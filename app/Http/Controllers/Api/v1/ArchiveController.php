@@ -1,0 +1,166 @@
+<?php
+
+namespace App\Http\Controllers\Api\v1;
+
+use App\Http\Controllers\API\v1\DocumentController;
+use App\Http\Controllers\Controller;
+use App\Http\Requests\Archive\ArchiveGetFilterRequest;
+use App\Http\Requests\Archive\ArchiveStoreRequest;
+use App\Http\Resources\Archive\ArchiveResource;
+use App\Http\Resources\Archive\ArchiveResourceCollection;
+use App\Http\Resources\Document\DocumentResource;
+use App\Models\Archive;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Log;
+
+class ArchiveController extends Controller
+{
+    public function index($limit = 10)
+    {
+        $data = Archive::orderBy('id', 'desc')->paginate($limit);
+
+        return $this->ok(new ArchiveResourceCollection($data));
+    }
+
+    public function test()
+    {
+        return auth()->user()->hasAnyPermission(['Administrator', 'Super-Admin']);
+    }
+
+    public function filter(ArchiveGetFilterRequest $request)
+    {
+        //Log::alert($request);
+        $data = Archive::orderBy('id', 'desc');
+        $filter_bill = [];
+        $request->filled('limit') ? $limit = $request->limit : $limit = 10;
+
+
+        if (!$request->isNotFilled('way') && $request->way != '') {
+            $filter_bill[] = ['way', 'like', '%' . $request->way . '%'];
+        }
+        if (!$request->isNotFilled('isIn') && $request->isIn != -1) {
+            $filter_bill[] = ['is_in', $request->isIn];
+        }
+        if (!$request->isNotFilled('archiveTypes') && $request->archiveTypes != '') {
+            $filter_bill[] = ['archive_type_id', $request->archiveTypeId];
+        }
+        if (!$request->isNotFilled('archiveTypeId') && $request->archiveTypeId != -1) {
+            $filter_bill[] = ['archive_type_id', $request->archiveTypeId];
+        }
+
+        if (!$request->isNotFilled('number') && $request->number != '') {
+            $data = $data->orWhere('number', 'like', '%' . $request->number . '%');
+        }
+        if (!$request->isNotFilled('number') && $request->number != '') {
+            $data = $data->orWhere('title', 'like', '%' . $request->number . '%');
+        }
+        if (!$request->isNotFilled('title') && $request->title != '') {
+            $data = $data->orWhere('title', 'like', '%' . $request->title . '%');
+        }
+        if (!$request->isNotFilled('description') && $request->description != '') {
+            $filter_bill[] = ['title', 'like', '%' . $request->description . '%'];
+        }
+        if (
+            !$request->isNotFilled('hasDate') && $request->hasDate == 'true' &&
+            !$request->isNotFilled('issueDateFrom') && $request->issueDateFrom != '' &&
+            !$request->isNotFilled('issueDateTo') && $request->issueDateTo != ''
+        ) {
+            $data = $data->whereBetween('issue_date', [$request->issueDateFrom, $request->issueDateTo]);
+        }
+        //Log::alert($filter_bill);
+        $data = $data->where($filter_bill);
+        if (Auth::user()->hasAnyPermission(['Administrator', 'Super-Admin', 'ViewAllSections'])) {
+            if (!$request->isNotFilled('sectionId') && $request->sectionId != '-1') {
+                $data = $data->whereRelation('ArchiveType.Section', 'id', '=', Auth::user()->sections()->first()->id);
+            }
+
+        } else {
+            $data = $data->whereRelation('ArchiveType.Section', 'id', '=', Auth::user()->sections()->first()->id);
+        }
+        $data = $data->where($filter_bill)->paginate($limit);
+        if (empty ($data) || $data == null) {
+            return $this->FailedResponse(__('general.loadFailed'));
+        } else {
+            return $this->ok(new ArchiveResourceCollection($data));
+        }
+    }
+
+    public function store(ArchiveStoreRequest $request)
+    {
+        $data = Archive::create([
+            'title' => $request->title,
+            'issue_date' => $request->issueDate,
+            'number' => $request->number,
+            'way' => $request->way,
+            'description' => $request->description,
+            'is_in' => $request->isIn,
+            'user_id' => Auth::user()->id,
+            'archive_type_id' => $request->archiveTypeId,
+        ]);
+        if ($request->hasFile('files')) {
+            $document = new DocumentController();
+            $document->store_multi(request:$request,
+                                   documentable_id: $data->id,
+                                   documentable_type:Archive::class,
+                                   pathFolder:"archives");
+        }
+        // foreach ($request->file('files') as $file) {
+        //     $document = new DocumentController();
+        //     $document->store(new Request(["files" => $file, "archive_id" => $data->id]));
+        // }
+
+        return $this->ok(new ArchiveResource(Archive::find($data->id)));
+    }
+
+    public function show(string $id)
+    {
+        $data = Archive::find($id);
+
+        return $this->ok(new ArchiveResource($data));
+    }
+
+    public function show_documents(string $archive_id)
+    {
+        $data = Archive::find($archive_id);
+
+        return $this->ok(DocumentResource::collection($data->documents));
+    }
+
+    public function update(ArchiveStoreRequest $request, string $id)
+    {
+        $data = Archive::find($id);
+        if ($data) {
+            $data->title = $request->title;
+            $data->issue_date = $request->issueDate;
+            $data->number = $request->number;
+            $data->way = $request->way;
+            $data->description = $request->description;
+            $data->is_in = $request->isIn;
+            $data->user_id = Auth::user()->id;
+            $data->archive_type_id = $request->archiveTypeId;
+            $data->save();
+            if ($request->hasFile('files')) {
+                $document = new DocumentController();
+                $document->store_multi(
+                    request: $request,
+                    documentable_id: $data->id,
+                    documentable_type: Archive::class,
+                    pathFolder: "archives"
+                );
+            }
+
+            return $this->ok(new ArchiveResource($data));
+        }
+
+        return $this->ok(new ArchiveResource([]));
+    }
+
+    public function destroy(string $id)
+    {
+        $data = Archive::find($id);
+        $data->documents()->delete();
+        $data->delete();
+
+        return $this->ok(null);
+    }
+}
