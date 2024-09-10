@@ -5,6 +5,7 @@ use App\Http\Middleware\MaintenanceCheckerMiddleware;
 use Illuminate\Foundation\Application;
 use Illuminate\Foundation\Configuration\Exceptions;
 use Illuminate\Foundation\Configuration\Middleware;
+use Illuminate\Auth\Middleware\Authenticate;
 
 return Application::configure(basePath: dirname(__DIR__))
     ->withRouting(
@@ -15,9 +16,13 @@ return Application::configure(basePath: dirname(__DIR__))
     )
     ->withMiddleware(function (Middleware $middleware) {
         $middleware->alias([
-                'locale' => LocalizationMiddleware::class,
-                'maintenance' => MaintenanceCheckerMiddleware::class
-            ]);
+                            'locale' => LocalizationMiddleware::class,
+                            'maintenance' => MaintenanceCheckerMiddleware::class,
+                            'auth' => Authenticate::class,
+                        ]);
+
+        // $middleware->append(CorsMiddleware::class); // Register Cors middleware
+
     })
     ->withExceptions(function (Exceptions $exceptions) {
         //
