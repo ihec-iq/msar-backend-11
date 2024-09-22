@@ -55,7 +55,7 @@ $response = Http::withHeaders([
 if ($response->failed()) {
     Log::alert('HTTP Error: ' . $response->body());
 } else {
-    Log::alert($response->body());
+    Log::alert($response);
 }
 
     //echo $response->body();
