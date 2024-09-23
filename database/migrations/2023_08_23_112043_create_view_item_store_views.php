@@ -11,6 +11,8 @@ return new class extends Migration
     public function up(): void
     {
         //DB::statement('drop view item_store_views');
+        DB::statement('DROP VIEW IF EXISTS item_store_views');
+
         DB::statement('
         CREATE  view item_store_views as
         select
@@ -58,6 +60,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        // DB::statement('DROP VIEW IF EXISTS item_store_views');
+        DB::statement('DROP VIEW IF EXISTS item_store_views');
     }
 };

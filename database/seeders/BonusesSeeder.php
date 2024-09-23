@@ -21,7 +21,13 @@ class BonusesSeeder extends Seeder
                     'employee_id' => $employee->id,
                     'bonus_digree_stage_id' => 1,
                     'bonus_study_id' => 1,
-                    'bonus_job_title_id' => 1
+                    'bonus_job_title_id' => 1,
+                    'title' => 'bonus ' . $key,
+                    'number_last_bounues' => 1,
+                    'issue_date' => now(),
+                    'date_last_bounues' => now(),
+                    'date_last_worth' => now(),
+                    'date_next_worth' => now(),
                 ]
             );
         }

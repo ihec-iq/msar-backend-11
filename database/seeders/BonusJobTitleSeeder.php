@@ -14,7 +14,9 @@ class BonusJobTitleSeeder extends Seeder
     public function run(): void
     {
 
-        BonusJobTitle::create([ 'name' => '']);
+        BonusJobTitle::create([ 'name' => 'المدير العام']);
+        BonusJobTitle::create([ 'name' => 'المدير التنفيذي']);
+        BonusJobTitle::create([ 'name' => 'المدير المالي']);
 
     }
 }
