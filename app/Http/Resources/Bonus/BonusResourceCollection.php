@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Resources\Bonuses;
+namespace App\Http\Resources\Bonus;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\ResourceCollection;
 

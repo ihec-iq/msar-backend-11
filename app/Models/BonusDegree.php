@@ -5,7 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class BonusDigree extends Model
+class BonusDegree extends Model
 {
     use HasFactory;
      protected $guarded = [];

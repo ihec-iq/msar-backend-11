@@ -14,7 +14,7 @@ return new class () extends Migration {
             $table->id();
             $table->string('title')->nullable();
             $table->foreignId('employee_id')->constrained()->onUpdate('cascade')->onDelete('cascade');
-            $table->foreignId('bonus_digree_stage_id')->constrained()->onUpdate('cascade')->onDelete('cascade');
+            $table->foreignId('bonus_degree_stage_id')->constrained()->onUpdate('cascade')->onDelete('cascade');
             $table->foreignId('bonus_study_id')->constrained()->onUpdate('cascade')->onDelete('cascade');
             $table->foreignId('bonus_job_title_id')->constrained()->onUpdate('cascade')->onDelete('cascade');
             $table->string('number_last_bounues')->nullable();

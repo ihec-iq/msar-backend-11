@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\Api\v1\BonusController;
 use App\Http\Controllers\Api\v1\BonusesController;
+use App\Http\Controllers\Api\v1\BonusJobTitleController;
 use App\Http\Controllers\api\v1\EmployeeCenterController;
 use App\Http\Controllers\API\V1\EmployeeController;
 use App\Http\Controllers\Api\v1\EmployeePositionController;
@@ -48,4 +49,18 @@ Route::prefix('/bonus')->middleware(['auth:sanctum'])->group(function () {
     Route::post('/store', [BonusController::class, 'store']);
     Route::post('/update/{id}', [BonusController::class, 'update']);
     Route::delete('/delete/{id}', [BonusController::class, 'destroy']);
+});
+Route::prefix('/bonus_job_title')->middleware(['auth:sanctum'])->group(function () {
+    Route::get('', [BonusJobTitleController::class, 'index']);
+    Route::get('/filter', [BonusJobTitleController::class, 'filter']);
+    Route::post('/store', [BonusJobTitleController::class, 'store']);
+    Route::post('/update/{id}', [BonusJobTitleController::class, 'update']);
+    Route::delete('/delete/{id}', [BonusJobTitleController::class, 'destroy']);
+    Route::get('/{id}', [BonusJobTitleController::class, 'show']);
+});
+Route::prefix('/bonus_study')->middleware(['auth:sanctum'])->group(function () {
+    Route::get('', [BonusController::class, 'Bonus_study']);
+});
+Route::prefix('/bonus_degree_stage')->middleware(['auth:sanctum'])->group(function () {
+    Route::get('', [BonusController::class, 'Bonus_degree_stage']);
 });

@@ -4,10 +4,11 @@ namespace App\Http\Controllers\Api\v1;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Bonus\BonusStoreRequest;
-use App\Http\Resources\Bonuses\BonusesResourceCollection;
-use App\Http\Resources\Bonuses\BonusResource;
-use App\Http\Resources\Bonuses\BonusResourceCollection;
-use App\Models\Bonuses;
+use App\Http\Resources\Bonus\BonusResource;
+use App\Http\Resources\Bonus\BonusResourceCollection;
+use App\Http\Resources\GeneralIdNameResource;
+use App\Http\Resources\Bonus\BonusDegreeStageResource;
+use App\Models\Bonus;
 use Illuminate\Http\Request;
 
 class BonusController extends Controller
@@ -17,15 +18,28 @@ class BonusController extends Controller
      */
     public function index()
     {
-        $data = Bonuses::all();
+        $data = Bonus::all();
         return $this->ok(BonusResource::collection($data));
     }
+   
+    public function Bonus_study()
+    {
+        $data = \App\Models\BonusStudy::all();
+        return $this->ok(GeneralIdNameResource::collection($data));
+    }
+    public function Bonus_degree_stage()
+    {
+        $data = \App\Models\BonusDegreeStage::all();
+        return $this->ok(BonusDegreeStageResource::collection($data));
+    }
+
+
 
     public function filter(Request $request)
     {
         $request->filled('limit') ? $limit = $request->limit : $limit = 10;
 
-        $data = Bonuses::orderBy('id', 'desc');
+        $data = Bonus::orderBy('id', 'desc');
         $data = $data->whereRelation('Employee', 'is_person', '=', true);
 
         if (!$request->isNotFilled('employeeName') && $request->employeeName != '') {
@@ -43,7 +57,7 @@ class BonusController extends Controller
         if (empty($data) || $data == null) {
             return $this->FailedResponse(__('general.loadFailed'));
         } else {
-            return $this->ok(new  BonusResourceCollection($data));
+            return $this->ok(new BonusResourceCollection($data));
         }
     }
     /**
@@ -53,7 +67,7 @@ class BonusController extends Controller
     {
         //return $request->all();
         try {
-            $data = Bonuses::create($request->validated());
+            $data = Bonus::create($request->validated());
             return $this->ok(new BonusResource($data));
         } catch (\Exception $e) {
             return $this->FailedResponse(__('general.saveFailed'), $e->getMessage());

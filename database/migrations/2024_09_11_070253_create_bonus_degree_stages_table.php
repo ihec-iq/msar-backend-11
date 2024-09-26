@@ -10,9 +10,9 @@ return new class () extends Migration {
      */
     public function up(): void
     {
-        Schema::create('bonus_digree_stages', function (Blueprint $table) {
+        Schema::create('bonus_degree_stages', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('bonus_digree_id')->constrained()->onUpdate('cascade')->onDelete('cascade');
+            $table->foreignId('bonus_degree_id')->constrained()->onUpdate('cascade')->onDelete('cascade');
             $table->foreignId('bonus_stage_id')->constrained()->onUpdate('cascade')->onDelete('cascade');
             $table->double('salery')->default(0);
             $table->integer('yearly_bounues');
@@ -26,6 +26,6 @@ return new class () extends Migration {
      */
     public function down(): void
     {
-        Schema::dropIfExists('bonus_digree_stages');
+        Schema::dropIfExists('bonus_degree_stages');
     }
 };

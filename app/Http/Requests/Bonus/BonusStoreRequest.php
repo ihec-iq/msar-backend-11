@@ -23,7 +23,7 @@ class BonusStoreRequest extends FormRequest
     {
         return [
             'employee_id' => 'required|exists:employees,id',
-            'bonus_digree_stage_id' => 'required|exists:bonus_digree_stages,id',
+            'bonus_degree_stage_id' => 'required|exists:bonus_degree_stages,id',
             'bonus_study_id' => 'required|exists:bonus_studies,id',
             'bonus_job_title_id' => 'required|exists:bonus_job_titles,id',
             'number_last_bounues' => 'required|string',
