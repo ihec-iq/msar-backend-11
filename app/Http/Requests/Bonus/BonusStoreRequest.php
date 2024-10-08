@@ -22,6 +22,7 @@ class BonusStoreRequest extends FormRequest
     public function rules(): array
     {
         return [
+            'title' => 'nullable|string',
             'employee_id' => 'required|exists:employees,id',
             'bonus_degree_stage_id' => 'required|exists:bonus_degree_stages,id',
             'bonus_study_id' => 'required|exists:bonus_studies,id',

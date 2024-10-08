@@ -41,7 +41,6 @@ Route::prefix('/hr_document_type')->middleware(['auth:sanctum'])->group(function
     Route::get('/', [HrDocumentTypeController::class, 'index']);
 });
 
-
 Route::prefix('/bonus')->middleware(['auth:sanctum'])->group(function () {
     Route::get('/', [BonusController::class, 'index']);
     Route::get('/filter', [BonusController::class, 'filter']);

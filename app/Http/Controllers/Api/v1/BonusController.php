@@ -10,6 +10,7 @@ use App\Http\Resources\GeneralIdNameResource;
 use App\Http\Resources\Bonus\BonusDegreeStageResource;
 use App\Models\Bonus;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
 
 class BonusController extends Controller
 {
@@ -21,7 +22,7 @@ class BonusController extends Controller
         $data = Bonus::all();
         return $this->ok(BonusResource::collection($data));
     }
-   
+
     public function Bonus_study()
     {
         $data = \App\Models\BonusStudy::all();
@@ -79,7 +80,8 @@ class BonusController extends Controller
      */
     public function show(string $id)
     {
-        //
+        $bonus = Bonus::findOrFail($id);
+        return $this->ok(new BonusResource($bonus));
     }
 
     /**
@@ -87,7 +89,13 @@ class BonusController extends Controller
      */
     public function update(BonusStoreRequest $request, string $id)
     {
-        //
+        try {
+            $bonus = Bonus::findOrFail($id);
+            $bonus->update($request->validated());
+            return $this->ok(new BonusResource($bonus));
+        } catch (\Exception $e) {
+            return $this->FailedResponse(__('general.saveFailed'), $e->getMessage());
+        }
     }
 
     /**
@@ -95,6 +103,12 @@ class BonusController extends Controller
      */
     public function destroy(string $id)
     {
-        //
+        try {
+            $bonus = Bonus::findOrFail($id);
+            $bonus->delete();
+            return $this->ok(['message' => 'Bonus deleted successfully']);
+        } catch (\Exception $e) {
+            return $this->FailedResponse(__('general.deleteFailed'), $e->getMessage());
+        }
     }
 }
