@@ -47,7 +47,7 @@ class DatabaseSeeder extends Seeder
             BonusDegreeStageSeeder::class,
             BonusJobTitleSeeder::class,
             BonusStudySeeder::class,
-            BonusSeeder::class
+            UserHrSeeder::class
         ]);
     }
 }
