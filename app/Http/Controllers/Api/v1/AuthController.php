@@ -17,6 +17,7 @@ class AuthController extends Controller
     public function login(LoginRequest $request)
     {
 
+        //Log::alert($request);
         $user = User::where('email', $request->email)->where('active', true)->orWhere('user_name', $request->email)->first();
         // Log::alert($user);
         // Log::alert($user->password);

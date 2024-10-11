@@ -41,7 +41,13 @@ class DatabaseSeeder extends Seeder
             VacationTypeSeeder::class,
             VacationReasonSeeder::class,
             RetrievalVoucherItemTypeSeeder::class,
-            HrDocumentTypeSeeder::class
+            HrDocumentTypeSeeder::class,
+            BonusDegreeSeeder::class,
+            BonusStageSeeder::class,
+            BonusDegreeStageSeeder::class,
+            BonusJobTitleSeeder::class,
+            BonusStudySeeder::class,
+            UserHrSeeder::class
         ]);
     }
 }
