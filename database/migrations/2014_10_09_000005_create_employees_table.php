@@ -45,6 +45,14 @@ return new class extends Migration {
             $table->double('take_vacation')->nullable()->default(0);
             $table->double('init_vacation_sick')->nullable()->default(0);
             $table->double('take_vacation_sick')->nullable()->default(0);
+            $table->foreignId('bonus_degree_stage_id')->constrained()->onUpdate('cascade')->onDelete('cascade')->default(1);
+            $table->foreignId('bonus_study_id')->constrained()->onUpdate('cascade')->onDelete('cascade')->default(1);
+            $table->foreignId('bonus_job_title_id')->constrained()->onUpdate('cascade')->onDelete('cascade')->default(1);
+            $table->string('number_last_bounues')->nullable();
+            $table->date('issue_date')->nullable();
+            $table->date('date_last_bounues')->nullable();
+            $table->date('date_last_worth')->nullable();
+            $table->date('date_next_worth')->nullable();
             $table->timestamps();
             $table->softDeletes();
         });

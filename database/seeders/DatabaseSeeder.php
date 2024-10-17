@@ -26,6 +26,11 @@ class DatabaseSeeder extends Seeder
             EmployeePositionSeeder::class,
             EmployeeCenterSeeder::class,
             EmployeeTypeSeeder::class,
+            BonusDegreeSeeder::class,
+            BonusStageSeeder::class,
+            BonusDegreeStageSeeder::class,
+            BonusJobTitleSeeder::class,
+            BonusStudySeeder::class,
             UserSeeder::class,
             EmployeeSeeder::class,
             ArchiveTypeSeeder::class,
@@ -42,11 +47,7 @@ class DatabaseSeeder extends Seeder
             VacationReasonSeeder::class,
             RetrievalVoucherItemTypeSeeder::class,
             HrDocumentTypeSeeder::class,
-            BonusDegreeSeeder::class,
-            BonusStageSeeder::class,
-            BonusDegreeStageSeeder::class,
-            BonusJobTitleSeeder::class,
-            BonusStudySeeder::class,
+            
             UserHrSeeder::class
         ]);
     }

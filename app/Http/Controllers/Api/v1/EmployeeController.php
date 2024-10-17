@@ -4,6 +4,7 @@ namespace App\Http\Controllers\API\V1;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Employee\StoreEmployeeRequest;
+use App\Http\Requests\Employee\UpdateEmployeeRequest;
 use App\Http\Resources\Employee\EmployeeBigLiteResource;
 use App\Http\Resources\Employee\EmployeeResource;
 use App\Http\Resources\Employee\EmployeeResourceCollection;
@@ -12,8 +13,7 @@ use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
-use Log;
-
+ 
 class EmployeeController extends Controller
 {
     /**
@@ -105,7 +105,26 @@ class EmployeeController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(StoreEmployeeRequest $request)
+    public function store(UpdateEmployeeRequest $request)
+    {
+        $user = User::create([
+            'name' => $request->name,
+            'password' => Hash::make('password'),
+            'email' => rand(100000, 99999999999) . '@company.com',
+            'active' => 1,
+        ]);
+        $employee = Employee::create(array_merge($request->validated(), ['user_id' => $user->user_id]));
+
+        return $this->ok(new EmployeeResource($employee));
+    }
+
+    public function update(UpdateEmployeeRequest $request, Employee $employee)
+    {
+         $employee->update($request->validated());
+
+        return $this->ok(new EmployeeResource($employee));
+    }
+    public function storeOld(StoreEmployeeRequest $request)
     {
         //
         $user = User::create([
@@ -159,7 +178,7 @@ class EmployeeController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(StoreEmployeeRequest $request, Employee $employee)
+    public function updateOld(StoreEmployeeRequest $request, Employee $employee)
     {
         $employee->name = $request->name;
         $employee->section_id = $request->sectionId;
