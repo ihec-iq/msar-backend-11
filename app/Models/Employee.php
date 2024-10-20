@@ -73,4 +73,16 @@ class Employee extends Model
     {
         return $this->hasMany(OutputVoucher::class);
     }
+    public function BonusJobTitle(): BelongsTo
+    {
+        return $this->belongsTo(BonusJobTitle::class, 'bonus_job_title_id');
+    }
+    public function BonusStudy(): BelongsTo
+    {
+        return $this->belongsTo(BonusStudy::class, 'bonus_study_id');
+    }
+    public function BonusDegreeStage(): BelongsTo
+    {
+        return $this->belongsTo(BonusDegreeStage::class, 'bonus_degree_stage_id');
+    }
 }

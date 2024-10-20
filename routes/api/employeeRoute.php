@@ -16,8 +16,8 @@ Route::prefix('/employee')->middleware(['auth:sanctum'])->group(function () {
     Route::get('/lite', [EmployeeController::class, 'getLite']);
     Route::get('/filter', [EmployeeController::class, 'filter']);
     Route::get('/{employee}', [EmployeeController::class, 'show']);
-    Route::post('/store', [EmployeeController::class, 'store']);
-    Route::post('/update/{employee}', [EmployeeController::class, 'update']);
+    Route::post('/', [EmployeeController::class, 'store']);
+    Route::put('/{employee}', [EmployeeController::class, 'update']);
     Route::delete('/delete/{employee}', [EmployeeController::class, 'destroy']);
 });
 Route::prefix('/employee_type')->middleware(['auth:sanctum'])->group(function () {

@@ -2,6 +2,8 @@
 
 namespace App\Http\Resources\Employee;
 
+use App\Http\Resources\Bonus\BonusDegreeStageResource;
+use App\Http\Resources\GeneralIdNameResource;
 use App\Http\Resources\User\SectionResource;
 use App\Http\Resources\User\UserLiteResource;
 use Illuminate\Http\Request;
@@ -33,15 +35,22 @@ class EmployeeResource extends JsonResource
             'Section' => new SectionResource($this->Section),
             'isMoveSection' => $this->is_move_section,
             'MoveSection' => new SectionResource($this->MoveSection),
-            'Position' => new EmployeePositionResource($this->EmployeePosition),
-            'Center' => new EmployeeCenterResource($this->EmployeeCenter),
-            'Type' => new EmployeeTypeResource($this->EmployeeType),
+            'EmployeePosition' => new EmployeePositionResource($this->EmployeePosition),
+            'EmployeeCenter' => new EmployeeCenterResource($this->EmployeeCenter),
+            'EmployeeType' => new EmployeeTypeResource($this->EmployeeType),
             'countItems' => count($this->outputVouchers),
             'Items' => $this->outputVouchers,
             'SumItems' => $this->outputVouchers,
             'number' => $this->number,
             'idCard' => $this->id_card,
-            'telegramId' => $this->telegram
+            'telegramId' => $this->telegram,
+            'dateLastBounues' => $this->date_last_bounues,
+            'dateLastWorth' => $this->date_last_worth,
+            'dateNextWorth' => $this->date_next_worth,
+            'numberLastBounues' => $this->number_last_bounues,
+            'BonusJobTitle' => new GeneralIdNameResource($this->BonusJobTitle),
+            'BonusStudy' => new GeneralIdNameResource($this->BonusStudy),
+            'BonusDegreeStage' => new BonusDegreeStageResource($this->BonusDegreeStage),
         ];
     }
 }

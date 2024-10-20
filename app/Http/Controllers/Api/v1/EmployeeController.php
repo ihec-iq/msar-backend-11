@@ -107,14 +107,13 @@ class EmployeeController extends Controller
      */
     public function store(UpdateEmployeeRequest $request)
     {
-        $user = User::create([
+        $user = User::firstOrCreate([
             'name' => $request->name,
             'password' => Hash::make('password'),
             'email' => rand(100000, 99999999999) . '@company.com',
             'active' => 1,
         ]);
-        $employee = Employee::create(array_merge($request->validated(), ['user_id' => $user->user_id]));
-
+        $employee = Employee::create(array_merge($request->validated(), ['user_id' => $user->id]));
         return $this->ok(new EmployeeResource($employee));
     }
 

@@ -31,7 +31,7 @@ class UpdateEmployeeRequest extends FormRequest
             'take_vacation' => 'nullable|numeric',
             'init_vacation_sick' => 'nullable|numeric',
             'take_vacation_sick' => 'nullable|numeric',
-            'bonus_degree_stage_id' => 'exists:bonus_degrees,id',
+            'bonus_degree_stage_id' => 'exists:bonus_degree_stages,id',
             'bonus_study_id' => 'exists:bonus_studies,id',
             'bonus_job_title_id' => 'exists:bonus_job_titles,id',
             'number_last_bounues' => 'nullable|string|max:255',
