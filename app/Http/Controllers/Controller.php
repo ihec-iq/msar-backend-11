@@ -8,7 +8,8 @@ abstract class Controller
     {
         return response()->json([
             'message' => 'Successful',
-            'data' => $data,
+            'length' => is_array($data)  ? count($data) : 0,
+            'data' => $data
         ], status: 200);
     }
     public function ok_paginate($data)

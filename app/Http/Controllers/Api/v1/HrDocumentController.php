@@ -8,7 +8,10 @@ use App\Http\Resources\Hr\HrDocumentResourceCollection;
 use App\Models\Employee;
 use App\Models\HrDocument;
 use App\Enum\EnumTypeChoseShareDocument;
+use App\Http\Resources\Employee\EmployeeResource;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
+use Illuminate\Http\Resources\Json\JsonResource;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
 
@@ -68,7 +71,58 @@ class HrDocumentController extends Controller
                 pathFolder: $employeeId
             );
         }
+        $this->update_employee_date_bonus($employeeId);
         return $data;
+    }
+    public function update_employee_date_bonus($employeeId)
+    {
+        $employeeInfo = $this->check_bonus_employee($employeeId); //return $employeeInfo['nextDateBonus'];
+        $employee = Employee::find($employeeId);
+        $employee->date_next_worth = $employeeInfo['nextDateBonus'];
+        $employee->save();
+        return new EmployeeResource($employee);
+    }
+    public function check_bonus_employee($employeeId)
+    {
+        $employee = Employee::find($employeeId);
+        if ($employee) {
+            $increseDay = 0;
+            $date_last_bonus = $employee->date_last_bonus; //return $date_last_bonus;
+            $HrDocuments = $employee->HrDocuments()
+                ->whereBetween('issue_date', [$date_last_bonus, Carbon::parse($date_last_bonus)->addYear()])
+                ->where("is_active", "=", true)
+                ->with('Type')
+                ->orderByDesc('add_days')
+                ->get()
+                ->take(4);
+            $filteredArray = [];
+            $repeted180 = 0;
+            foreach ($HrDocuments as $row) {
+                if ($row->add_days == 180) {
+                    if ($repeted180 < 1) {
+                        $repeted180++;
+                        $filteredArray[] = $row;
+                        $increseDay += $row->add_days;
+                    }
+                    continue;
+                }
+                $filteredArray[] = $row;
+                $increseDay += $row->add_days;
+            }
+
+
+            $result = [
+                'id' => $employee->id,
+                'name' => $employee->name,
+                'currentDateBonus' => Carbon::parse($date_last_bonus)->format('Y-m-d'),
+                'numberIncreseDayes' => $increseDay,
+                'nextDateBonus' => Carbon::parse($date_last_bonus)->addDay($increseDay)->format('Y-m-d'),
+                'Documents' => HrDocumentResource::collection($filteredArray)
+            ];
+            return $result;
+
+            //date_next_worth
+        }
     }
     public function store(Request $request)
     {
@@ -80,7 +134,6 @@ class HrDocumentController extends Controller
             foreach ($EmployeesBySection as $key => $employee) {
                 $data = $this->addHrDocument(request: $request, employeeId: $employee->id);
             }
-
         } elseif ($request->chosePushBy == EnumTypeChoseShareDocument::ToAllEmployees->value) {
             $EmployeesBySection = Employee::all();
             foreach ($EmployeesBySection as $key => $employee) {
@@ -104,7 +157,6 @@ class HrDocumentController extends Controller
     public function show(string $id)
     {
         return $this->ok(new HrDocumentResource(HrDocument::find($id)));
-
     }
 
     public function hrDocumentReportByEmployee($employeeId)
@@ -116,22 +168,20 @@ class HrDocumentController extends Controller
 
         $data = json_decode((HrDocumentResource::collection($data))->toJson(), true);
 
-
-
         foreach ($data as $key => $value) {
             $result .=
                 "تسلسل الملف :#  " . $value['id'] . PHP_EOL .
                 "اسم الكتاب " . $value['title'] . PHP_EOL .
-                "نوع الكتاب " . $value['Type']['name']. PHP_EOL .
+                "نوع الكتاب " . $value['Type']['name'] . PHP_EOL .
                 "تاريخ الكتاب " . $value['issueDate'] . PHP_EOL .
-                "المرافقات " . PHP_EOL ;
+                "المرافقات " . PHP_EOL;
 
             foreach ($value['Files'] as $keyFile => $file) {
-                $result .= "الملف  " .$keyFile. PHP_EOL ;
-                $result .= "الرابط  " .$file['path']. PHP_EOL ;
+                $result .= "الملف  " . $keyFile . PHP_EOL;
+                $result .= "الرابط  " . $file['path'] . PHP_EOL;
                 $filePath = $file['path'];
             }
-            $result .= "--------------------------------------------------". PHP_EOL;
+            $result .= "--------------------------------------------------" . PHP_EOL;
         }
         // Log::alert($data);
         //Log::alert("hrDocumentReportByEmployee : " . $result);
@@ -150,10 +200,12 @@ class HrDocumentController extends Controller
         $data->employee_id = $request->employeeId;
         $data->hr_document_type_id = $request->hrDocumentTypeId;
         $data->add_days = $request->addDays;
+        $data->is_active = $request->isActive;
         $data->user_update_id = Auth::user()->id;
 
         $data->save();
         //$data = HrDocument::find($data->id);
+        $this->update_employee_date_bonus($employeeId);
 
         if ($request->hasFile('files')) {
             $document = new DocumentController();
@@ -172,6 +224,10 @@ class HrDocumentController extends Controller
      */
     public function destroy(string $id)
     {
-        return $this->ok(HrDocument::find($id)->delete());
+        $HrDocument = HrDocument::find($id);
+        $employee_id = $HrDocument->employee_id;
+        $HrDocument->delete();
+        $this->update_employee_date_bonus($employee_id);
+        return $this->ok($HrDocument);
     }
 }

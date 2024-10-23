@@ -16,8 +16,8 @@ Route::prefix('/employee')->middleware(['auth:sanctum'])->group(function () {
     Route::get('/lite', [EmployeeController::class, 'getLite']);
     Route::get('/filter', [EmployeeController::class, 'filter']);
     Route::get('/{employee}', [EmployeeController::class, 'show']);
-    Route::post('/', [EmployeeController::class, 'store']);
-    Route::put('/{employee}', [EmployeeController::class, 'update']);
+    Route::post('/store', [EmployeeController::class, 'store']);
+    Route::post('/update/{employee}', [EmployeeController::class, 'update']);
     Route::delete('/delete/{employee}', [EmployeeController::class, 'destroy']);
 });
 Route::prefix('/employee_type')->middleware(['auth:sanctum'])->group(function () {
@@ -33,9 +33,12 @@ Route::prefix('/hr_document')->middleware(['auth:sanctum'])->group(function () {
     Route::get('/', [HrDocumentController::class, 'index']);
     Route::get('/filter', [HrDocumentController::class, 'filter']);
     Route::get('/{id}', [HrDocumentController::class, 'show']);
+    Route::get('/getHrByEmployee/{id}', [HrDocumentController::class, 'check_bonus_employee']);
+    Route::get('/updateEmployeeDateBonusByEmployee/{id}', [HrDocumentController::class, 'update_employee_date_bonus']);
     Route::post('/store', [HrDocumentController::class, 'store']);
     Route::post('/update/{id}', [HrDocumentController::class, 'update']);
     Route::delete('/delete/{id}', [HrDocumentController::class, 'destroy']);
+
 });
 Route::prefix('/hr_document_type')->middleware(['auth:sanctum'])->group(function () {
     Route::get('/', [HrDocumentTypeController::class, 'index']);

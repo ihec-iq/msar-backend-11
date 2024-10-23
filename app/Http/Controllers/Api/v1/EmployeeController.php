@@ -13,7 +13,8 @@ use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
- 
+use Illuminate\Support\Facades\Log;
+
 class EmployeeController extends Controller
 {
     /**
@@ -120,7 +121,6 @@ class EmployeeController extends Controller
     public function update(UpdateEmployeeRequest $request, Employee $employee)
     {
          $employee->update($request->validated());
-
         return $this->ok(new EmployeeResource($employee));
     }
     public function storeOld(StoreEmployeeRequest $request)

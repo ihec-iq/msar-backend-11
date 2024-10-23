@@ -24,6 +24,7 @@ class HrDocumentResource extends JsonResource
             'title' => $this->title,
             'addDays' => $this->add_days,
             'issueDate' => $this->issue_date,
+            'isActive' => $this->is_active,
             'Type' => new HrDocumentTypeResource($this->Type),
             'Employee' => new EmployeeBigLiteResource($this->Employee),
             'UserCreate' => new UserLiteResource($this->UserCreate),

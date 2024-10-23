@@ -14,7 +14,7 @@ class UpdateEmployeeRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'name' => 'required|string|max:255',
+            'name' => 'string|max:255',
             'is_person' => 'boolean',
             'section_id' => 'exists:sections,id',
             'is_move_section' => 'boolean',
@@ -34,11 +34,11 @@ class UpdateEmployeeRequest extends FormRequest
             'bonus_degree_stage_id' => 'exists:bonus_degree_stages,id',
             'bonus_study_id' => 'exists:bonus_studies,id',
             'bonus_job_title_id' => 'exists:bonus_job_titles,id',
-            'number_last_bounues' => 'nullable|string|max:255',
+            'number_last_bonus' => 'nullable|string|max:255',
             'issue_date' => 'nullable|date',
-            'date_last_bounues' => 'nullable|date',
+            'date_last_bonus' => 'nullable|date',
             'date_last_worth' => 'nullable|date',
-            'date_next_worth' => 'nullable|date',
+            // 'date_next_worth' => 'nullable|date',
         ];
     }
 }

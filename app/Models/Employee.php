@@ -19,7 +19,7 @@ class Employee extends Model
     {
         return $this->hasMany(InputVoucher::class);
     }
-    public function HrDocument(): HasMany
+    public function HrDocuments(): HasMany
     {
         return $this->hasMany(HrDocument::class);
     }

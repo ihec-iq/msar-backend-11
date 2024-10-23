@@ -23,9 +23,9 @@ class UserHrSeeder extends Seeder
                     'bonus_study_id' => 1,
                     'bonus_job_title_id' => 1,
                     'title' => 'bonus ' . $key,
-                    'number_last_bounues' => 1,
+                    'number_last_bonus' => 1,
                     'issue_date' => now(),
-                    'date_last_bounues' => now(),
+                    'date_last_bonus' => now(),
                     'date_last_worth' => now(),
                     'date_next_worth' => now(),
                 ]
