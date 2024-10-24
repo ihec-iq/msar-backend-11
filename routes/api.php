@@ -1,9 +1,7 @@
 <?php
 
 //use App\Http\Controllers\API\V1\GoogleDriveController;
-
-use App\Http\Resources\Hr\HrDocumentResource;
-use App\Models\HrDocument;
+ 
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Log;
@@ -15,6 +13,7 @@ require __DIR__.'/api/userRoute.php';
 require __DIR__.'/api/employeeRoute.php';
 require __DIR__.'/api/vacationRoute.php';
 require __DIR__.'/api/botRoute.php';
+require __DIR__.'/api/settingRoute.php';
 
 Route::get('/', function () {
     return 'Workflow API running...';
