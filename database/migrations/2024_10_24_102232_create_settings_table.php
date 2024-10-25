@@ -15,9 +15,10 @@ return new class extends Migration
             $table->id();
             $table->string('key');
             $table->string('value1')->nullable();
-            $table->string('value3')->nullable();
-            $table->string('value3')->nullable();
-            $table->string('value4')->nullable();
+            $table->string('value2')->nullable();
+            $table->integer('value3')->nullable();
+            $table->dateTime('value4')->nullable();
+            $table->boolean('value5')->nullable();
             $table->text('description')->nullable();
             $table->boolean('is_active')->default(true);
             $table->timestamps();
