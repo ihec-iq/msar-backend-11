@@ -22,11 +22,12 @@ class StoreSettingRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'key' => 'require|string',
+            'key' => 'required|string',
             'value1' => 'nullable|string',
-            'value3' => 'nullable|string',
-            'value3' => 'nullable|string',
-            'value4' => 'nullable|string',
+            'value2' => 'nullable|string',
+            'value3' => 'nullable|integer',
+            'value4' => 'nullable|dateTime|date',
+            'value5' => 'nullable|boolean',
             'description' => 'nullable|string',
             'is_active' => 'nullable'
         ];
