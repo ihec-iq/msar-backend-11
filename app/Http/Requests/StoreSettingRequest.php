@@ -29,7 +29,7 @@ class StoreSettingRequest extends FormRequest
             'value4' => 'nullable|dateTime|date',
             'value5' => 'nullable|boolean',
             'description' => 'nullable|string',
-            'is_active' => 'nullable'
+            'is_active' => 'nullable|boolean'
         ];
     }
 }
