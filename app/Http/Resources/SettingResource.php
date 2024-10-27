@@ -17,12 +17,14 @@ class SettingResource extends JsonResource
         return [
             'id' => $this->id,
             'key' => $this->key,
-            'value1' => $this->value1,
-            'value3' => $this->value3,
-            'value4' => $this->value4,
+            'valStr' => $this->val_str,
+            'valStr' => $this->val_str2,
+            'valInt' => $this->val_int,
+            'valDbl' => $this->val_dbl,
+            'valBool' => $this->val_bool,
+            'valDate' => $this->val_date,
             'description' => $this->description,
-            'created_at' => $this->created_at,
-            'updated_at' => $this->updated_at,
+            'isActive' => $this->is_active
         ];
     }
 }

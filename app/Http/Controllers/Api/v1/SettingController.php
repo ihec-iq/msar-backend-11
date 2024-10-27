@@ -4,9 +4,10 @@ namespace App\Http\Controllers\Api\v1;
 
 use App\Http\Controllers\Controller;
 use App\Models\Setting;
-use App\Http\Requests\StoreSettingRequest;
-use App\Http\Requests\UpdateSettingRequest;
-use App\Http\Resources\SettingResource;
+use App\Http\Requests\StoreSettingRequest; 
+use App\Http\Resources\SettingResource; 
+use Illuminate\Support\Facades\Log;
+use Illuminate\Http\Request;
 
 class SettingController extends Controller
 {
@@ -33,10 +34,17 @@ class SettingController extends Controller
      */
     public function show(Setting $setting)
     {
-        return $this->ok(new SettingResource($setting)); // Return the specified setting
+        if ($setting) return $this->ok(new SettingResource($setting)); // Return the specified setting
+        return $this->FailedResponse(); // Return the specified setting
+    }
+    public function showByKey(Request $request)
+    {
+        $setting = Setting::where('key', $request->key)->first();
+        if ($setting) return $this->ok(new SettingResource($setting)); // Return the specified setting
+        return $this->FailedResponse();
     }
 
-  
+
     /**
      * Update the specified resource in storage.
      */

@@ -14,12 +14,15 @@ return new class extends Migration
         Schema::create('settings', function (Blueprint $table) {
             $table->id();
             $table->string('key');
-            $table->string('value1')->nullable();
-            $table->string('value3')->nullable();
-            $table->string('value3')->nullable();
-            $table->string('value4')->nullable();
+            $table->string('val_str')->nullable();
+            $table->string('val_str2')->nullable();
+            $table->integer('val_int')->nullable();
+            $table->double('val_dbl')->nullable();
+            $table->dateTime('val_date')->nullable();
+            $table->boolean('val_bool')->nullable();
             $table->text('description')->nullable();
             $table->boolean('is_active')->default(true);
+            $table->softDeletes();
             $table->timestamps();
         });
     }
