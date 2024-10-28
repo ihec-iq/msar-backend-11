@@ -23,7 +23,7 @@ class BonusJobTitleController extends Controller
     }
     public function filter(Request $request)
     {
-        $request->filled('limit') ? $limit = $request->limit : $limit = 2;
+        $request->filled('limit') ? $limit = $request->limit : $limit = 10;
 
         $data = BonusJobTitle::orderBy('id', 'desc');
 
@@ -31,10 +31,11 @@ class BonusJobTitleController extends Controller
            // $data = $data->where('name', 'like', '%' . $request->name . '%');
         }
         $data = $data->paginate($limit);
+        // return $data;
         if (empty($data) || $data == null) {
             return $this->FailedResponse(__('general.loadFailed'));
         } else {
-            return $this->ok(new BonusJobTitleResourceCollection( $data));
+            //return $this->ok(new BonusJobTitleResourceCollection( $data));
             return $this->ok(new PaginatedResourceCollection($data, BonusJobTitleResource::class));
         }
     }

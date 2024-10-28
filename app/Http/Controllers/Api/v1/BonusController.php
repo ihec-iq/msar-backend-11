@@ -8,7 +8,12 @@ use App\Http\Resources\Bonus\BonusResource;
 use App\Http\Resources\Bonus\BonusResourceCollection;
 use App\Http\Resources\GeneralIdNameResource;
 use App\Http\Resources\Bonus\BonusDegreeStageResource;
+use App\Http\Resources\Employee\EmployeeBonusResource;
+use App\Http\Resources\Employee\EmployeeResourceCollection;
+use App\Http\Resources\PaginatedResourceCollection;
 use App\Models\Bonus;
+use App\Models\Employee;
+use App\Models\Setting;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 
@@ -33,8 +38,6 @@ class BonusController extends Controller
         $data = \App\Models\BonusDegreeStage::all();
         return $this->ok(BonusDegreeStageResource::collection($data));
     }
-
-
 
     public function filter(Request $request)
     {
@@ -61,6 +64,7 @@ class BonusController extends Controller
             return $this->ok(new BonusResourceCollection($data));
         }
     }
+
     /**
      * Store a newly created resource in storage.
      */

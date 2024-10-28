@@ -2,13 +2,17 @@
 
 namespace App\Http\Controllers\API\V1;
 
+use App\Http\Controllers\api\v1\HrDocumentController;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Employee\StoreEmployeeRequest;
 use App\Http\Requests\Employee\UpdateEmployeeRequest;
 use App\Http\Resources\Employee\EmployeeBigLiteResource;
+use App\Http\Resources\Employee\EmployeeBonusResource;
 use App\Http\Resources\Employee\EmployeeResource;
 use App\Http\Resources\Employee\EmployeeResourceCollection;
+use App\Http\Resources\PaginatedResourceCollection;
 use App\Models\Employee;
+use App\Models\Setting;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -20,13 +24,15 @@ class EmployeeController extends Controller
     /**
      * Display a listing of the resource.
      */
+    /** @var \App\Models\User */
     public function index()
     {
         $data = Employee::orderBy('name');
         #region "Check Premission [vacation office ,vacation center ]"
         $data = $data->whereHas('EmployeeType', function ($query) {
             $employeeType = ["1"];
-            if (Auth::user()->hasAnyPermission(['vacation office'])) {
+            $user = Auth::user();
+            if ($user->hasAnyPermission(['vacation office'])) {
                 array_push($employeeType, "2");
             }
             if (Auth::user()->hasAnyPermission(['vacation center'])) {
@@ -120,7 +126,7 @@ class EmployeeController extends Controller
 
     public function update(UpdateEmployeeRequest $request, Employee $employee)
     {
-         $employee->update($request->validated());
+        $employee->update($request->validated());
         return $this->ok(new EmployeeResource($employee));
     }
     public function storeOld(StoreEmployeeRequest $request)
@@ -218,4 +224,54 @@ class EmployeeController extends Controller
 
         return $this->ok(null);
     }
+
+    #region Bonus
+    public function bonusCheck(Request $request)
+    {
+        $request->filled('limit') ? $limit = $request->limit : $limit = 10;
+
+        $data = Employee::orderBy('id', 'desc');
+        $data = $data->where('is_person', '=', true);
+        if (!$request->isNotFilled('employeeId') && $request->employeeId != '') {
+            $data = $data->where('id', $request->employeeId);
+        }
+        if (!$request->isNotFilled('employeeName') && $request->employeeName != '') {
+            $data = $data->where('name', 'like', '%' . $request->employeeName . '%');
+        }
+        $SettingNumberDayesAlertBonus = Setting::where("key", "SettingNumberDayesAlertBonus")->first()->val_int;
+        if (!$SettingNumberDayesAlertBonus) $SettingNumberDayesAlertBonus = 30;
+
+        $data = $data->paginate($limit);
+        if (empty($data) || $data == null) {
+            return $this->FailedResponse(__('general.loadFailed'));
+        } else {
+            return $this->ok(new PaginatedResourceCollection($data, EmployeeBonusResource::class));
+        }
+    }
+    public function bonusCalculate(Request $request)
+    {
+        $data = Employee::orderBy('id', 'desc');
+        $data = $data->where('is_person', '=', true);
+
+        if (!$request->isNotFilled('employeeName') && $request->employeeName != '') {
+            $data = $data->where('name', 'like', '%' . $request->employeeName . '%');
+        }
+        if (!$request->isNotFilled('employeeId') && $request->employeeId != '') {
+            $data = $data->where('id', $request->employeeId);
+        }
+
+        $dataResult = $data->get();
+        $hrController = new HrDocumentController();
+        foreach ($dataResult as $employee) {
+            $hrController->update_employee_date_bonus($employee->id);
+        }
+        $dataResult = $data->get();
+        if (empty($dataResult) || $dataResult == null) {
+            return $this->FailedResponse(__('general.loadFailed'));
+        } else {
+            return $this->ok(EmployeeBonusResource::collection($dataResult));
+        }
+    }
+
+    #endregion
 }

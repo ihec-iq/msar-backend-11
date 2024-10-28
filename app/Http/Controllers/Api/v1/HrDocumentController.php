@@ -88,6 +88,7 @@ class HrDocumentController extends Controller
         if ($employee) {
             $increseDay = 0;
             $date_last_bonus = $employee->date_last_bonus; //return $date_last_bonus;
+            if($date_last_bonus)
             $HrDocuments = $employee->HrDocuments()
                 ->whereBetween('issue_date', [$date_last_bonus, Carbon::parse($date_last_bonus)->addYear()])
                 ->where("is_active", "=", true)
@@ -110,13 +111,12 @@ class HrDocumentController extends Controller
                 $increseDay += $row->add_days;
             }
 
-
             $result = [
                 'id' => $employee->id,
                 'name' => $employee->name,
                 'currentDateBonus' => Carbon::parse($date_last_bonus)->format('Y-m-d'),
                 'numberIncreseDayes' => $increseDay,
-                'nextDateBonus' => Carbon::parse($date_last_bonus)->addDay($increseDay)->format('Y-m-d'),
+                'nextDateBonus' => Carbon::parse($date_last_bonus)->addYear(1)->addDay($increseDay*-1)->format('Y-m-d'),
                 'Documents' => HrDocumentResource::collection($filteredArray)
             ];
             return $result;

@@ -23,6 +23,10 @@ class Employee extends Model
     {
         return $this->hasMany(HrDocument::class);
     }
+    public function getDifNextDateAttribute()
+    {
+        return now()->diffInDays($this->date_next_worth);
+    }
 
     public function Section(): BelongsTo
     {
@@ -30,7 +34,7 @@ class Employee extends Model
     }
     public function MoveSection(): BelongsTo
     {
-        return $this->belongsTo(Section::class,"move_section_id","id");
+        return $this->belongsTo(Section::class, "move_section_id", "id");
     }
     public function EmployeeCenter(): BelongsTo
     {
