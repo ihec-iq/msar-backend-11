@@ -1,13 +1,13 @@
 <?php
 
-use App\Http\Controllers\api\v1\EmployeeCenterController;
-use App\Http\Controllers\API\V1\EmployeeController;
+use App\Http\Controllers\Api\v1\EmployeeCenterController;
+use App\Http\Controllers\Api\V1\EmployeeController;
 use App\Http\Controllers\Api\v1\EmployeePositionController;
 use App\Http\Controllers\Api\v1\EmployeeTypeController;
-use App\Http\Controllers\api\v1\PermissionController;
-use App\Http\Controllers\api\v1\RoleController;
+use App\Http\Controllers\Api\v1\PermissionController;
+use App\Http\Controllers\Api\v1\RoleController;
 use App\Http\Controllers\Api\v1\SectionController;
-use App\Http\Controllers\api\v1\UserController;
+use App\Http\Controllers\Api\v1\UserController;
 use Illuminate\Support\Facades\Route;
 
 Route::prefix('/user')->middleware(['auth:sanctum', 'maintenance', 'locale'])->group(function () {

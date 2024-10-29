@@ -2,7 +2,7 @@
 
 use App\Http\Controllers\Api\v1\ArchiveController;
 use App\Http\Controllers\Api\v1\ArchiveTypeController;
-use App\Http\Controllers\API\v1\DocumentController;
+use App\Http\Controllers\Api\v1\DocumentController;
 use Illuminate\Support\Facades\Route;
 
 Route::middleware(['auth:sanctum', 'maintenance', 'locale'])->prefix('/archiveSys')->group(function () {

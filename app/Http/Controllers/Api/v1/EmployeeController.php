@@ -1,8 +1,8 @@
 <?php
 
-namespace App\Http\Controllers\API\V1;
+namespace App\Http\Controllers\Api\v1;
 
-use App\Http\Controllers\api\v1\HrDocumentController;
+use App\Http\Controllers\Api\v1\HrDocumentController;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Employee\StoreEmployeeRequest;
 use App\Http\Requests\Employee\UpdateEmployeeRequest;
@@ -14,6 +14,7 @@ use App\Http\Resources\PaginatedResourceCollection;
 use App\Models\Employee;
 use App\Models\Setting;
 use App\Models\User;
+use Illuminate\Container\Attributes\DB;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
@@ -238,10 +239,19 @@ class EmployeeController extends Controller
         if (!$request->isNotFilled('employeeName') && $request->employeeName != '') {
             $data = $data->where('name', 'like', '%' . $request->employeeName . '%');
         }
-        $SettingNumberDayesAlertBonus = Setting::where("key", "SettingNumberDayesAlertBonus")->first()->val_int;
-        if (!$SettingNumberDayesAlertBonus) $SettingNumberDayesAlertBonus = 30;
 
-        $data = $data->paginate($limit);
+        $SettingNumberDayesAlertBonus = "30";
+        if ($request->isBound == 'true' || $request->isBound == 1) {
+            $local = Setting::where("key", "SettingNumberDayesAlertBonus")->first()->val_int;
+            if ($local) $SettingNumberDayesAlertBonus = $local;
+            $data = $data->where(function($query) use ($local) {
+                $query->whereRaw('DATEDIFF(date_next_worth,NOW()) <= ?', $local);
+            });
+        }
+
+        //$data= $data->selectRaw('DATEDIFF(NOW(), date_next_worth) as DD,*');
+        $data = $data->orderBy('date_next_worth','desc')->paginate($limit);
+        Log::alert($data);
         if (empty($data) || $data == null) {
             return $this->FailedResponse(__('general.loadFailed'));
         } else {

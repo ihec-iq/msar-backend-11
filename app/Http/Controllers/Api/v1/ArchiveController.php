@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers\Api\v1;
 
-use App\Http\Controllers\API\v1\DocumentController;
+use App\Http\Controllers\Api\v1\DocumentController;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Archive\ArchiveGetFilterRequest;
 use App\Http\Requests\Archive\ArchiveStoreRequest;

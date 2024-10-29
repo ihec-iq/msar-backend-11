@@ -3,12 +3,12 @@
 use App\Http\Controllers\Api\v1\BonusController;
 use App\Http\Controllers\Api\v1\BonusesController;
 use App\Http\Controllers\Api\v1\BonusJobTitleController;
-use App\Http\Controllers\api\v1\EmployeeCenterController;
-use App\Http\Controllers\API\V1\EmployeeController;
+use App\Http\Controllers\Api\v1\EmployeeCenterController;
+use App\Http\Controllers\Api\V1\EmployeeController;
 use App\Http\Controllers\Api\v1\EmployeePositionController;
 use App\Http\Controllers\Api\v1\EmployeeTypeController;
-use App\Http\Controllers\api\v1\HrDocumentController;
-use App\Http\Controllers\api\v1\HrDocumentTypeController;
+use App\Http\Controllers\Api\v1\HrDocumentController;
+use App\Http\Controllers\Api\v1\HrDocumentTypeController;
 use Illuminate\Support\Facades\Route;
 
 Route::prefix('/employee')->middleware(['auth:sanctum'])->group(function () {

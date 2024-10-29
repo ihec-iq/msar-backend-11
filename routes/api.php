@@ -1,6 +1,6 @@
 <?php
 
-//use App\Http\Controllers\API\V1\GoogleDriveController;
+//use App\Http\Controllers\Api\V1\GoogleDriveController;
  
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Http;

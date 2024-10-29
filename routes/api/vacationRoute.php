@@ -1,11 +1,11 @@
 <?php
 
-use App\Http\Controllers\api\v1\VacationController;
-use App\Http\Controllers\api\v1\VacationDailyController;
-use App\Http\Controllers\api\v1\VacationReasonController;
-use App\Http\Controllers\api\v1\VacationSickController;
-use App\Http\Controllers\api\v1\VacationTimeController;
-use App\Http\Controllers\api\v1\VacationTypeController;
+use App\Http\Controllers\Api\v1\VacationController;
+use App\Http\Controllers\Api\v1\VacationDailyController;
+use App\Http\Controllers\Api\v1\VacationReasonController;
+use App\Http\Controllers\Api\v1\VacationSickController;
+use App\Http\Controllers\Api\v1\VacationTimeController;
+use App\Http\Controllers\Api\v1\VacationTypeController;
 use Illuminate\Support\Facades\Route;
 
 Route::middleware(['auth:sanctum','maintenance', 'locale'])->prefix('/vacationSys')->group(function () {

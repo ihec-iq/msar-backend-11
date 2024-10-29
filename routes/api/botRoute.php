@@ -1,6 +1,6 @@
 <?php
 
-use App\Http\Controllers\api\v1\BotController;
+use App\Http\Controllers\Api\v1\BotController;
 use Illuminate\Support\Facades\Route;
 
 //Route::prefix('/bot')->middleware(['auth:sanctum'])->group(function () {

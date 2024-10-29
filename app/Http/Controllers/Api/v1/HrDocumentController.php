@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers\api\v1;
+namespace App\Http\Controllers\Api\v1;
 
 use App\Http\Controllers\Controller;
 use App\Http\Resources\Hr\HrDocumentResource;
@@ -92,6 +92,7 @@ class HrDocumentController extends Controller
             $HrDocuments = $employee->HrDocuments()
                 ->whereBetween('issue_date', [$date_last_bonus, Carbon::parse($date_last_bonus)->addYear()])
                 ->where("is_active", "=", true)
+                ->where('add_days','!=',0)
                 ->with('Type')
                 ->orderByDesc('add_days')
                 ->get()
