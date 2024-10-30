@@ -14,6 +14,7 @@ require __DIR__.'/api/employeeRoute.php';
 require __DIR__.'/api/vacationRoute.php';
 require __DIR__.'/api/botRoute.php';
 require __DIR__.'/api/settingRoute.php';
+require __DIR__.'/api/promotionRoute.php';
 
 Route::get('/', function () {
     return 'Workflow API running...';

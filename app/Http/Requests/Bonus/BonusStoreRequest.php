@@ -22,16 +22,13 @@ class BonusStoreRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'title' => 'nullable|string',
             'employee_id' => 'required|exists:employees,id',
             'bonus_degree_stage_id' => 'required|exists:bonus_degree_stages,id',
             'bonus_study_id' => 'required|exists:bonus_studies,id',
             'bonus_job_title_id' => 'required|exists:bonus_job_titles,id',
-            'number_last_bonus' => 'required|string',
+            'number_bonus' => 'required|string',
             'issue_date' => 'required|date',
-            'date_last_bonus' => 'required|date',
-            'date_last_worth' => 'required|date',
-            'date_next_worth' => 'required|date',
+            'date_worth' => 'required|date',
         ];
     }
 }

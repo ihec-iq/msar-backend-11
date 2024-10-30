@@ -21,12 +21,9 @@ class BonusResource extends JsonResource
     {
         return [
             'id' => $this->id,
-            'title' => $this->title,
             'issueDate' => $this->issue_date,
-            'dateLastBonus' => $this->date_last_bonus,
-            'dateLastWorth' => $this->date_last_worth,
-            'dateNextWorth' => $this->date_next_worth,
-            'numberLastBonus' => $this->number_last_bonus,
+            'numberBonus' => $this->number_last_bonus,
+            'dateWorth' => $this->date_worth,
             'Employee' => new EmployeeLiteResource($this->Employee),
             'BonusJobTitle' => new GeneralIdNameResource($this->JobTitle),
             'BonusStudy' => new GeneralIdNameResource($this->Study),
