@@ -69,7 +69,6 @@ class RetrievalVoucherController extends Controller
 
         //$arrayItems = json_decode($request->items, true);
         $arrayItems = json_decode($request->Items, true);
-        //Log::alert($arrayItems);
         $arrayItemInsert = [];
         foreach ($arrayItems as $key => $item) {
             $newItem = new RetrievalVoucherItem();

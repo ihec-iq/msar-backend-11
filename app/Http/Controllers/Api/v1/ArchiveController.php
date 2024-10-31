@@ -24,16 +24,14 @@ class ArchiveController extends Controller
 
     public function test()
     {
-        return auth()->user()->hasAnyPermission(['Administrator', 'Super-Admin']);
+        return Auth::user()->hasAnyPermission(['Administrator', 'Super-Admin']);
     }
 
     public function filter(ArchiveGetFilterRequest $request)
     {
-        //Log::alert($request);
         $data = Archive::orderBy('id', 'desc');
         $filter_bill = [];
         $request->filled('limit') ? $limit = $request->limit : $limit = 10;
-
 
         if (!$request->isNotFilled('way') && $request->way != '') {
             $filter_bill[] = ['way', 'like', '%' . $request->way . '%'];
@@ -67,7 +65,6 @@ class ArchiveController extends Controller
         ) {
             $data = $data->whereBetween('issue_date', [$request->issueDateFrom, $request->issueDateTo]);
         }
-        //Log::alert($filter_bill);
         $data = $data->where($filter_bill);
         if (Auth::user()->hasAnyPermission(['Administrator', 'Super-Admin', 'ViewAllSections'])) {
             if (!$request->isNotFilled('sectionId') && $request->sectionId != '-1') {

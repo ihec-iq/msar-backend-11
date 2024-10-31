@@ -91,7 +91,6 @@ class ItemController extends Controller
 
     public function update(ItemStoreRequest $request, string $id)
     {
-        Log::alert($request);
         $data = Item::find($id);
         $data->name = $request->name;
         $data->code = $request->code;

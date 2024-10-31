@@ -54,7 +54,6 @@ class OutputVoucherController extends Controller
      */
     public function store(OutputVoucherRequest $request)
     {
-        //Log::alert($request);
         $Stock = json_decode($request->Stock, true);
         $data = OutputVoucher::create([
             'number' => $request->number,
@@ -67,7 +66,6 @@ class OutputVoucherController extends Controller
             'user_update_id' => auth()->user()->id,
         ]);
         $arrayItems = json_decode($request->Items, true);
-        //Log::alert($arrayItems);
         $arrayItemInsert = [];
         foreach ($arrayItems as $key => $item) {
 

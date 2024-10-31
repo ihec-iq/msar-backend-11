@@ -96,9 +96,7 @@ class VacationDailyController extends Controller
                 ' الى تاريخ' . $value->day_to . PHP_EOL .
                 '------------------------------------';
         }
-
-        // Log::alert($data);
-        // Log::alert("dailyReportByEmployee : " . $result);
+ 
         return $result;
     }
     public function getDailyMyReport()

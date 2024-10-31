@@ -84,7 +84,6 @@ class InputVoucherItemController extends Controller
         if ($storeId <> "0")
             $results = $results->whereRaw('stockId=' . $storeId);
         $results = $results->get();
-        //Log::alert(print_r(InputVoucherItemVSelectResource::collection($results), true));
         return $this->ok(InputVoucherItemVSelectResource::collection($results));
 
     }
@@ -110,7 +109,6 @@ class InputVoucherItemController extends Controller
         if ($storeId <> "0")
             $results = $results->whereRaw('stockId=' . $storeId);
         $results = $results->get();
-        //Log::alert(print_r(InputVoucherItemVSelectResource::collection($results), true));
         return $this->ok(InputVoucherItemVSelectResource::collection($results));
 
     }

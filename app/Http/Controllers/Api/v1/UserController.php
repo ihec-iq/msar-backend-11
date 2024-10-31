@@ -120,8 +120,7 @@ class UserController extends Controller
             //'email' => ['required', 'string', 'email', 'max:255', 'unique:users'],
             // 'password' => ['nullable','required', 'confirmed', Rules\Password::defaults()],
         ]);
-        //Log::alert($request);
-
+ 
         $user = User::find($user_id);
         if (!isset($user) || $user == null || $user == '') {
             return $this->FailedResponse(__('general.saveUnsuccessfully'));

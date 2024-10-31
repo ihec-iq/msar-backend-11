@@ -21,7 +21,6 @@ class VoucherItemHistoryController extends Controller
 
     public function filter(Request $request)
     {
-        //Log::alert($request);
         $filter_bill = [];
         $request->filled('limit') ? $limit = $request->limit : $limit = 10;
         // if (! $request->isNotFilled('name') && $request->name != '') {

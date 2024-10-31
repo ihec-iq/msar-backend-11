@@ -64,7 +64,6 @@ class StoreController extends Controller
 
     public function summation(Request $request)
     {
-        Log::alert('filter');
         $filter_bill = [];
         $filter_billOR = [];
         $request->filled('limit') ? $limit = $request->limit : $limit = 10;
@@ -104,7 +103,6 @@ class StoreController extends Controller
         //     ->groupBy(['input_voucher_items.price', 'items.id', 'items.name', 'stocks.name', 'description'])
         //     ->paginate($limit);
 
-        Log::alert($data);
         //return $data;
         if (empty($data) || $data == null) {
             return $this->FailedResponse(__('general.loadFailed'));
@@ -132,7 +130,6 @@ class StoreController extends Controller
         // if (! $request->isNotFilled('isIn') && $request->isIn != -1) {
         //     $filter_bill[] = ['is_in', $request->isIn];
         // }
-        Log::alert("Sum",);
         $data = DB::table('input_voucher_items')
             ->join('items', 'input_voucher_items.item_id', '=', 'items.id')
             ->join('input_vouchers', 'input_voucher_items.input_voucher_id', '=', 'input_vouchers.id')

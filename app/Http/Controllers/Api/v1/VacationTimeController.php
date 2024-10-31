@@ -70,7 +70,6 @@ class VacationTimeController extends Controller
         });
         //endregion
         $data = $data->paginate($limit);
-        //Log::alert($request);
         if (empty($data) || $data == null) {
             return $this->FailedResponse(__('general.loadFailed'));
         } else {
@@ -100,9 +99,7 @@ class VacationTimeController extends Controller
                 ' الى وقت' . $value->time_to . PHP_EOL .
                 '-----------------------------------------'. PHP_EOL;
         }
-        // Log::alert($data);
         Log::alert('dailyReportByEmployee : ' . $result);
-
         return $result;
     }
 

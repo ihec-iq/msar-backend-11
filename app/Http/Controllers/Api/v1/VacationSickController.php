@@ -120,7 +120,6 @@ class VacationSickController extends Controller
         ];
         $vacationSick = VacationSick::create($data);
         $vacationResult = $this->update_vacations($vacation->id);
-        Log::alert($vacation->Employee->telegramId);
         if ($vacation->Employee->telegramId) {
             if (isset($vacation->Employee->telegramId) && $vacation->Employee->telegramId != '') {
                 $botController = new BotController(new Api);

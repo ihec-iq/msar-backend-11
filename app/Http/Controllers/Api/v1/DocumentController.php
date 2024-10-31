@@ -168,7 +168,6 @@ class DocumentController extends Controller
         //$url = Storage::put('documents', $Document->path);
         //$result = Storage::delete($Document->path);
         $Document->delete();
-        Log::alert($Document);
         return true;
         //return $this->deleteFile($Document->path);
     }

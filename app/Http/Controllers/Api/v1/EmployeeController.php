@@ -101,6 +101,7 @@ class EmployeeController extends Controller
             array_push($employeeType, "4");
             $query->whereIn('id', $employeeType);
         });
+        
         #endregion
         $data = $data->paginate($limit);
         if (empty($data) || $data == null) {
@@ -219,8 +220,6 @@ class EmployeeController extends Controller
      */
     public function destroy(Employee $employee)
     {
-        Log::alert("Delete Employee id");
-        Log::alert($employee);
         $employee->delete();
 
         return $this->ok(null);
@@ -251,7 +250,6 @@ class EmployeeController extends Controller
 
         //$data= $data->selectRaw('DATEDIFF(NOW(), date_next_worth) as DD,*');
         $data = $data->orderBy('date_next_worth','desc')->paginate($limit);
-        Log::alert($data);
         if (empty($data) || $data == null) {
             return $this->FailedResponse(__('general.loadFailed'));
         } else {

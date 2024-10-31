@@ -32,6 +32,7 @@ class DatabaseSeeder extends Seeder
             BonusDegreeStageSeeder::class,
             BonusJobTitleSeeder::class,
             BonusStudySeeder::class,
+            PermissionSeeder::class,
             UserSeeder::class,
             EmployeeSeeder::class,
             ArchiveTypeSeeder::class,

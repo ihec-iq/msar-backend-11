@@ -17,18 +17,8 @@ class AuthController extends Controller
     public function login(LoginRequest $request)
     {
 
-        //Log::alert($request);
         $user = User::where('email', $request->email)->where('active', true)->orWhere('user_name', $request->email)->first();
-        // Log::alert($user);
-        // Log::alert($user->password);
-        // Log::alert(Hash::make($request->password));
-        // Log::alert(Hash::check($request->password, $user->password));
         if (! $user || ! Hash::check($request->password, $user->password)) {
-            // throw ValidationException::withMessages([
-            //     'email' => ['The provided credentials are incorrect.'],
-            // ]);
-            //|| Carbon::now()->addYear(1)->diffInDays($this->created_at)<1
-
             return response()->json(
                 [
                     'ErrorCode' => '401',
