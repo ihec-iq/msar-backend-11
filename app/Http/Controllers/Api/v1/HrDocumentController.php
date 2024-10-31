@@ -84,29 +84,48 @@ class HrDocumentController extends Controller
         if ($employee) {
             $increseDay = 0;
             $date_last_bonus = $employee->date_last_bonus; //return $date_last_bonus;
-            if ($date_last_bonus)
-                $HrDocuments = $employee->HrDocuments()
+            $filteredArray = [];
+            if ($date_last_bonus){
+                #region Add Ponus
+               $HrDocuments = $employee->HrDocuments()
                     ->whereBetween('issue_date', [$date_last_bonus, Carbon::parse($date_last_bonus)->addYear()])
                     ->where("is_active", "=", true)
-                    ->where('add_days', '!=', 0)
+                    ->where('add_days', '>', 0)
                     ->with('Type')
                     ->orderByDesc('add_days')
                     ->get()
                     ->take(4);
-            $filteredArray = [];
-            $repeted180 = 0;
-            foreach ($HrDocuments as $row) {
-                if ($row->add_days == 180) {
-                    if ($repeted180 < 1) {
-                        $repeted180++;
-                        $filteredArray[] = $row;
-                        $increseDay += $row->add_days;
+                $repeted180 = 0;
+                foreach ($HrDocuments as $row) {
+                    if ($row->add_days == 180) {
+                        if ($repeted180 < 1) {
+                            $repeted180++;
+                            $filteredArray[] = $row;
+                            $increseDay += $row->add_days;
+                        }
+                        continue;
                     }
-                    continue;
+                    $filteredArray[] = $row;
+                    $increseDay += $row->add_days;
                 }
-                $filteredArray[] = $row;
-                $increseDay += $row->add_days;
+                #endregion
+                #region Add Subtract
+                $HrDocuments = $employee->HrDocuments()
+                    ->whereBetween('issue_date', [$date_last_bonus, Carbon::parse($date_last_bonus)->addYear()])
+                    ->where("is_active", "=", true)
+                    ->where('add_days', '<', 0)
+                    ->with('Type')
+                    ->orderByDesc('add_days')
+                    ->first();
+                if($HrDocuments){
+                    $increseDay -= $HrDocuments->add_days;
+                    $filteredArray[] = $HrDocuments;
+                }
+                #endregion
             }
+                
+            
+            
 
             $result = [
                 'id' => $employee->id,
