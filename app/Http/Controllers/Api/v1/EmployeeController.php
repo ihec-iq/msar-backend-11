@@ -181,6 +181,10 @@ class EmployeeController extends Controller
     {
         return $this->ok(new EmployeeResource($employee));
     }
+    public function showLite(Employee $employee)
+    {
+        return $this->ok(new EmployeeBigLiteResource($employee));
+    } 
 
     /**
      * Update the specified resource in storage.

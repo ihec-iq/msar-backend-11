@@ -16,6 +16,7 @@ Route::prefix('/employee')->middleware(['auth:sanctum'])->group(function () {
     Route::get('/lite', [EmployeeController::class, 'getLite']);
     Route::get('/filter', [EmployeeController::class, 'filter']);
     Route::get('/{employee}', [EmployeeController::class, 'show']);
+    Route::get('/show/lite/{employee}', [EmployeeController::class, 'showLite']);
     Route::post('/store', [EmployeeController::class, 'store']);
     Route::post('/update/{employee}', [EmployeeController::class, 'update']);
     Route::delete('/delete/{employee}', [EmployeeController::class, 'destroy']);
