@@ -16,9 +16,13 @@ class BonusJobTitleController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
-        $data = BonusJobTitle::orderBy('id', 'desc')->get();
+        $data = BonusJobTitle::orderBy('id', 'desc');
+        if (!$request->isNotFilled('bonusDegreeId') && $request->bonusDegreeId != 0) {
+            $data = $data->where('bonus_degree_id', $request->bonusDegreeId);
+        }
+        $data = $data->get();
         return $this->ok(BonusJobTitleResource::collection($data));
     }
     public function filter(Request $request)
@@ -28,7 +32,10 @@ class BonusJobTitleController extends Controller
         $data = BonusJobTitle::orderBy('id', 'desc');
 
         if (!$request->isNotFilled('name') && $request->name != '') {
-           // $data = $data->where('name', 'like', '%' . $request->name . '%');
+            // $data = $data->where('name', 'like', '%' . $request->name . '%');
+        }
+        if (!$request->isNotFilled('bonusDegreeId') && $request->bonusDegreeId != 0) {
+            $data = $data->where('bonus_degree_id', $request->bonusDegreeId);
         }
         $data = $data->paginate($limit);
         // return $data;
@@ -47,6 +54,7 @@ class BonusJobTitleController extends Controller
     {
         $validatedData = $request->validate([
             'name' => 'required|string|max:255',
+            'bonusDegreeId' => 'required|integer|exists:bonus_degrees,id',
             'description' => 'nullable|string',
         ]);
 
@@ -71,6 +79,7 @@ class BonusJobTitleController extends Controller
 
         $validatedData = $request->validate([
             'name' => 'required|string|max:255',
+            'bonusDegreeId' => 'required|integer|exists:bonus_degrees,id',
             'description' => 'nullable|string',
         ]);
 
