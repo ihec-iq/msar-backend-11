@@ -22,7 +22,7 @@ class EmployeeBonusResource extends JsonResource
             'id' => $this->id,
             'name' => $this->name,
             'dateLastBonus' => $this->date_last_bonus,
-            'dateNextWorth' => $this->date_next_worth,
+            'dateNextWorth' => $this->date_next_bonus,
             'difNextDate' => $this->getDifNextDateAttribute(), // Updated to use the new method
             'numberLastBonus' => $this->number_last_bonus,
             'employeePosition' => $this->EmployeePosition->name,
@@ -42,6 +42,6 @@ class EmployeeBonusResource extends JsonResource
     public function getDifNextDateAttribute(): int
     {
         // Assuming you want to calculate the difference in days
-        return now()->diffInDays($this->date_next_worth);
+        return now()->diffInDays($this->date_next_bonus);
     }
 }

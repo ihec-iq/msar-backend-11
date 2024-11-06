@@ -26,8 +26,7 @@ class UserHrSeeder extends Seeder
                     'number_last_bonus' => 1,
                     'issue_date' => now(),
                     'date_last_bonus' => now(),
-                    'date_last_worth' => now(),
-                    'date_next_worth' => now(),
+                    'date_next_bonus' => now()->addYears(1),
                 ]
             );
         }

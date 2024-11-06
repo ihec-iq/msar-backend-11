@@ -74,7 +74,7 @@ class HrDocumentController extends Controller
     {
         $employeeInfo = $this->check_bonus_employee($employeeId); //return $employeeInfo['nextDateBonus'];
         $employee = Employee::find($employeeId);
-        $employee->date_next_worth = $employeeInfo['nextDateBonus'];
+        $employee->date_next_bonus = $employeeInfo['nextDateBonus'];
         $employee->save();
         return new EmployeeResource($employee);
     }
@@ -137,7 +137,7 @@ class HrDocumentController extends Controller
             ];
             return $result;
 
-            //date_next_worth
+            //date_next_bonus
         }
     }
     public function store(Request $request)

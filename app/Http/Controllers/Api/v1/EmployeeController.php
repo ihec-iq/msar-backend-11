@@ -8,6 +8,7 @@ use App\Http\Requests\Employee\StoreEmployeeRequest;
 use App\Http\Requests\Employee\UpdateEmployeeRequest;
 use App\Http\Resources\Employee\EmployeeBigLiteResource;
 use App\Http\Resources\Employee\EmployeeBonusResource;
+use App\Http\Resources\Employee\EmployeeLiteBonusResource;
 use App\Http\Resources\Employee\EmployeeResource;
 use App\Http\Resources\Employee\EmployeeResourceCollection;
 use App\Http\Resources\PaginatedResourceCollection;
@@ -101,7 +102,7 @@ class EmployeeController extends Controller
             array_push($employeeType, "4");
             $query->whereIn('id', $employeeType);
         });
-        
+
         #endregion
         $data = $data->paginate($limit);
         if (empty($data) || $data == null) {
@@ -184,7 +185,11 @@ class EmployeeController extends Controller
     public function showLite(Employee $employee)
     {
         return $this->ok(new EmployeeBigLiteResource($employee));
-    } 
+    }
+    public function showLiteBonus(Employee $employee)
+    {
+        return $this->ok(new EmployeeLiteBonusResource($employee));
+    }
 
     /**
      * Update the specified resource in storage.
@@ -243,17 +248,25 @@ class EmployeeController extends Controller
             $data = $data->where('name', 'like', '%' . $request->employeeName . '%');
         }
 
-        $SettingNumberDayesAlertBonus = "30";
         if ($request->isBound == 'true' || $request->isBound == 1) {
-            $local = Setting::where("key", "SettingNumberDayesAlertBonus")->first()->val_int;
-            if ($local) $SettingNumberDayesAlertBonus = $local;
-            $data = $data->where(function($query) use ($local) {
-                $query->whereRaw('DATEDIFF(date_next_worth,NOW()) <= ?', $local);
+            $SettingNumberDayesAlertBonus = "30";
+            $local = $SettingNumberDayesAlertBonus;
+            if (!$request->isNotFilled('bound') && $request->bound != '') {
+                $local =   $request->bound;
+            } else {
+                $local = Setting::where("key", "SettingNumberDayesAlertBonus")->first()->val_int;
+                if ($local) $SettingNumberDayesAlertBonus = $local;
+            }
+
+            if ($local != '' && $local != null) $SettingNumberDayesAlertBonus = $local;
+
+            $data = $data->where(function ($query) use ($SettingNumberDayesAlertBonus) {
+                $query->whereRaw('DATEDIFF(date_next_bonus,NOW()) <= ?', $SettingNumberDayesAlertBonus);
             });
         }
 
-        //$data= $data->selectRaw('DATEDIFF(NOW(), date_next_worth) as DD,*');
-        $data = $data->orderBy('date_next_worth','desc')->paginate($limit);
+        //$data= $data->selectRaw('DATEDIFF(NOW(), date_next_bonus) as DD,*');
+        $data = $data->orderBy('date_next_bonus', 'desc')->paginate($limit);
         if (empty($data) || $data == null) {
             return $this->FailedResponse(__('general.loadFailed'));
         } else {

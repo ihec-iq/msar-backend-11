@@ -14,11 +14,9 @@ return new class () extends Migration {
             $table->id();
             $table->foreignId('employee_id')->constrained()->onUpdate('cascade')->onDelete('cascade');
             $table->foreignId('bonus_degree_stage_id')->constrained()->onUpdate('cascade')->onDelete('cascade');
-            $table->foreignId('bonus_study_id')->constrained()->onUpdate('cascade')->onDelete('cascade');
-            $table->foreignId('bonus_job_title_id')->constrained()->onUpdate('cascade')->onDelete('cascade');
-            $table->string('number_bonus')->nullable();
+            $table->string('number')->nullable();
             $table->date('issue_date')->nullable();
-            $table->date('date_worth')->nullable();
+            $table->text('notes')->nullable();
             $table->softDeletes();
             $table->timestamps();
         });

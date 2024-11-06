@@ -25,7 +25,7 @@ class Employee extends Model
     }
     public function getDifNextDateAttribute()
     {
-        return now()->diffInDays($this->date_next_worth);
+        return now()->diffInDays($this->date_next_bonus);
     }
 
     public function Section(): BelongsTo

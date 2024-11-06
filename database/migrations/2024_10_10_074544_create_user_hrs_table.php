@@ -21,8 +21,7 @@ return new class extends Migration
             $table->string('number_last_bonus')->nullable();
             $table->date('issue_date')->nullable();
             $table->date('date_last_bonus')->nullable();
-            $table->date('date_last_worth')->nullable();
-            $table->date('date_next_worth')->nullable();
+            $table->date('date_next_bonus')->nullable();
             $table->softDeletes();
             $table->timestamps();
         });

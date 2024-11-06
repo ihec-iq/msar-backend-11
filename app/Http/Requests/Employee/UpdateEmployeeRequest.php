@@ -37,8 +37,7 @@ class UpdateEmployeeRequest extends FormRequest
             'number_last_bonus' => 'nullable|string|max:255',
             'issue_date' => 'nullable|date',
             'date_last_bonus' => 'nullable|date',
-            'date_last_worth' => 'nullable|date',
-            // 'date_next_worth' => 'nullable|date',
+            // 'date_next_bonus' => 'nullable|date',
         ];
     }
 }

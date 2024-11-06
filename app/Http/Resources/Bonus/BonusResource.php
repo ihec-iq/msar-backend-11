@@ -4,6 +4,7 @@ namespace App\Http\Resources\Bonus;
 
 
 use App\Http\Resources\Employee\EmployeeBigLiteResource;
+use App\Http\Resources\Employee\EmployeeLiteBonusResource;
 use App\Http\Resources\Employee\EmployeeLiteResource;
 use App\Http\Resources\GeneralIdNameResource;
 use App\Http\Resources\User\UserLiteResource;
@@ -22,14 +23,12 @@ class BonusResource extends JsonResource
         return [
             'id' => $this->id,
             'issueDate' => $this->issue_date,
-            'numberBonus' => $this->number_last_bonus,
-            'dateWorth' => $this->date_worth,
-            'Employee' => new EmployeeLiteResource($this->Employee),
-            'BonusJobTitle' => new GeneralIdNameResource($this->JobTitle),
-            'BonusStudy' => new GeneralIdNameResource($this->Study),
+            'number' => $this->number,
+            'Employee' => new EmployeeLiteBonusResource($this->Employee),
             'BonusDegreeStage' => new BonusDegreeStageResource($this->DegreeStage),
             'UserCreate' => new UserLiteResource($this->UserCreate),
             'UserUpdate' => new UserLiteResource($this->UserUpdate),
+            'notes' => $this->notes,
         ];
         
     }

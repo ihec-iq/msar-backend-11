@@ -1,5 +1,6 @@
 <?php
 
+use Carbon\Carbon;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
@@ -49,10 +50,8 @@ return new class extends Migration {
             $table->foreignId('bonus_study_id')->default(1)->constrained()->onUpdate('cascade')->onDelete('cascade');
             $table->foreignId('bonus_job_title_id')->default(1)->constrained()->onUpdate('cascade')->onDelete('cascade');
             $table->string('number_last_bonus')->nullable();
-            $table->date('issue_date')->nullable();
             $table->date('date_last_bonus')->nullable()->default(now());
-            $table->date('date_last_worth')->nullable()->default(now());
-            $table->date('date_next_worth')->nullable()->default(now());
+            $table->date('date_next_bonus')->nullable()->default(Carbon::now()->addYears(1));
             $table->timestamps();
             $table->softDeletes();
         });
