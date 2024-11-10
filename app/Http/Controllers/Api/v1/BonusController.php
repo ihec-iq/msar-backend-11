@@ -14,6 +14,7 @@ use App\Http\Resources\PaginatedResourceCollection;
 use App\Models\Bonus;
 use App\Models\Employee;
 use App\Models\Setting;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 
@@ -42,7 +43,6 @@ class BonusController extends Controller
     public function filter(Request $request)
     {
         $request->filled('limit') ? $limit = $request->limit : $limit = 10;
-
         $data = Bonus::orderBy('id', 'desc');
         $data = $data->whereRelation('Employee', 'is_person', '=', true);
 
@@ -73,6 +73,12 @@ class BonusController extends Controller
         //return $request->all();
         try {
             $data = Bonus::create($request->validated());
+            $data->Employee->update([
+                'date_last_bonus' => $request->issue_date,
+                'date_next_bonus' => Carbon::parse($request->issue_date)->addYears(1),
+                'bonus_degree_stage_id' => $request->bonus_degree_stage_id,
+                'number_last_bonus' => $request->number,
+            ]);
             return $this->ok(new BonusResource($data));
         } catch (\Exception $e) {
             return $this->FailedResponse(__('general.saveFailed'), $e->getMessage());
@@ -108,8 +114,24 @@ class BonusController extends Controller
     public function destroy(string $id)
     {
         try {
-            $bonus = Bonus::findOrFail($id);
-            $bonus->delete();
+            $data = Bonus::findOrFail($id);
+            $employee = $data->Employee;
+            $data = Bonus::where('employee_id', $employee->id)->count();
+            if ($data == 1) {
+                return $this->FailedResponse(__('general.deleteFailed'),'لا يمكن حذف العلاوة الاولى');    
+            }
+
+            $data->delete();
+            $lastData = Bonus::where('employee_id', $employee->id)->orderBy('id', 'desc')->first();
+
+            $employee->update([
+                'date_last_bonus' => $lastData->issue_date,
+                'date_next_bonus' => Carbon::parse($lastData->issue_date)->addYears(1),
+                'bonus_degree_stage_id' => $lastData->bonus_degree_stage_id,
+                'number_last_bonus' => $lastData->number,
+            ]);
+            $hrDocument = new HrDocumentController();
+            $hrDocument->update_employee_date_bonus($employee->id);
             return $this->ok(['message' => 'Bonus deleted successfully']);
         } catch (\Exception $e) {
             return $this->FailedResponse(__('general.deleteFailed'), $e->getMessage());

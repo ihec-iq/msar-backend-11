@@ -24,7 +24,7 @@ class EmployeeLiteBonusResource extends JsonResource
             'Type' => new EmployeeTypeResource($this->EmployeeType),
             'Position' => new EmployeePositionResource($this->EmployeePosition),
             'dateLastBonus' => $this->date_last_bonus,
-            'dateNextWorth' => $this->date_next_bonus,
+            'dateNextBonus' => $this->date_next_bonus,
             'numberLastBonus' => $this->number_last_bonus,
             'BonusJobTitle' => new GeneralIdNameResource($this->BonusJobTitle),
             'BonusStudy' => new GeneralIdNameResource($this->BonusStudy),

@@ -24,11 +24,9 @@ class BonusStoreRequest extends FormRequest
         return [
             'employee_id' => 'required|exists:employees,id',
             'bonus_degree_stage_id' => 'required|exists:bonus_degree_stages,id',
-            'bonus_study_id' => 'required|exists:bonus_studies,id',
-            'bonus_job_title_id' => 'required|exists:bonus_job_titles,id',
-            'number_bonus' => 'required|string',
+            'number' => 'required|string',
             'issue_date' => 'required|date',
-            'date_worth' => 'required|date',
+            'notes' => 'nullable|string',
         ];
     }
 }

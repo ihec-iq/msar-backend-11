@@ -45,7 +45,7 @@ class EmployeeResource extends JsonResource
             'idCard' => $this->id_card,
             'telegramId' => $this->telegram,
             'dateLastBonus' => $this->date_last_bonus,
-            'dateNextWorth' => $this->date_next_bonus,
+            'dateNextBonus' => $this->date_next_bonus,
             'numberLastBonus' => $this->number_last_bonus,
             'BonusJobTitle' => new GeneralIdNameResource($this->BonusJobTitle),
             'BonusStudy' => new GeneralIdNameResource($this->BonusStudy),

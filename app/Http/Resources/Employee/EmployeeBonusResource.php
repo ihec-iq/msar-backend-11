@@ -22,7 +22,7 @@ class EmployeeBonusResource extends JsonResource
             'id' => $this->id,
             'name' => $this->name,
             'dateLastBonus' => $this->date_last_bonus,
-            'dateNextWorth' => $this->date_next_bonus,
+            'dateNextBonus' => $this->date_next_bonus,
             'difNextDate' => $this->getDifNextDateAttribute(), // Updated to use the new method
             'numberLastBonus' => $this->number_last_bonus,
             'employeePosition' => $this->EmployeePosition->name,
