@@ -49,7 +49,7 @@ class UserController extends Controller
         $data = $data->paginate($limit);
 
         if (empty($data) || $data == null) {
-            return $this->FailedResponse(__('general.loadFailed'));
+            return $this->error(__('general.loadFailed'));
         } else {
             return $this->ok(new UserResourceCollection($data));
         }
@@ -97,8 +97,8 @@ class UserController extends Controller
                 'token' => $access_token,
             ]);
         } catch (\Exception $e) {
-            return $this->FailedResponse(__('general.saveUnsuccessfully'));
-            // return $this->FailedResponse($e->getMessage(), __('general.saveUnsuccessfully'));
+            return $this->error(__('general.saveUnsuccessfully'));
+            // return $this->error($e->getMessage(), __('general.saveUnsuccessfully'));
         }
     }
 
@@ -123,7 +123,7 @@ class UserController extends Controller
  
         $user = User::find($user_id);
         if (!isset($user) || $user == null || $user == '') {
-            return $this->FailedResponse(__('general.saveUnsuccessfully'));
+            return $this->error(__('general.saveUnsuccessfully'));
         }
         // if ($user->email != $request->email) {
         //     $validate = $request->validate([
@@ -157,13 +157,13 @@ class UserController extends Controller
             'token' => $access_token,
         ], __('general.saveSuccessfully'));
 
-        //return $this->FailedResponse(__('general.saveUnsuccessfully'));
+        //return $this->error(__('general.saveUnsuccessfully'));
     }
     public function updateMyPassword(Request $request)
     {
         $user = User::find(Auth::user()->id);
         if (!isset($user) || $user == null || $user == '') {
-            return $this->FailedResponse(__('general.saveUnsuccessfully'));
+            return $this->error(__('general.saveUnsuccessfully'));
         }
         isset($request->password) && $request->password != '' ? $user->password = Hash::make($request->password) : '';
         $user->save();
@@ -172,14 +172,14 @@ class UserController extends Controller
             'user' => new UserResource($user),
             'token' => $access_token,
         ], __('general.saveSuccessfully'));
-        //return $this->FailedResponse(__('general.saveUnsuccessfully'));
+        //return $this->error(__('general.saveUnsuccessfully'));
     }
 
     public function active($id)
     {
         $user = User::find($id);
         if (!isset($user) || $user == null || $user == '') {
-            return $this->FailedResponse(__('general.saveUnsuccessfully'));
+            return $this->error(__('general.saveUnsuccessfully'));
         }
         $user->active = true;
         $user->save();
@@ -191,7 +191,7 @@ class UserController extends Controller
     {
         $user = User::find($id);
         if (!isset($user) || $user == null || $user == '') {
-            return $this->FailedResponse(__('general.saveUnsuccessfully'));
+            return $this->error(__('general.saveUnsuccessfully'));
         }
         $user->active = false;
         $user->save();

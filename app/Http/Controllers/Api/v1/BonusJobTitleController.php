@@ -32,7 +32,7 @@ class BonusJobTitleController extends Controller
         $data = BonusJobTitle::orderBy('id', 'desc');
 
         if (!$request->isNotFilled('name') && $request->name != '') {
-            // $data = $data->where('name', 'like', '%' . $request->name . '%');
+            $data = $data->where('name', 'like', '%' . $request->name . '%');
         }
         if (!$request->isNotFilled('bonusDegreeId') && $request->bonusDegreeId != 0) {
             $data = $data->where('bonus_degree_id', $request->bonusDegreeId);
@@ -40,7 +40,7 @@ class BonusJobTitleController extends Controller
         $data = $data->paginate($limit);
         // return $data;
         if (empty($data) || $data == null) {
-            return $this->FailedResponse(__('general.loadFailed'));
+            return $this->error(__('general.loadFailed'));
         } else {
             //return $this->ok(new BonusJobTitleResourceCollection( $data));
             return $this->ok(new PaginatedResourceCollection($data, BonusJobTitleResource::class));

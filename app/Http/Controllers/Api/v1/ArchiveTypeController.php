@@ -66,7 +66,7 @@ class ArchiveTypeController extends Controller
         $is_used_in_archive = Archive::where('archive_type_id', $id)->exists();
 
         if ($is_used_in_archive) {
-            return $this->FailedResponse('This archive type is used in some archives', null, 400);
+            return $this->error('This archive type is used in some archives', null, 400);
         }
 
         $data = ArchiveType::find($id);

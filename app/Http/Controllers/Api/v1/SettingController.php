@@ -35,13 +35,13 @@ class SettingController extends Controller
     public function show(Setting $setting)
     {
         if ($setting) return $this->ok(new SettingResource($setting)); // Return the specified setting
-        return $this->FailedResponse(); // Return the specified setting
+        return $this->error(); // Return the specified setting
     }
     public function showByKey(Request $request)
     {
         $setting = Setting::where('key', $request->key)->first();
         if ($setting) return $this->ok(new SettingResource($setting)); // Return the specified setting
-        return $this->FailedResponse();
+        return $this->error();
     }
 
 

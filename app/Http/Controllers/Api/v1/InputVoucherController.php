@@ -49,7 +49,7 @@ class InputVoucherController extends Controller
 
         //return $data->toSql();
         if (empty($data) || $data == null) {
-            return $this->FailedResponse(__('general.loadFailed'));
+            return $this->error(__('general.loadFailed'));
         } else {
             //return $this->ok($data);
             return $this->ok(new InputVoucherResourceCollection($data));

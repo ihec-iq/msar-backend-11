@@ -70,7 +70,7 @@ class VacationSickController extends Controller
         $data = $data->paginate($limit);
 
         if (empty($data) || $data == null) {
-            return $this->FailedResponse(__('general.loadFailed'));
+            return $this->error(__('general.loadFailed'));
         } else {
             return $this->ok(new VacationSickResourceCollection($data));
         }
@@ -105,7 +105,7 @@ class VacationSickController extends Controller
 
         $vacationTime = VacationSick::where($data)->first();
         if ($vacationTime) {
-            return $this->FailedResponse(
+            return $this->error(
                 "this is Found in System",
                 new VacationSickResource($vacationTime)
             );

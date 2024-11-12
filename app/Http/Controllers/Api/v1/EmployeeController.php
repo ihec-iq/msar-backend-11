@@ -106,7 +106,7 @@ class EmployeeController extends Controller
         #endregion
         $data = $data->paginate($limit);
         if (empty($data) || $data == null) {
-            return $this->FailedResponse(__('general.loadFailed'));
+            return $this->error(__('general.loadFailed'));
         } else {
             return $this->ok(new EmployeeResourceCollection($data));
         }
@@ -268,7 +268,7 @@ class EmployeeController extends Controller
         //$data= $data->selectRaw('DATEDIFF(NOW(), date_next_bonus) as DD,*');
         $data = $data->orderBy('date_next_bonus', 'desc')->paginate($limit);
         if (empty($data) || $data == null) {
-            return $this->FailedResponse(__('general.loadFailed'));
+            return $this->error(__('general.loadFailed'));
         } else {
             return $this->ok(new PaginatedResourceCollection($data, EmployeeBonusResource::class));
         }
@@ -292,7 +292,7 @@ class EmployeeController extends Controller
         }
         $dataResult = $data->get();
         if (empty($dataResult) || $dataResult == null) {
-            return $this->FailedResponse(__('general.loadFailed'));
+            return $this->error(__('general.loadFailed'));
         } else {
             return $this->ok(EmployeeBonusResource::collection($dataResult));
         }

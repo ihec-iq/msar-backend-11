@@ -74,7 +74,7 @@ class VacationDailyController extends Controller
 
         $data = $data->paginate($limit);
         if (empty($data) || $data == null) {
-            return $this->FailedResponse(__('general.loadFailed'));
+            return $this->error(__('general.loadFailed'));
         } else {
             return $this->ok(new VacationDailyResourceCollection($data));
         }
@@ -120,7 +120,7 @@ class VacationDailyController extends Controller
         ];
         $vacationDaily = VacationDaily::where($data)->first();
         if ($vacationDaily) {
-            return $this->FailedResponse(
+            return $this->error(
                 'this is Found in System',
                 new VacationDailyResource($vacationDaily)
             );

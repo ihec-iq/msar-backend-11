@@ -55,7 +55,7 @@ class StoreController extends Controller
             ->orWhere($filter_billOR)
             ->paginate($limit);
         if (empty($data) || $data == null) {
-            return $this->FailedResponse(__('general.loadFailed'));
+            return $this->error(__('general.loadFailed'));
         } else {
             //return $this->ok($data);
             return $this->ok(new StoreResourceCollection($data));
@@ -105,7 +105,7 @@ class StoreController extends Controller
 
         //return $data;
         if (empty($data) || $data == null) {
-            return $this->FailedResponse(__('general.loadFailed'));
+            return $this->error(__('general.loadFailed'));
         } else {
             //return $this->ok($data);
             return $this->ok(new StoreSummationResourceCollection($data));
@@ -209,7 +209,7 @@ class StoreController extends Controller
 
         //return $data;
         if (empty($data) || $data == null) {
-            return $this->FailedResponse(__('general.loadFailed'));
+            return $this->error(__('general.loadFailed'));
         } else {
             //return $this->ok($data);
             return $this->ok(new StoreItemHistoryResourceCollection($data));

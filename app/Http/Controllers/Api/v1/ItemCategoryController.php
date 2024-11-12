@@ -33,7 +33,7 @@ class ItemCategoryController extends Controller
         }
         $data = ItemCategory::orderBy('id', 'desc')->where($filter_bill)->paginate($limit);
         if (empty($data) || $data == null) {
-            return $this->FailedResponse(__('general.loadFailed'));
+            return $this->error(__('general.loadFailed'));
         } else {
             return $this->ok(new ItemCategoryResourceCollection($data));
         }

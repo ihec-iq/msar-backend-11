@@ -59,7 +59,7 @@ class BonusController extends Controller
         // }
         $data = $data->paginate($limit);
         if (empty($data) || $data == null) {
-            return $this->FailedResponse(__('general.loadFailed'));
+            return $this->error(__('general.loadFailed'));
         } else {
             return $this->ok(new BonusResourceCollection($data));
         }
@@ -73,15 +73,18 @@ class BonusController extends Controller
         //return $request->all();
         try {
             $data = Bonus::create($request->validated());
-            $data->Employee->update([
-                'date_last_bonus' => $request->issue_date,
-                'date_next_bonus' => Carbon::parse($request->issue_date)->addYears(1),
-                'bonus_degree_stage_id' => $request->bonus_degree_stage_id,
-                'number_last_bonus' => $request->number,
-            ]);
+            // must to check employee have level up bonus_degree_stage_id
+            if ($data->Employee->bonus_degree_stage_id < $request->bonus_degree_stage_id) {
+                $data->Employee->update([
+                    'date_last_bonus' => $request->issue_date,
+                    'date_next_bonus' => Carbon::parse($request->issue_date)->addYears(1),
+                    'bonus_degree_stage_id' => $request->bonus_degree_stage_id,
+                    'number_last_bonus' => $request->number,
+                ]);
+            }
             return $this->ok(new BonusResource($data));
         } catch (\Exception $e) {
-            return $this->FailedResponse(__('general.saveFailed'), $e->getMessage());
+            return $this->error(__('general.saveFailed'), $e->getMessage());
         }
     }
 
@@ -102,9 +105,22 @@ class BonusController extends Controller
         try {
             $bonus = Bonus::findOrFail($id);
             $bonus->update($request->validated());
+            // must to check employee have level up bonus_degree_stage_id to update it
+            $employee = $bonus->Employee;
+            if ($employee->bonus_degree_stage_id < $request->bonus_degree_stage_id) {
+                $employee->update([
+                    'date_last_bonus' => $request->issue_date,
+                    'date_next_bonus' => Carbon::parse($request->issue_date)->addYears(1),
+                    'bonus_degree_stage_id' => $request->bonus_degree_stage_id,
+                    'number_last_bonus' => $request->number,
+                ]);
+            }
+            // re check employee date bonus
+            $hrDocument = new HrDocumentController();
+            $hrDocument->update_employee_date_bonus($employee->id);
             return $this->ok(new BonusResource($bonus));
         } catch (\Exception $e) {
-            return $this->FailedResponse(__('general.saveFailed'), $e->getMessage());
+            return $this->error(__('general.saveFailed'), $e->getMessage());
         }
     }
 
@@ -116,13 +132,14 @@ class BonusController extends Controller
         try {
             $data = Bonus::findOrFail($id);
             $employee = $data->Employee;
-            $data = Bonus::where('employee_id', $employee->id)->count();
-            if ($data == 1) {
-                return $this->FailedResponse(__('general.deleteFailed'),'لا يمكن حذف العلاوة الاولى');    
+            $countBonuses = Bonus::where('employee_id', $employee->id)->count();
+            if ($countBonuses == 1) {
+                return $this->error('لا يمكن حذف العلاوة الاولى');    
             }
 
             $data->delete();
-            $lastData = Bonus::where('employee_id', $employee->id)->orderBy('id', 'desc')->first();
+            // get last bonus
+            $lastData = Bonus::where('employee_id', $employee->id)->orderBy('issue_date', 'desc')->first();
 
             $employee->update([
                 'date_last_bonus' => $lastData->issue_date,
@@ -134,7 +151,7 @@ class BonusController extends Controller
             $hrDocument->update_employee_date_bonus($employee->id);
             return $this->ok(['message' => 'Bonus deleted successfully']);
         } catch (\Exception $e) {
-            return $this->FailedResponse(__('general.deleteFailed'), $e->getMessage());
+            return $this->error($e->getMessage());
         }
     }
 }
