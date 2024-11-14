@@ -46,7 +46,7 @@ return new class extends Migration {
             $table->double('take_vacation')->nullable()->default(0);
             $table->double('init_vacation_sick')->nullable()->default(0);
             $table->double('take_vacation_sick')->nullable()->default(0);
-            $table->foreignId('bonus_degree_stage_id')->default(1)->constrained()->onUpdate('cascade')->onDelete('cascade');
+            $table->foreignId('degree_stage_id')->default(67)->constrained('bonus_degree_stages')->onUpdate('cascade')->onDelete('cascade');
             $table->foreignId('bonus_study_id')->default(1)->constrained()->onUpdate('cascade')->onDelete('cascade');
             $table->foreignId('bonus_job_title_id')->default(1)->constrained()->onUpdate('cascade')->onDelete('cascade');
             $table->string('number_last_bonus')->nullable();

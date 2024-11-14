@@ -21,16 +21,20 @@ class EmployeeBonusResource extends JsonResource
         return [
             'id' => $this->id,
             'name' => $this->name,
+            'numberLastBonus' => $this->number_last_bonus,
             'dateLastBonus' => $this->date_last_bonus,
             'dateNextBonus' => $this->date_next_bonus,
-            'difNextDate' => $this->getDifNextDateAttribute(), // Updated to use the new method
-            'numberLastBonus' => $this->number_last_bonus,
+            'difNextBonusDate' => $this->getDifNextBonusDateAttribute(),
+            'numberLastPromotion' => $this->number_last_promotion,
+            'dateLastPromotion' => $this->date_last_promotion,
+            'dateNextPromotion' => $this->date_next_promotion,
+            'difNextPromotionDate' => $this->getDifNextPromotionDateAttribute(),
             'employeePosition' => $this->EmployeePosition->name,
             'employeeCenter' => $this->EmployeeCenter->name,
             'employeeType' => $this->EmployeeType->name,
             'bonusJobTitle' => $this->BonusJobTitle->name,
             'bonusStudy' => $this->BonusStudy->name,
-            'bonusDegreeStage' => 'الدرجة ' . $this->BonusDegreeStage->Degree->name . ' المرحلة ' . $this->BonusDegreeStage->Stage->name,
+            'degreeStage' => 'الدرجة ' . $this->DegreeStage->Degree->name . ' المرحلة ' . $this->DegreeStage->Stage->name,
         ];
     }
 
@@ -39,9 +43,14 @@ class EmployeeBonusResource extends JsonResource
      *
      * @return int
      */
-    public function getDifNextDateAttribute(): int
+    public function getDifNextBonusDateAttribute(): int
     {
         // Assuming you want to calculate the difference in days
         return now()->diffInDays($this->date_next_bonus);
+    }
+    public function getDifNextPromotionDateAttribute(): int
+    {
+        // Assuming you want to calculate the difference in days
+        return now()->diffInDays($this->date_next_promotion);
     }
 }

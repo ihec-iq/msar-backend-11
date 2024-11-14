@@ -18,15 +18,18 @@ class UserHrSeeder extends Seeder
         foreach ($employees as $key => $employee) {
             UserHr::create(
                 [
-                    'employee_id' => $employee->id,
-                    'bonus_degree_stage_id' => 1,
-                    'bonus_study_id' => 1,
-                    'bonus_job_title_id' => 1,
+                    'employee_id' => $employee->id, 
                     'title' => 'bonus ' . $key,
-                    'number_last_bonus' => 1,
                     'issue_date' => now(),
+                    'degree_stage_id' => 67,
+                    'study_id' => 1,
+                    'job_title_id' => 1,
+                    'number_last_bonus' => 1,
                     'date_last_bonus' => now(),
                     'date_next_bonus' => now()->addYears(1),
+                    'number_last_promotion' => 1,
+                    'date_last_promotion' => now(),
+                    'date_next_promotion' => now()->addYears(4),
                 ]
             );
         }

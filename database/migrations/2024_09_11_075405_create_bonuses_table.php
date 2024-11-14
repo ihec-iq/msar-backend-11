@@ -13,7 +13,7 @@ return new class () extends Migration {
         Schema::create('bonuses', function (Blueprint $table) {
             $table->id();
             $table->foreignId('employee_id')->constrained()->onUpdate('cascade')->onDelete('cascade');
-            $table->foreignId('bonus_degree_stage_id')->constrained()->onUpdate('cascade')->onDelete('cascade');
+            $table->foreignId('degree_stage_id')->constrained('bonus_degree_stages')->onUpdate('cascade')->onDelete('cascade');
             $table->string('number')->nullable();
             $table->date('issue_date')->nullable();
             $table->text('notes')->nullable();

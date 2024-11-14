@@ -18,6 +18,7 @@ class HrDocumentTypeResource extends JsonResource
             'id' => $this->id,
             'name' => $this->name,
             'addDays' => $this->add_days,
+            'addMonths' => $this->add_months,
         ];
     }
 }

@@ -85,8 +85,8 @@ class Employee extends Model
     {
         return $this->belongsTo(BonusStudy::class, 'bonus_study_id');
     }
-    public function BonusDegreeStage(): BelongsTo
+    public function DegreeStage(): BelongsTo
     {
-        return $this->belongsTo(BonusDegreeStage::class, 'bonus_degree_stage_id');
+        return $this->belongsTo(BonusDegreeStage::class, 'degree_stage_id');
     }
 }

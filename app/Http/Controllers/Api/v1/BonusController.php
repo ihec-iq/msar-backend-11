@@ -8,12 +8,8 @@ use App\Http\Resources\Bonus\BonusResource;
 use App\Http\Resources\Bonus\BonusResourceCollection;
 use App\Http\Resources\GeneralIdNameResource;
 use App\Http\Resources\Bonus\BonusDegreeStageResource;
-use App\Http\Resources\Employee\EmployeeBonusResource;
-use App\Http\Resources\Employee\EmployeeResourceCollection;
 use App\Http\Resources\PaginatedResourceCollection;
-use App\Models\Bonus;
-use App\Models\Employee;
-use App\Models\Setting;
+use App\Models\Bonus; 
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
@@ -36,7 +32,8 @@ class BonusController extends Controller
     }
     public function Bonus_degree_stage()
     {
-        $data = \App\Models\BonusDegreeStage::all();
+        $data = \App\Models\BonusDegreeStage::all(); 
+
         return $this->ok(BonusDegreeStageResource::collection($data));
     }
 
@@ -61,7 +58,7 @@ class BonusController extends Controller
         if (empty($data) || $data == null) {
             return $this->error(__('general.loadFailed'));
         } else {
-            return $this->ok(new BonusResourceCollection($data));
+            return $this->ok(new PaginatedResourceCollection($data, BonusResource::class));
         }
     }
 
@@ -72,17 +69,18 @@ class BonusController extends Controller
     {
         //return $request->all();
         try {
-            $data = Bonus::create($request->validated());
-            // must to check employee have level up bonus_degree_stage_id
-            if ($data->Employee->bonus_degree_stage_id < $request->bonus_degree_stage_id) {
-                $data->Employee->update([
+            $bonus = Bonus::create($request->validated());
+            // must to check employee have level up degree_stage_id
+            $employee = $bonus->Employee;
+            if ($employee->degree_stage_id < $request->degree_stage_id) {
+                $employee->update([
                     'date_last_bonus' => $request->issue_date,
                     'date_next_bonus' => Carbon::parse($request->issue_date)->addYears(1),
-                    'bonus_degree_stage_id' => $request->bonus_degree_stage_id,
+                    'degree_stage_id' => $request->degree_stage_id,
                     'number_last_bonus' => $request->number,
                 ]);
             }
-            return $this->ok(new BonusResource($data));
+            return $this->ok(new BonusResource($bonus));
         } catch (\Exception $e) {
             return $this->error(__('general.saveFailed'), $e->getMessage());
         }
@@ -105,13 +103,13 @@ class BonusController extends Controller
         try {
             $bonus = Bonus::findOrFail($id);
             $bonus->update($request->validated());
-            // must to check employee have level up bonus_degree_stage_id to update it
+            // must to check employee have level up degree_stage_id to update it
             $employee = $bonus->Employee;
-            if ($employee->bonus_degree_stage_id < $request->bonus_degree_stage_id) {
+            if ($employee->degree_stage_id < $request->degree_stage_id) {
                 $employee->update([
                     'date_last_bonus' => $request->issue_date,
                     'date_next_bonus' => Carbon::parse($request->issue_date)->addYears(1),
-                    'bonus_degree_stage_id' => $request->bonus_degree_stage_id,
+                    'degree_stage_id' => $request->degree_stage_id,
                     'number_last_bonus' => $request->number,
                 ]);
             }
@@ -144,7 +142,7 @@ class BonusController extends Controller
             $employee->update([
                 'date_last_bonus' => $lastData->issue_date,
                 'date_next_bonus' => Carbon::parse($lastData->issue_date)->addYears(1),
-                'bonus_degree_stage_id' => $lastData->bonus_degree_stage_id,
+                'degree_stage_id' => $lastData->degree_stage_id,
                 'number_last_bonus' => $lastData->number,
             ]);
             $hrDocument = new HrDocumentController();

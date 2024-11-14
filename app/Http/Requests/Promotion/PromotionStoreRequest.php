@@ -21,11 +21,10 @@ class PromotionStoreRequest extends FormRequest
     {
         return [
             'employee_id' => 'required|exists:employees,id',
-            'number_promotion' => 'required|string|max:255',
+            'degree_stage_id' => 'required|exists:bonus_degree_stages,id',
+            'number' => 'required|string',
             'issue_date' => 'required|date',
-            'note' => 'nullable|string',
-            'bonus_degree_stage_id' => 'required|exists:bonus_degree_stages,id',
-            'bonus_job_title_id' => 'required|exists:bonus_job_titles,id',
+            'notes' => 'nullable|string',
         ];
     }
 } 

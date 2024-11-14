@@ -44,12 +44,28 @@ class EmployeeResource extends JsonResource
             'number' => $this->number,
             'idCard' => $this->id_card,
             'telegramId' => $this->telegram,
+            'numberLastBonus' => $this->number_last_bonus,
             'dateLastBonus' => $this->date_last_bonus,
             'dateNextBonus' => $this->date_next_bonus,
-            'numberLastBonus' => $this->number_last_bonus,
+            'difNextBonusDate' => $this->getDifNextBonusDateAttribute(),
+            'numberLastPromotion' => $this->number_last_promotion,
+            'dateLastPromotion' => $this->date_last_promotion,
+            'dateNextPromotion' => $this->date_next_promotion,
+            'difNextPromotionDate' => $this->getDifNextPromotionDateAttribute(),
             'BonusJobTitle' => new GeneralIdNameResource($this->BonusJobTitle),
             'BonusStudy' => new GeneralIdNameResource($this->BonusStudy),
             'BonusDegreeStage' => new BonusDegreeStageResource($this->BonusDegreeStage),
         ];
+    }
+
+    public function getDifNextBonusDateAttribute(): int
+    {
+        // Assuming you want to calculate the difference in days
+        return now()->diffInDays($this->date_next_bonus);
+    }
+    public function getDifNextPromotionDateAttribute(): int
+    {
+        // Assuming you want to calculate the difference in days
+        return now()->diffInDays($this->date_next_promotion);
     }
 }

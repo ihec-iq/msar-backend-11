@@ -102,6 +102,11 @@ class PermissionSeeder extends Seeder
         Permission::create(['name' => 'edit promotion']);
         Permission::create(['name' => 'delete promotion']);
         Permission::create(['name' => 'show promotions']);
+
+        Permission::create(['name' => 'add user hr']);
+        Permission::create(['name' => 'edit user hr']);
+        Permission::create(['name' => 'delete user hr']);
+        Permission::create(['name' => 'show user hrs']);
         // Special permission
         Permission::create(['name' => 'has section only']);
         //endregion

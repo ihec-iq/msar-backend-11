@@ -31,12 +31,14 @@ class UpdateEmployeeRequest extends FormRequest
             'take_vacation' => 'nullable|numeric',
             'init_vacation_sick' => 'nullable|numeric',
             'take_vacation_sick' => 'nullable|numeric',
-            'bonus_degree_stage_id' => 'exists:bonus_degree_stages,id',
+            'degree_stage_id' => 'exists:bonus_degree_stages,id',
             'bonus_study_id' => 'exists:bonus_studies,id',
             'bonus_job_title_id' => 'exists:bonus_job_titles,id',
             'number_last_bonus' => 'nullable|string|max:255',
-            'issue_date' => 'nullable|date',
+            'number_last_promotion' => 'nullable|string|max:255',
             'date_last_bonus' => 'nullable|date',
+            'date_last_promotion' => 'nullable|date',
+            'date_next_bonus' => 'nullable|date',
             // 'date_next_bonus' => 'nullable|date',
         ];
     }

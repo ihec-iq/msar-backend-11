@@ -20,6 +20,7 @@ return new class extends Migration {
                 ->default(1);
             $table->foreignId('hr_document_type_id')->constrained()->onUpdate('cascade')->onDelete('cascade');
             $table->integer('add_days')->default(0);
+            $table->integer('add_months')->default(0);
             $table->foreignId('user_create_id')->constrained(table: 'users')->onUpdate('cascade')->onDelete('cascade');
             $table->foreignId('user_update_id')->constrained(table: 'users')->onUpdate('cascade')->onDelete('cascade');
             $table->boolean('is_active')->default(true);

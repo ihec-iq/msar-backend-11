@@ -291,6 +291,8 @@ class EmployeeController extends Controller
             $hrController->update_employee_date_bonus($employee->id);
         }
         $dataResult = $data->get();
+        Log::alert($dataResult);
+
         if (empty($dataResult) || $dataResult == null) {
             return $this->error(__('general.loadFailed'));
         } else {

@@ -16,6 +16,7 @@ return new class extends Migration
             $table->string('name');
             $table->string('code')->nullable();
             $table->integer('add_days')->default(0);
+            $table->integer('add_months')->default(0);
             $table->timestamps();
         });
     }

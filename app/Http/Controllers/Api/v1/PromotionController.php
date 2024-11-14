@@ -5,8 +5,14 @@ namespace App\Http\Controllers\Api\v1;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Promotion\PromotionStoreRequest;
 use App\Http\Resources\Promotion\PromotionResource;
+use App\Http\Resources\Promotion\PromotionResourceCollection;
+use App\Http\Resources\GeneralIdNameResource;
+use App\Http\Resources\PaginatedResourceCollection;
+use App\Http\Resources\Promotion\PromotionDegreeStageResource;
 use App\Models\Promotion;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
 
 class PromotionController extends Controller
 {
@@ -15,19 +21,57 @@ class PromotionController extends Controller
      */
     public function index()
     {
-        $promotions = Promotion::all();
-        return $this->ok(PromotionResource::collection($promotions));
+        $data = Promotion::all();
+        return $this->ok(PromotionResource::collection($data));
     }
 
-   
+    public function filter(Request $request)
+    {
+        $request->filled('limit') ? $limit = $request->limit : $limit = 10;
+        $data = Promotion::orderBy('id', 'desc');
+        $data = $data->whereRelation('Employee', 'is_person', '=', true);
+
+        if (!$request->isNotFilled('employeeName') && $request->employeeName != '') {
+            $data = $data->whereRelation('Employee', 'name', 'like', '%' . $request->employeeName . '%');
+        }
+        if (!$request->isNotFilled('record') && $request->record != '') {
+            $data = $data->orWhere('record', 'like', '%' . $request->record . '%');
+        }
+
+
+        // if (! $request->isNotFilled('issueDateFrom') && $request->issueDateFrom != '') {
+        //     $data = $data->where('day_from', '>=', $request->issueDateFrom, 'and', 'date', '<=', $request->issueDateTo);
+        // }
+        $data = $data->paginate($limit);
+        if (empty($data) || $data == null) {
+            return $this->error(__('general.loadFailed'));
+        } else {
+            return $this->ok(new PaginatedResourceCollection($data, PromotionResource::class));
+        }
+    }
 
     /**
      * Store a newly created resource in storage.
      */
     public function store(PromotionStoreRequest $request)
     {
-        $promotion = Promotion::create($request->validated());
-        return $this->ok(new PromotionResource($promotion));
+        //return $request->all();
+        try {
+            $data = Promotion::create($request->validated());
+            // must to check employee have level up promotion_degree_stage_id
+            if ($data->Employee->degree_stage_id < $request->degree_stage_id) {
+                $numberOfYear = 4;
+                $data->Employee->update([
+                    'date_last_promotion' => $request->issue_date,
+                    'date_next_promotion' => Carbon::parse($request->issue_date)->addYears($numberOfYear),
+                    'number_last_promotion' => $request->number,
+                    'degree_stage_id' => $request->degree_stage_id,
+                ]);
+            }
+            return $this->ok(new PromotionResource($data));
+        } catch (\Exception $e) {
+            return $this->error(__('general.saveFailed'), $e->getMessage());
+        }
     }
 
     /**
@@ -39,25 +83,59 @@ class PromotionController extends Controller
     }
 
     /**
-     * Show the form for editing the specified resource.
-     */
-    
-
-    /**
      * Update the specified resource in storage.
      */
     public function update(PromotionStoreRequest $request, Promotion $promotion)
     {
-        $promotion->update($request->validated());
-        return $this->ok(new PromotionResource($promotion));
+        try {
+            $promotion->update($request->validated());
+            // must to check employee have level up promotion_degree_stage_id to update it
+            $employee = $promotion->Employee;
+            if ($employee->degree_stage_id < $request->degree_stage_id) {
+                $employee->update([
+                    'date_last_promotion' => $request->issue_date,
+                    'date_next_promotion' => Carbon::parse($request->issue_date)->addYears(4),
+                    'number_last_promotion' => $request->number,
+                    'degree_stage_id' => $request->degree_stage_id,
+                ]);
+            }
+            // re check employee date promotion
+            $hrDocument = new HrDocumentController();
+            $hrDocument->update_employee_date_promotion($employee->id);
+            return $this->ok(new PromotionResource($promotion));
+        } catch (\Exception $e) {
+            return $this->error(__('general.saveFailed'), $e->getMessage());
+        }
     }
 
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Promotion $promotion)
+    public function destroy(string $id)
     {
-        $promotion->delete();
-        return $this->ok(new PromotionResource($promotion));
+        try {
+            $data = Promotion::findOrFail($id);
+            $employee = $data->Employee;
+            $countPromotiones = Promotion::where('employee_id', $employee->id)->count();
+            if ($countPromotiones == 1) {
+                return $this->error('لا يمكن حذف العلاوة الاولى');
+            }
+
+            $data->delete();
+            // get last promotion
+            $lastData = Promotion::where('employee_id', $employee->id)->orderBy('issue_date', 'desc')->first();
+
+            $employee->update([
+                'date_last_promotion' => $lastData->issue_date,
+                'date_next_promotion' => Carbon::parse($lastData->issue_date)->addYears(1),
+                'promotion_degree_stage_id' => $lastData->promotion_degree_stage_id,
+                'number_last_promotion' => $lastData->number,
+            ]);
+            $hrDocument = new HrDocumentController();
+            $hrDocument->update_employee_date_promotion($employee->id);
+            return $this->ok(['message' => 'Promotion deleted successfully']);
+        } catch (\Exception $e) {
+            return $this->error($e->getMessage());
+        }
     }
 }

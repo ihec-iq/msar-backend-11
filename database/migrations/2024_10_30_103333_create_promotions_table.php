@@ -13,14 +13,13 @@ return new class extends Migration
     {
         Schema::create('promotions', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('employee_id')->constrained('employees')->cascadeOnDelete();
-            $table->string('number_promotion');
-            $table->date('issue_date');
-            $table->string('note')->nullable();
-            $table->foreignId('bonus_degree_stage_id')->constrained()->onUpdate('cascade')->onDelete('cascade');
-            $table->foreignId('bonus_job_title_id')->constrained()->onUpdate('cascade')->onDelete('cascade');
-            $table->timestamps();
+            $table->foreignId('employee_id')->constrained()->onUpdate('cascade')->onDelete('cascade');
+            $table->foreignId('degree_stage_id')->constrained('bonus_degree_stages')->onUpdate('cascade')->onDelete('cascade');
+            $table->string('number')->nullable();
+            $table->date('issue_date')->nullable();
+            $table->text('notes')->nullable();
             $table->softDeletes();
+            $table->timestamps();
         });
     }
 

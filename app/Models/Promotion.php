@@ -2,24 +2,22 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Promotion extends Model
 {
-    // ... existing code ...
+    use HasFactory, SoftDeletes;
+    protected $guarded = [];
 
-    public function BonusDegreeStage()
-    {
-        return $this->belongsTo(BonusDegreeStage::class);
-    }
-
-    public function BonusJobTitle()
-    {
-        return $this->belongsTo(BonusJobTitle::class);
-    }
-
-    public function Employee()
+    public function Employee(): BelongsTo
     {
         return $this->belongsTo(Employee::class);
+    }
+    public function DegreeStage(): BelongsTo
+    {
+        return $this->belongsTo(BonusDegreeStage::class, 'degree_stage_id');
     }
 }

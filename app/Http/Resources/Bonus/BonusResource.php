@@ -25,7 +25,7 @@ class BonusResource extends JsonResource
             'issueDate' => $this->issue_date,
             'number' => $this->number,
             'Employee' => new EmployeeLiteBonusResource($this->Employee),
-            'BonusDegreeStage' => new BonusDegreeStageResource($this->DegreeStage),
+            'DegreeStage' => new BonusDegreeStageResource($this->DegreeStage),
             'UserCreate' => new UserLiteResource($this->UserCreate),
             'UserUpdate' => new UserLiteResource($this->UserUpdate),
             'notes' => $this->notes,
