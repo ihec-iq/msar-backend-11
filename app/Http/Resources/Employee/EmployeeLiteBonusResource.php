@@ -28,7 +28,7 @@ class EmployeeLiteBonusResource extends JsonResource
             'numberLastBonus' => $this->number_last_bonus,
             'BonusJobTitle' => new GeneralIdNameResource($this->BonusJobTitle),
             'BonusStudy' => new GeneralIdNameResource($this->BonusStudy),
-            'BonusDegreeStage' => new BonusDegreeStageResource($this->BonusDegreeStage),
+            'DegreeStage' => new BonusDegreeStageResource($this->DegreeStage),
         ];
     }
 }

@@ -82,11 +82,13 @@ class HrDocumentController extends Controller
     public function check_bonus_employee($employeeId)
     {
         $employee = Employee::find($employeeId);
+
         if ($employee) {
             $increseDay = 0;
             $increseMonths = 0;
             $date_last_bonus = $employee->date_last_bonus; //return $date_last_bonus;
             $filteredArray = [];
+
             if ($date_last_bonus){
                 #region Add Ponus
                $HrDocuments = $employee->HrDocuments()
@@ -95,9 +97,11 @@ class HrDocumentController extends Controller
                     ->where('add_days', '>', 0)
                     ->orWhere('add_months', '>', 0)
                     ->with('Type')
-                    ->orderByDesc(['add_months', 'add_days'])
+                    ->orderBy('add_months', 'DESC')
+                    ->orderBy('add_days', 'DESC')
                     ->get()
                     ->take(4);
+                Log::info($HrDocuments);
                 $repeted180 = 0;
                 foreach ($HrDocuments as $row) {
                     if ($row->add_days == 180) {
@@ -121,7 +125,8 @@ class HrDocumentController extends Controller
                     ->where('add_days', '<', 0)
                     ->orWhere('add_months', '<', 0)
                     ->with('Type')
-                    ->orderByDesc(['add_months', 'add_days'])
+                    ->orderBy('add_months', 'DESC')
+                    ->orderBy('add_days', 'DESC')
                     ->first();
                 if($HrDocuments){
                     $increseDay -= $HrDocuments->add_days;

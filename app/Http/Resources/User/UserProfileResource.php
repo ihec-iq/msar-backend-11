@@ -4,7 +4,7 @@ namespace App\Http\Resources\User;
 
 use App\Http\Resources\Employee\EmployeeProfileResource;
 use App\Http\Resources\GeneralIdNameResource;
-use Carbon\Carbon;
+use Illuminate\Support\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 

@@ -1,11 +1,7 @@
 <?php
 
 namespace App\Http\Resources\Employee;
-
-use App\Http\Resources\Bonus\BonusDegreeStageResource;
-use App\Http\Resources\GeneralIdNameResource;
-use App\Http\Resources\User\SectionResource;
-use App\Http\Resources\User\UserLiteResource;
+ 
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 
