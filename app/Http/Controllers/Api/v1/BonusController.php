@@ -130,21 +130,22 @@ class BonusController extends Controller
         try {
             $data = Bonus::findOrFail($id);
             $employee = $data->Employee;
-            $countBonuses = Bonus::where('employee_id', $employee->id)->count();
-            if ($countBonuses == 1) {
-                return $this->error('لا يمكن حذف العلاوة الاولى');    
-            }
+            // $countBonuses = Bonus::where('employee_id', $employee->id)->count();
+            // if ($countBonuses == 1) {
+            //     return $this->error('لا يمكن حذف العلاوة الاولى');    
+            // }
 
             $data->delete();
             // get last bonus
             $lastData = Bonus::where('employee_id', $employee->id)->orderBy('issue_date', 'desc')->first();
-
-            $employee->update([
-                'date_last_bonus' => $lastData->issue_date,
-                'date_next_bonus' => Carbon::parse($lastData->issue_date)->addYears(1),
-                'degree_stage_id' => $lastData->degree_stage_id,
-                'number_last_bonus' => $lastData->number,
-            ]);
+            if ($lastData) {
+                $employee->update([
+                    'date_last_bonus' => $lastData->issue_date,
+                    'date_next_bonus' => Carbon::parse($lastData->issue_date)->addYears(1),
+                    'degree_stage_id' => $lastData->degree_stage_id,
+                    'number_last_bonus' => $lastData->number,
+                ]);
+            }
             $hrDocument = new HrDocumentController();
             $hrDocument->update_employee_date_bonus($employee->id);
             return $this->ok(['message' => 'Bonus deleted successfully']);
