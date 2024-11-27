@@ -2,12 +2,16 @@
 
 namespace App\Models;
 
+use App\Http\Resources\Bonus\BonusDegreeStageResource;
+use App\Http\Resources\Bonus\BonusResource;
+use App\Http\Resources\Bonus\BonusWithoutEmployeeResource;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasManyThrough;
 use Illuminate\Database\Eloquent\Relations\HasOne;
+use Illuminate\Database\Eloquent\Relations\HasOneThrough;
 
 class Employee extends Model
 {
@@ -88,5 +92,37 @@ class Employee extends Model
     public function DegreeStage(): BelongsTo
     {
         return $this->belongsTo(BonusDegreeStage::class, 'degree_stage_id');
+    }
+    public function Bonus(): HasMany
+    {
+        return $this->hasMany(Bonus::class);
+    }
+    public function LastBonus(): HasOne
+    {
+        return $this->hasOne(Bonus::class)->latestOfMany();
+    }
+
+    public function getNextDegreeStageAttribute(): ? BonusDegreeStageResource
+    {
+        return new BonusDegreeStageResource(BonusDegreeStage::find($this->degree_stage_id+1));
+    }
+
+    public function getNextNoteAttribute()
+    {
+        return  $this->degree_stage_id  ;
+    }
+
+
+    public function LastPromotion(): HasOne
+    {
+        return $this->hasOne(Promotion::class)->latestOfMany();
+    }
+    public function UserUpdate(): BelongsTo
+    {
+        return $this->belongsTo(User::class, 'updated_by');
+    }
+    public function UserCreate(): BelongsTo
+    {
+        return $this->belongsTo(User::class, 'created_by');
     }
 }

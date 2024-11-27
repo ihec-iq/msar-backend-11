@@ -19,7 +19,7 @@ class PromotionResource extends JsonResource
             'Employee' => new EmployeeLiteResource($this->whenLoaded('Employee')),
             'numberPromotion' => $this->number_promotion,
             'issueDate' => $this->issue_date,
-            'note' => $this->note,
+            'notes' => $this->note,
             'DegreeStage' => new BonusDegreeStageResource($this->whenLoaded('DegreeStage')),
             'BonusJobTitle' => new BonusJobTitleResource($this->whenLoaded('BonusJobTitle')),
             // Add other fields as necessary

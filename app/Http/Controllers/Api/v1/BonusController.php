@@ -105,6 +105,8 @@ class BonusController extends Controller
             $bonus->update($request->validated());
             // must to check employee have level up degree_stage_id to update it
             $employee = $bonus->Employee;
+            Log::alert($employee->degree_stage_id);
+            Log::alert($request->degree_stage_id);
             if ($employee->degree_stage_id < $request->degree_stage_id) {
                 $employee->update([
                     'date_last_bonus' => $request->issue_date,
@@ -130,10 +132,10 @@ class BonusController extends Controller
         try {
             $data = Bonus::findOrFail($id);
             $employee = $data->Employee;
-            // $countBonuses = Bonus::where('employee_id', $employee->id)->count();
-            // if ($countBonuses == 1) {
-            //     return $this->error('لا يمكن حذف العلاوة الاولى');    
-            // }
+            $countBonuses = Bonus::where('employee_id', $employee->id)->count();
+            if ($countBonuses == 1) {
+                return $this->error('لا يمكن حذف العلاوة الاولى');    
+            }
 
             $data->delete();
             // get last bonus

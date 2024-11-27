@@ -2,6 +2,8 @@
 
 namespace Database\Seeders;
 
+use App\Models\Bonus;
+use App\Models\Employee;
 use App\Models\User;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
@@ -818,5 +820,17 @@ INSERT INTO `employees` (`name`, `is_person`, `section_id`, `user_id`, `id_card`
 ( "اسعد عبد الجبار", 1, 13, 360, "55", NULL, "2013-03-01", 0, 0, 0, 0, NULL, NULL, NULL,1,1,1,1);
         '
         );
+
+        $employees = Employee::all();
+        foreach ($employees as $employee) {
+            Bonus::create([
+                'employee_id' => $employee->id,
+                'degree_stage_id' => 65,
+                'issue_date' => now() ,
+                'number'=>'',
+                'notes'=>'الترفيع الاولي , يجب ذكر كتب اخر ترفيع هنا'
+            ]);
+        }
     }
+
 }
