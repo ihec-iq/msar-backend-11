@@ -22,6 +22,7 @@ class HrDocumentResource extends JsonResource
         return [
             'id' => $this->id,
             'title' => $this->title,
+            'number' => $this->number,
             'addDays' => $this->add_days,
             'addMonths' => $this->add_months,
             'issueDate' => $this->issue_date,

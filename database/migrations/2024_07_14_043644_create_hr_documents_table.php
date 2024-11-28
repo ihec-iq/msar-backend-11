@@ -13,6 +13,7 @@ return new class extends Migration {
         Schema::create('hr_documents', function (Blueprint $table) {
             $table->id();
             $table->string('title')->nullable();
+            $table->string('number')->nullable();
             $table->date('issue_date')->nullable();
             $table->foreignId('employee_id')->constrained()
                 ->onUpdate('cascade')

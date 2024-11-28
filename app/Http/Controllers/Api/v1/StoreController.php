@@ -147,8 +147,6 @@ class StoreController extends Controller
                 'input_voucher_items.count as count',
             )
             ->where('items.id', $id)
-
-
             ->union(
                 DB::table('output_voucher_items')
                     ->join(

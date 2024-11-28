@@ -18,6 +18,7 @@ class EmployeeBonusResource extends JsonResource
     {
         $lastBonus = $this->Bonus->last();
         $nextDegreeStage = $this->getNextDegreeStageAttribute();
+        $noteNext= $this->getNextNoteAttribute();
         return [
             'id' => $this->id,
             'name' => $this->name,
@@ -46,7 +47,8 @@ class EmployeeBonusResource extends JsonResource
             'stageNext' =>   $this->nextDegreeStage['Stage']['name'],
             'degreeNext' =>   $this->nextDegreeStage['Degree']['name'],
             'salaryNext' => $this->nextDegreeStage['salary'],
-            'notesNext' => $this->getNextNoteAttribute() ?? "",
+            //'notesNext' => $this->getNextNoteAttribute($this->id) ?? "",
+            'notesNext' => $noteNext!="" ? $noteNext: "لايوجد",
 
             // 'nextDegreeStage' => $this->nextDegreeStage,
             // 'lastDegreeStage' => $this->nextDegreeStage,

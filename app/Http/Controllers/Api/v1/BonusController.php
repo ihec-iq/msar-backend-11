@@ -46,6 +46,9 @@ class BonusController extends Controller
         if (!$request->isNotFilled('employeeName') && $request->employeeName != '') {
             $data = $data->whereRelation('Employee', 'name', 'like', '%' . $request->employeeName . '%');
         }
+        if (!$request->isNotFilled('employeeId') && $request->employeeId != '') {
+            $data = $data->whereRelation('Employee', 'id', '=',  $request->employeeId);
+        }
         if (!$request->isNotFilled('record') && $request->record != '') {
             $data = $data->orWhere('record', 'like', '%' . $request->record . '%');
         }
