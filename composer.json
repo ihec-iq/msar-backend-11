@@ -1,24 +1,25 @@
 {
-    "name": "laravel/laravel",
+    "name": "ihec-iraq/ihec-iraq",
     "type": "project",
-    "description": "The skeleton application for the Laravel framework.",
+    "description": "The skeleton application for the IHEC Iraq.",
     "keywords": [
-        "laravel",
-        "framework"
+        "ihec-iraq",
+        "Ali7med"
     ],
     "license": "MIT",
     "require": {
         "php": "^8.2",
+        "filament/filament": "^3.2",
         "irazasyed/telegram-bot-sdk": "^3.14",
-        "laravel/framework": "^11.22",
+        "laravel/framework": "^11.23",
         "laravel/pulse": "^1.2",
         "laravel/sanctum": "^4.0",
         "laravel/tinker": "^2.9",
-        "livewire/livewire": "^3.5",
-        "livewire/volt": "^1.6",
+        "opcodesio/log-viewer": "^3.11",
         "spatie/laravel-permission": "^6.9"
     },
     "require-dev": {
+        "barryvdh/laravel-ide-helper": "^3.2",
         "fakerphp/faker": "^1.23",
         "laravel/breeze": "^2.1",
         "laravel/pint": "^1.13",

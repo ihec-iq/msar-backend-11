@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers\api\v1;
+namespace App\Http\Controllers\Api\v1;
 
 use App\Http\Controllers\Controller;
 use App\Http\Resources\Vacation\VacationDailyResource;
@@ -74,7 +74,7 @@ class VacationDailyController extends Controller
 
         $data = $data->paginate($limit);
         if (empty($data) || $data == null) {
-            return $this->FailedResponse(__('general.loadFailed'));
+            return $this->error(__('general.loadFailed'));
         } else {
             return $this->ok(new VacationDailyResourceCollection($data));
         }
@@ -96,9 +96,7 @@ class VacationDailyController extends Controller
                 ' الى تاريخ' . $value->day_to . PHP_EOL .
                 '------------------------------------';
         }
-
-        // Log::alert($data);
-        // Log::alert("dailyReportByEmployee : " . $result);
+ 
         return $result;
     }
     public function getDailyMyReport()
@@ -122,7 +120,7 @@ class VacationDailyController extends Controller
         ];
         $vacationDaily = VacationDaily::where($data)->first();
         if ($vacationDaily) {
-            return $this->FailedResponse(
+            return $this->error(
                 'this is Found in System',
                 new VacationDailyResource($vacationDaily)
             );

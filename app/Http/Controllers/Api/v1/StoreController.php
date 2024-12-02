@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers\api\v1;
+namespace App\Http\Controllers\Api\v1;
 
 use App\Http\Controllers\Controller;
 use App\Http\Resources\Store\StoreItemHistoryResourceCollection;
@@ -55,7 +55,7 @@ class StoreController extends Controller
             ->orWhere($filter_billOR)
             ->paginate($limit);
         if (empty($data) || $data == null) {
-            return $this->FailedResponse(__('general.loadFailed'));
+            return $this->error(__('general.loadFailed'));
         } else {
             //return $this->ok($data);
             return $this->ok(new StoreResourceCollection($data));
@@ -64,7 +64,6 @@ class StoreController extends Controller
 
     public function summation(Request $request)
     {
-        Log::alert('filter');
         $filter_bill = [];
         $filter_billOR = [];
         $request->filled('limit') ? $limit = $request->limit : $limit = 10;
@@ -104,10 +103,9 @@ class StoreController extends Controller
         //     ->groupBy(['input_voucher_items.price', 'items.id', 'items.name', 'stocks.name', 'description'])
         //     ->paginate($limit);
 
-        Log::alert($data);
         //return $data;
         if (empty($data) || $data == null) {
-            return $this->FailedResponse(__('general.loadFailed'));
+            return $this->error(__('general.loadFailed'));
         } else {
             //return $this->ok($data);
             return $this->ok(new StoreSummationResourceCollection($data));
@@ -132,7 +130,6 @@ class StoreController extends Controller
         // if (! $request->isNotFilled('isIn') && $request->isIn != -1) {
         //     $filter_bill[] = ['is_in', $request->isIn];
         // }
-        Log::alert("Sum",);
         $data = DB::table('input_voucher_items')
             ->join('items', 'input_voucher_items.item_id', '=', 'items.id')
             ->join('input_vouchers', 'input_voucher_items.input_voucher_id', '=', 'input_vouchers.id')
@@ -150,8 +147,6 @@ class StoreController extends Controller
                 'input_voucher_items.count as count',
             )
             ->where('items.id', $id)
-
-
             ->union(
                 DB::table('output_voucher_items')
                     ->join(
@@ -212,7 +207,7 @@ class StoreController extends Controller
 
         //return $data;
         if (empty($data) || $data == null) {
-            return $this->FailedResponse(__('general.loadFailed'));
+            return $this->error(__('general.loadFailed'));
         } else {
             //return $this->ok($data);
             return $this->ok(new StoreItemHistoryResourceCollection($data));

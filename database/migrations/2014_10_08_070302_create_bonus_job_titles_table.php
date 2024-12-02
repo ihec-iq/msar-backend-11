@@ -14,6 +14,7 @@ return new class () extends Migration {
             $table->id();
             $table->string('name');
             $table->string('description')->nullable();
+            $table->foreignId('bonus_degree_id')->constrained('bonus_degrees')->cascadeOnDelete();
             $table->softDeletes();
             $table->timestamps();
         });

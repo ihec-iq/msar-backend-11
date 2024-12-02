@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers\api\v1;
+namespace App\Http\Controllers\Api\v1;
 
 use App\Http\Controllers\Controller;
 use App\Http\Resources\Hr\HrDocumentResource;
@@ -8,7 +8,10 @@ use App\Http\Resources\Hr\HrDocumentResourceCollection;
 use App\Models\Employee;
 use App\Models\HrDocument;
 use App\Enum\EnumTypeChoseShareDocument;
+use App\Http\Resources\Employee\EmployeeResource;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
+use Illuminate\Http\Resources\Json\JsonResource;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
 
@@ -24,12 +27,8 @@ class HrDocumentController extends Controller
 
     public function filter(Request $request)
     {
-        //Log::alert($request);
         $request->filled('limit') ? $limit = $request->limit : $limit = 10;
-
         $data = HrDocument::orderBy('id', 'desc');
-
-
         if (!$request->isNotFilled('employeeName') && $request->employeeName != '' && $request->employeeName != null) {
             $data = $data->orWhereRelation('Employee', 'name', 'like', '%' . $request->employeeName . '%');
             $data = $data->orWhere('title', 'like', '%' . $request->employeeName . '%');
@@ -40,7 +39,7 @@ class HrDocumentController extends Controller
         }
         $data = $data->paginate($limit); //return $data;
         if (empty($data) || $data == null) {
-            return $this->FailedResponse(__('general.loadFailed'));
+            return $this->error(__('general.loadFailed'));
         } else {
             return $this->ok(new HrDocumentResourceCollection($data));
         }
@@ -52,10 +51,12 @@ class HrDocumentController extends Controller
     {
         $data = HrDocument::create([
             'title' => $request->title,
+            'number' => $request->number,
             'issue_date' => $request->issueDate,
             'employee_id' => $employeeId,
             'hr_document_type_id' => $request->hrDocumentTypeId,
             'add_days' => $request->addDays,
+            'add_months' => $request->addMonths,
             'user_create_id' => Auth::user()->id,
             'user_update_id' => Auth::user()->id,
         ]);
@@ -68,7 +69,158 @@ class HrDocumentController extends Controller
                 pathFolder: $employeeId
             );
         }
+        $this->update_employee_date_bonus($employeeId);
         return $data;
+    }
+    public function update_employee_date_bonus($employeeId)
+    {
+        $employeeInfo = $this->check_bonus_employee($employeeId); //return $employeeInfo['nextDateBonus'];
+        $employee = Employee::find($employeeId);
+        $employee->date_next_bonus = $employeeInfo['nextDateBonus'];
+        $employee->save();
+        return new EmployeeResource($employee);
+    }
+    public function check_bonus_employee($employeeId)
+    {
+        $employee = Employee::find($employeeId);
+        $filteredArray = [];
+        if ($employee) {
+            $increseDay = 0;
+            $increseMonths = 0;
+            $date_last_bonus = $employee->date_last_bonus; //return $date_last_bonus;
+
+            if ($date_last_bonus) {
+                #region Add Ponus
+                $HrDocuments = HrDocument::where('employee_id', $employeeId)
+                    ->whereBetween('issue_date', [$date_last_bonus, Carbon::parse($date_last_bonus)->addYear()])
+                    ->where("is_active", "=", true)
+                    ->where(function ($query) {
+                        $query->where('add_days', '>', 0)
+                            ->orWhere('add_months', '>', 0);
+                    })
+                    ->with('Type')
+                    ->orderBy('add_months', 'DESC')
+                    ->orderBy('add_days', 'DESC')
+                    ->get()
+                    ->take(4);
+                $repeted6Month = 0;
+                foreach ($HrDocuments as $row) {
+                    if ($row->add_months == 6) {
+                        if ($repeted6Month < 1) {
+                            $repeted6Month++;
+                            $filteredArray[] = $row;
+                            $increseDay += $row->add_days;
+                            $increseMonths += $row->add_months;
+                        }
+                        continue;
+                    }
+                    $filteredArray[] = $row;
+                    $increseDay += $row->add_days;
+                    $increseMonths += $row->add_months;
+                }
+                #endregion
+                #region Add Subtract
+                $HrDocuments = HrDocument::where('employee_id', $employeeId)
+                    ->whereBetween('issue_date', [$date_last_bonus, Carbon::parse($date_last_bonus)->addYear()])
+                    ->where("is_active", "=", true)
+                    ->where('add_days', '<', 0)
+                    ->orWhere('add_months', '<', 0)
+                    ->with('Type')
+                    ->orderBy('add_months', 'DESC')
+                    ->orderBy('add_days', 'DESC')
+                    ->first();
+                if ($HrDocuments) {
+                    $increseDay -= $HrDocuments->add_days;
+                    $increseMonths += $HrDocuments->add_months;
+                    $filteredArray[] = $HrDocuments;
+                }
+                #endregion
+            }
+
+            $result = [
+                'id' => $employee->id,
+                'name' => $employee->name,
+                'currentDateBonus' => Carbon::parse($date_last_bonus)->format('Y-m-d'),
+                'numberIncreseDayes' => $increseDay + ($increseMonths * 30),
+                'nextDateBonus' => Carbon::parse($date_last_bonus)->addYear(1)->addDay($increseDay * -1)->addMonths($increseMonths * -1)->format('Y-m-d'),
+                'Documents' => HrDocumentResource::collection($filteredArray)
+            ];
+            return $result;
+
+            //date_next_bonus
+        }
+    }
+    public function get_check_bonus_employee($employeeId)
+    {
+        $employee = Employee::find($employeeId);
+        $selectedDocs = [];
+        if ($employee) {
+            $increseDay = 0;
+            $increseMonths = 0;
+            $date_last_bonus = $employee->date_last_bonus; //return $date_last_bonus;
+            $filteredArray = [];
+
+            if ($date_last_bonus) {
+                #region Add Ponus
+                $HrDocuments = $employee->HrDocuments()
+                    ->whereBetween('issue_date', [$date_last_bonus, Carbon::parse($date_last_bonus)->addYear()])
+                    ->where("is_active", "=", true)
+                    ->where('add_days', '>', 0)
+                    ->orWhere('add_months', '>', 0)
+                    ->with('Type')
+                    ->orderBy('add_months', 'DESC')
+                    ->orderBy('add_days', 'DESC')
+                    ->get()
+                    ->take(4);
+                $repeted6Month = 0;
+                foreach ($HrDocuments as $row) {
+                    if ($row->add_days == 180) {
+                        if ($repeted6Month < 1) {
+                            $repeted6Month++;
+                            $filteredArray[] = $row;
+                            $increseDay += $row->add_days;
+                            $increseMonths += $row->add_months;
+                        }
+                        continue;
+                    }
+                    $filteredArray[] = $row;
+                    $increseDay += $row->add_days;
+                    $increseMonths += $row->add_months;
+                }
+                $selectedDocs[] = $filteredArray;
+
+                #endregion
+                #region Add Subtract
+                $HrDocuments = $employee->HrDocuments()
+                    ->whereBetween('issue_date', [$date_last_bonus, Carbon::parse($date_last_bonus)->addYear()])
+                    ->where("is_active", "=", true)
+                    ->where('add_days', '<', 0)
+                    ->orWhere('add_months', '<', 0)
+                    ->with('Type')
+                    ->orderBy('add_months', 'DESC')
+                    ->orderBy('add_days', 'DESC')
+                    ->first();
+                if ($HrDocuments) {
+                    $increseDay -= $HrDocuments->add_days;
+                    $increseMonths += $HrDocuments->add_months;
+                    $filteredArray[] = $HrDocuments;
+                }
+                $selectedDocs[] = $filteredArray;
+                #endregion
+            }
+
+            $result = [
+                'id' => $employee->id,
+                'name' => $employee->name,
+                'currentDateBonus' => Carbon::parse($date_last_bonus)->format('Y-m-d'),
+                'numberIncreseDayes' => $increseDay + ($increseMonths * 30),
+                'nextDateBonus' => Carbon::parse($date_last_bonus)->addYear(1)->addDay($increseDay * -1)->addMonths($increseMonths * -1)->format('Y-m-d'),
+                'Documents' => HrDocumentResource::collection($selectedDocs)
+            ];
+            return $result;
+
+            //date_next_bonus
+        }
     }
     public function store(Request $request)
     {
@@ -80,7 +232,6 @@ class HrDocumentController extends Controller
             foreach ($EmployeesBySection as $key => $employee) {
                 $data = $this->addHrDocument(request: $request, employeeId: $employee->id);
             }
-
         } elseif ($request->chosePushBy == EnumTypeChoseShareDocument::ToAllEmployees->value) {
             $EmployeesBySection = Employee::all();
             foreach ($EmployeesBySection as $key => $employee) {
@@ -92,9 +243,6 @@ class HrDocumentController extends Controller
                 $data = $this->addHrDocument(request: $request, employeeId: $employee->id);
             }
         }
-        // Log::alert($data);
-        // $data = HrDocument::find($data->id);
-
         return $this->ok(new HrDocumentResource($data));
     }
 
@@ -104,7 +252,6 @@ class HrDocumentController extends Controller
     public function show(string $id)
     {
         return $this->ok(new HrDocumentResource(HrDocument::find($id)));
-
     }
 
     public function hrDocumentReportByEmployee($employeeId)
@@ -116,25 +263,21 @@ class HrDocumentController extends Controller
 
         $data = json_decode((HrDocumentResource::collection($data))->toJson(), true);
 
-
-
         foreach ($data as $key => $value) {
             $result .=
                 "تسلسل الملف :#  " . $value['id'] . PHP_EOL .
                 "اسم الكتاب " . $value['title'] . PHP_EOL .
-                "نوع الكتاب " . $value['Type']['name']. PHP_EOL .
+                "نوع الكتاب " . $value['Type']['name'] . PHP_EOL .
                 "تاريخ الكتاب " . $value['issueDate'] . PHP_EOL .
-                "المرافقات " . PHP_EOL ;
+                "المرافقات " . PHP_EOL;
 
             foreach ($value['Files'] as $keyFile => $file) {
-                $result .= "الملف  " .$keyFile. PHP_EOL ;
-                $result .= "الرابط  " .$file['path']. PHP_EOL ;
+                $result .= "الملف  " . $keyFile . PHP_EOL;
+                $result .= "الرابط  " . $file['path'] . PHP_EOL;
                 $filePath = $file['path'];
             }
-            $result .= "--------------------------------------------------". PHP_EOL;
+            $result .= "--------------------------------------------------" . PHP_EOL;
         }
-        // Log::alert($data);
-        //Log::alert("hrDocumentReportByEmployee : " . $result);
         return $result;
     }
     /**
@@ -150,10 +293,13 @@ class HrDocumentController extends Controller
         $data->employee_id = $request->employeeId;
         $data->hr_document_type_id = $request->hrDocumentTypeId;
         $data->add_days = $request->addDays;
+        $data->add_months = $request->addMonths;
+        $data->is_active = $request->isActive;
         $data->user_update_id = Auth::user()->id;
 
         $data->save();
         //$data = HrDocument::find($data->id);
+        $this->update_employee_date_bonus($employeeId);
 
         if ($request->hasFile('files')) {
             $document = new DocumentController();
@@ -172,6 +318,10 @@ class HrDocumentController extends Controller
      */
     public function destroy(string $id)
     {
-        return $this->ok(HrDocument::find($id)->delete());
+        $HrDocument = HrDocument::find($id);
+        $employee_id = $HrDocument->employee_id;
+        $HrDocument->delete();
+        $this->update_employee_date_bonus($employee_id);
+        return $this->ok($HrDocument);
     }
 }

@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers\api\v1;
+namespace App\Http\Controllers\Api\v1;
 
 use App\Http\Controllers\Controller;
 use App\Http\Resources\Vacation\VacationTimeResource;
@@ -70,9 +70,8 @@ class VacationTimeController extends Controller
         });
         //endregion
         $data = $data->paginate($limit);
-        //Log::alert($request);
         if (empty($data) || $data == null) {
-            return $this->FailedResponse(__('general.loadFailed'));
+            return $this->error(__('general.loadFailed'));
         } else {
             return $this->ok(new VacationTimeResourceCollection($data));
         }
@@ -100,9 +99,7 @@ class VacationTimeController extends Controller
                 ' الى وقت' . $value->time_to . PHP_EOL .
                 '-----------------------------------------'. PHP_EOL;
         }
-        // Log::alert($data);
         Log::alert('dailyReportByEmployee : ' . $result);
-
         return $result;
     }
 
@@ -119,7 +116,7 @@ class VacationTimeController extends Controller
         ];
         $vacationTime = VacationTime::where($data)->first();
         if ($vacationTime) {
-            return $this->FailedResponse(
+            return $this->error(
                 'this is Found in System',
                 new VacationTimeResource($vacationTime)
             );

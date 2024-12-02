@@ -2,7 +2,7 @@
 
 namespace Database\Seeders;
 
-use App\Http\Controllers\api\v1\VacationController;
+use App\Http\Controllers\Api\v1\VacationController;
 use App\Models\Employee;
 use Illuminate\Database\Seeder;
 

@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers\api\v1;
+namespace App\Http\Controllers\Api\v1;
 
 use App\Http\Controllers\Controller;
 use App\Http\Resources\User\RolePermissionResource;
@@ -22,7 +22,7 @@ class RoleController extends Controller
         $data = Role::all();
 
         if (empty($data) || $data == null) {
-            return $this->FailedResponse(__('general.loadFailed'));
+            return $this->error(__('general.loadFailed'));
         } else {
             return $this->ok(RolePermissionResource::collection($data));
         }
@@ -46,7 +46,7 @@ class RoleController extends Controller
         }
 
         if (empty($role) || $role == null) {
-            return $this->FailedResponse(__('general.saveUnsuccessfully'));
+            return $this->error(__('general.saveUnsuccessfully'));
         } else {
             return $this->ok(new RolePermissionResource($role));
         }
@@ -62,7 +62,7 @@ class RoleController extends Controller
         $data = Role::findById($id, 'web');
 
         if (empty($data) || $data == null) {
-            return $this->FailedResponse(__('general.loadFailed'));
+            return $this->error(__('general.loadFailed'));
         } else {
             return $this->ok(new RolePermissionResource($data));
         }
@@ -94,7 +94,7 @@ class RoleController extends Controller
         $data->syncPermissions($request->checkedPermission);
 
         if (empty($data) || $data == null) {
-            return $this->FailedResponse(__('general.loadFailed'));
+            return $this->error(__('general.loadFailed'));
         } else {
             return $this->ok(new RolePermissionResource($data));
         }
@@ -109,7 +109,7 @@ class RoleController extends Controller
         $user->assignRole($role_id);
 
         if (empty($user) || $user == null) {
-            return $this->FailedResponse(__('general.loadFailed'));
+            return $this->error(__('general.loadFailed'));
         } else {
             return $this->ok(new UserResource($user));
         }
@@ -124,7 +124,7 @@ class RoleController extends Controller
         $user->removeRole($role_id);
 
         if (empty($user) || $user == null) {
-            return $this->FailedResponse(__('general.loadFailed'));
+            return $this->error(__('general.loadFailed'));
         } else {
             return $this->ok(new UserResource($user));
         }
@@ -141,7 +141,7 @@ class RoleController extends Controller
         $data->delete();
 
         if (empty($data) || $data == null) {
-            return $this->FailedResponse(__('general.deleteUnsuccessfully'));
+            return $this->error(__('general.deleteUnsuccessfully'));
         } else {
             return $this->ok(new RolePermissionResource($data));
         }

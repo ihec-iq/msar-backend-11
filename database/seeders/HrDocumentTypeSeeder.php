@@ -18,49 +18,76 @@ class HrDocumentTypeSeeder extends Seeder
             'code' => ''
         ]);
         HrDocumentType::create([
-            'name' => 'كتب شكر 6 اشهر',
+            'name' => 'كتاب تشكر 6 اشهر',
             'code' => '+',
-            'add_days'=>6*30
+            'add_months'=>6,
+            'add_days'=>0
         ]);
         HrDocumentType::create([
-            'name' => 'كتب شكر 3 اشهر',
+            'name' => 'كتاب تشكر 3 اشهر',
             'code' => '+',
-            'add_days'=>3*30
+            'add_months'=>3,
+            'add_days'=>0
         ]);
         HrDocumentType::create([
-            'name' => 'كتب شكر 1 اشهر',
+            'name' => 'كتاب تشكر 1 اشهر',
             'code' => '+',
-            'add_days'=>30
+            'add_months'=>1,
+            'add_days'=>0
+        ]);
+        HrDocumentType::create([
+            'name' => 'كتاب تشكر اضافة خدمة',
+            'code' => '+',
+            'add_months' => 0,
+            'add_days' => 0
         ]);
         HrDocumentType::create([
             'name' => 'كتب عقوبة - لفت نظر',
             'code' => '-',
-            'add_days' => -30
+            'add_months'=>-1,
+            'add_days'=>0
         ]);
         HrDocumentType::create([
             'name' => 'كتب عقوبة - انذار',
             'code' => '-',
-            'add_days' => -30 * 6
+            'add_months'=>-6,
+            'add_days'=>0
         ]);
         HrDocumentType::create([
             'name' => 'كتب عقوبة - قطع راتب',
             'code' => '-',
-            'add_days' => -30 * 5
+            'add_months'=>-5,
+            'add_days'=>0
         ]);
         HrDocumentType::create([
             'name' => 'كتب عقوبة - توبيخ',
             'code' => '-',
-            'add_days' => -30* 12
+            'add_months'=>-12,
+            'add_days'=>0
         ]);
         HrDocumentType::create([
             'name' => 'كتب عقوبة - انقاص راتب',
             'code' => '-',
-            'add_days' => -30 * 12 * 2
+            'add_months'=>-12,
+            'add_days'=>0
         ]);
         HrDocumentType::create([
             'name' => 'كتب عقوبة - تنزيل',
             'code' => '-',
-            'add_days' => -30 * 12 * 3
+            'add_months'=>-12,
+            'add_days'=>0
+        ]);
+        HrDocumentType::create([
+            'name' => 'كتب عقوبة - غياب',
+            'code' => '-',
+            'add_months'=>0,
+            'add_days'=>0
+        ]);
+        HrDocumentType::create([
+            'name' => 'كتب عقوبة - اجازة بدون راتب',
+            'code' => '-',
+            'add_months'=>0,
+            'add_days'=>0
         ]);
         HrDocumentType::create([
             'name' => 'اجازات',

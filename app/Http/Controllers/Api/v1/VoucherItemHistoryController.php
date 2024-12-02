@@ -21,7 +21,6 @@ class VoucherItemHistoryController extends Controller
 
     public function filter(Request $request)
     {
-        //Log::alert($request);
         $filter_bill = [];
         $request->filled('limit') ? $limit = $request->limit : $limit = 10;
         // if (! $request->isNotFilled('name') && $request->name != '') {
@@ -45,7 +44,7 @@ class VoucherItemHistoryController extends Controller
 
         //return VoucherItemHistoryResource::collection($data);
         if (empty($data) || $data == null) {
-            return $this->FailedResponse(__('general.loadFailed'));
+            return $this->error(__('general.loadFailed'));
         } else {
             return $this->ok(new VoucherItemHistoryResourceCollection($data));
         }

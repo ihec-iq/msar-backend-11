@@ -2,6 +2,8 @@
 
 namespace App\Http\Resources\Employee;
 
+use App\Http\Resources\Bonus\BonusDegreeStageResource;
+use App\Http\Resources\GeneralIdNameResource;
 use App\Http\Resources\User\SectionResource;
 use App\Http\Resources\User\UserLiteResource;
 use Illuminate\Http\Request;
@@ -33,15 +35,37 @@ class EmployeeResource extends JsonResource
             'Section' => new SectionResource($this->Section),
             'isMoveSection' => $this->is_move_section,
             'MoveSection' => new SectionResource($this->MoveSection),
-            'Position' => new EmployeePositionResource($this->EmployeePosition),
-            'Center' => new EmployeeCenterResource($this->EmployeeCenter),
-            'Type' => new EmployeeTypeResource($this->EmployeeType),
+            'EmployeePosition' => new EmployeePositionResource($this->EmployeePosition),
+            'EmployeeCenter' => new EmployeeCenterResource($this->EmployeeCenter),
+            'EmployeeType' => new EmployeeTypeResource($this->EmployeeType),
             'countItems' => count($this->outputVouchers),
             'Items' => $this->outputVouchers,
             'SumItems' => $this->outputVouchers,
             'number' => $this->number,
             'idCard' => $this->id_card,
-            'telegramId' => $this->telegram
+            'telegramId' => $this->telegram,
+            'numberLastBonus' => $this->number_last_bonus,
+            'dateLastBonus' => $this->date_last_bonus,
+            'dateNextBonus' => $this->date_next_bonus,
+            'difNextBonusDate' => $this->getDifNextBonusDateAttribute(),
+            'numberLastPromotion' => $this->number_last_promotion,
+            'dateLastPromotion' => $this->date_last_promotion,
+            'dateNextPromotion' => $this->date_next_promotion,
+            'difNextPromotionDate' => $this->getDifNextPromotionDateAttribute(),
+            'BonusJobTitle' => new GeneralIdNameResource($this->BonusJobTitle),
+            'BonusStudy' => new GeneralIdNameResource($this->BonusStudy),
+            'DegreeStage' => new BonusDegreeStageResource($this->DegreeStage),
         ];
+    }
+
+    public function getDifNextBonusDateAttribute(): int
+    {
+        // Assuming you want to calculate the difference in days
+        return now()->diffInDays($this->date_next_bonus);
+    }
+    public function getDifNextPromotionDateAttribute(): int
+    {
+        // Assuming you want to calculate the difference in days
+        return now()->diffInDays($this->date_next_promotion);
     }
 }

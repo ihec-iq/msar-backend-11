@@ -18,7 +18,7 @@ class HrDocument extends Model
     }
     public function Employee(): BelongsTo
     {
-        return $this->belongsTo(Employee::class,"employee_id");
+        return $this->belongsTo(Employee::class);
     }
     public function Type(): BelongsTo
     {

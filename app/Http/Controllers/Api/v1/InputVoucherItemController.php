@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers\api\v1;
+namespace App\Http\Controllers\Api\v1;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Voucher\InputVoucherItemRequest;
@@ -84,7 +84,6 @@ class InputVoucherItemController extends Controller
         if ($storeId <> "0")
             $results = $results->whereRaw('stockId=' . $storeId);
         $results = $results->get();
-        //Log::alert(print_r(InputVoucherItemVSelectResource::collection($results), true));
         return $this->ok(InputVoucherItemVSelectResource::collection($results));
 
     }
@@ -110,7 +109,6 @@ class InputVoucherItemController extends Controller
         if ($storeId <> "0")
             $results = $results->whereRaw('stockId=' . $storeId);
         $results = $results->get();
-        //Log::alert(print_r(InputVoucherItemVSelectResource::collection($results), true));
         return $this->ok(InputVoucherItemVSelectResource::collection($results));
 
     }
@@ -135,7 +133,7 @@ class InputVoucherItemController extends Controller
 
         $data = InputVoucherItem::orderBy('id', 'desc')->where($filter_bill)->paginate($limit);
         if (empty($data) || $data == null) {
-            return $this->FailedResponse(__('general.loadFailed'));
+            return $this->error(__('general.loadFailed'));
         } else {
             //return $this->ok($data);
             return $this->ok(new InputVoucherItemResourceCollection($data));

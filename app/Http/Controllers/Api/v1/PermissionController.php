@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers\api\v1;
+namespace App\Http\Controllers\Api\v1;
 
 use App\Http\Controllers\Controller;
 use App\Http\Resources\PermissionResource;
@@ -23,7 +23,7 @@ class PermissionController extends Controller
         // // $permissions = getAllPermissions()->pluck('name');
 
         if (empty($data) || $data == null) {
-            return $this->FailedResponse(__('general.saveUnsuccessfully'));
+            return $this->error(__('general.saveUnsuccessfully'));
         } else {
             return $this->ok(PermissionResource::collection($data), __('general.saveSuccessfully'));
         }
@@ -37,7 +37,7 @@ class PermissionController extends Controller
         $data = User::find($user_id)->getAllPermissions();
 
         if (empty($data) || $data == null) {
-            return $this->FailedResponse(__('general.saveUnsuccessfully'));
+            return $this->error(__('general.saveUnsuccessfully'));
         } else {
             return $this->ok(PermissionResource::collection($data), __('general.saveSuccessfully'));
         }

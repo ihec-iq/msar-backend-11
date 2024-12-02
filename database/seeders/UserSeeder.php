@@ -2,12 +2,14 @@
 
 namespace Database\Seeders;
 
+use App\Models\Bonus;
+use App\Models\Employee;
 use App\Models\User;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
-use Spatie\Permission\Models\Permission;
 use Spatie\Permission\Models\Role;
+use Spatie\Permission\Models\Permission;
 
 class UserSeeder extends Seeder
 {
@@ -16,110 +18,20 @@ class UserSeeder extends Seeder
      */
     public function run(): void
     {
-
-        //region System Permissions
-
-        Permission::create(['name' => 'Administrator']);
-        Permission::create(['name' => 'dashboard']);
-
-        Permission::create(['name' => 'add user']);
-        Permission::create(['name' => 'edit user']);
-        Permission::create(['name' => 'delete user']);
-        Permission::create(['name' => 'show users']);
-
-        Permission::create(['name' => 'add archive']);
-        Permission::create(['name' => 'edit archive']);
-        Permission::create(['name' => 'delete archive']);
-        Permission::create(['name' => 'show archives']);
-
-        Permission::create(['name' => 'add document']);
-        Permission::create(['name' => 'delete document']);
-        Permission::create(['name' => 'show documents']);
-
-        Permission::create(['name' => 'add section']);
-        Permission::create(['name' => 'add user sections']);
-        Permission::create(['name' => 'edit section']);
-        Permission::create(['name' => 'delete section']);
-        Permission::create(['name' => 'show sections']);
-
-        Permission::create(['name' => 'add archiveType']);
-        Permission::create(['name' => 'edit archiveType']);
-        Permission::create(['name' => 'delete archiveType']);
-        Permission::create(['name' => 'show archiveTypes']);
-
-        Permission::create(['name' => 'add inputVoucher']);
-        Permission::create(['name' => 'edit inputVoucher']);
-        Permission::create(['name' => 'delete inputVoucher']);
-        Permission::create(['name' => 'show inputVouchers']);
-
-        Permission::create(['name' => 'show storage']);
-
-        Permission::create(['name' => 'add outputVoucher']);
-        Permission::create(['name' => 'edit outputVoucher']);
-        Permission::create(['name' => 'delete outputVoucher']);
-        Permission::create(['name' => 'show outputVouchers']);
-
-        Permission::create(['name' => 'add directVoucher']);
-        Permission::create(['name' => 'edit directVoucher']);
-        Permission::create(['name' => 'delete directVoucher']);
-        Permission::create(['name' => 'show directVouchers']);
-
-        Permission::create(['name' => 'add retrievalVoucher']);
-        Permission::create(['name' => 'edit retrievalVoucher']);
-        Permission::create(['name' => 'delete retrievalVoucher']);
-        Permission::create(['name' => 'show retrievalVouchers']);
-
-        Permission::create(['name' => 'add item']);
-        Permission::create(['name' => 'edit item']);
-        Permission::create(['name' => 'delete item']);
-        Permission::create(['name' => 'show items']);
-
-        Permission::create(['name' => 'add category item']);
-        Permission::create(['name' => 'edit category item']);
-        Permission::create(['name' => 'delete category item']);
-        Permission::create(['name' => 'show categories item']);
-
-        Permission::create(['name' => 'vacation office']);
-        Permission::create(['name' => 'vacation center']);
-        Permission::create(['name' => 'vacation Report']);
-
-        Permission::create(['name' => 'add vacation time']);
-        Permission::create(['name' => 'edit vacation time']);
-        Permission::create(['name' => 'delete vacation time']);
-        Permission::create(['name' => 'show vacations time']);
-
-        Permission::create(['name' => 'add vacation daily']);
-        Permission::create(['name' => 'edit vacation daily']);
-        Permission::create(['name' => 'delete vacation daily']);
-        Permission::create(['name' => 'show vacations daily']);
-
-        Permission::create(['name' => 'add vacation sick']);
-        Permission::create(['name' => 'edit vacation sick']);
-        Permission::create(['name' => 'delete vacation sick']);
-        Permission::create(['name' => 'show vacations sick']);
-
-        Permission::create(['name' => 'add employee']);
-        Permission::create(['name' => 'edit employee']);
-        Permission::create(['name' => 'delete employee']);
-        Permission::create(['name' => 'show employees']);
-
-        $permissions = Permission::all();
-
-        //endregion
-
         //region Roles
 
+        $permissions = Permission::all();
         $adminRole = Role::create(['name' => 'Administrator']);
-        $adminRole->syncPermissions($permissions);
+        $adminRole->syncPermissions($permissions); // This line can be adjusted based on your needs
 
         $superAdmin = Role::create(['name' => 'Super-Admin']);
-        $superAdmin->syncPermissions($permissions);
+        $superAdmin->syncPermissions($permissions); // This line can be adjusted based on your needs
 
         $hrRole = Role::create(['name' => 'HR']);
         $hrRole->syncPermissions(['add archive', 'edit archive', 'delete archive', 'show archives']);
 
-        // Permissions has spcial
-        Permission::create(['name' => 'hisSectionOnly']);
+        // Special permission
+        // Permission::create(['name' => 'hisSectionOnly']); // This line has been removed
 
         //endregion
 
@@ -178,6 +90,8 @@ class UserSeeder extends Seeder
         //endregion
         // DB::statement('TRUNCATE TABLE users;');
         // DB::statement('TRUNCATE TABLE employees;');
+
+
         DB::statement(
             '
 INSERT INTO `users` (`id`, `name`, `email`, `email_verified_at`, `password`, `phone`, `invite_code`, `active`, `window_id`, `any_device`, `user_id`, `remember_token`, `created_at`, `updated_at`) VALUES
@@ -906,5 +820,17 @@ INSERT INTO `employees` (`name`, `is_person`, `section_id`, `user_id`, `id_card`
 ( "اسعد عبد الجبار", 1, 13, 360, "55", NULL, "2013-03-01", 0, 0, 0, 0, NULL, NULL, NULL,1,1,1,1);
         '
         );
+
+        $employees = Employee::all();
+        foreach ($employees as $employee) {
+            Bonus::create([
+                'employee_id' => $employee->id,
+                'degree_stage_id' => 65,
+                'issue_date' => now() ,
+                'number'=>'',
+                'notes'=>'الترفيع الاولي , يجب ذكر كتب اخر ترفيع هنا'
+            ]);
+        }
     }
+
 }

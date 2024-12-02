@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers\api\v1;
+namespace App\Http\Controllers\Api\v1;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Voucher\InputVoucherStoreRequest;
@@ -49,7 +49,7 @@ class InputVoucherController extends Controller
 
         //return $data->toSql();
         if (empty($data) || $data == null) {
-            return $this->FailedResponse(__('general.loadFailed'));
+            return $this->error(__('general.loadFailed'));
         } else {
             //return $this->ok($data);
             return $this->ok(new InputVoucherResourceCollection($data));

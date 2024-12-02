@@ -16,25 +16,33 @@ class BonusJobTitleController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
-        $data = BonusJobTitle::orderBy('id', 'desc')->get();
+        $data = BonusJobTitle::orderBy('id', 'desc');
+        if (!$request->isNotFilled('bonusDegreeId') && $request->bonusDegreeId != 0) {
+            $data = $data->where('bonus_degree_id', $request->bonusDegreeId);
+        }
+        $data = $data->get();
         return $this->ok(BonusJobTitleResource::collection($data));
     }
     public function filter(Request $request)
     {
-        $request->filled('limit') ? $limit = $request->limit : $limit = 2;
+        $request->filled('limit') ? $limit = $request->limit : $limit = 10;
 
         $data = BonusJobTitle::orderBy('id', 'desc');
 
         if (!$request->isNotFilled('name') && $request->name != '') {
-           // $data = $data->where('name', 'like', '%' . $request->name . '%');
+            $data = $data->where('name', 'like', '%' . $request->name . '%');
+        }
+        if (!$request->isNotFilled('bonusDegreeId') && $request->bonusDegreeId != 0) {
+            $data = $data->where('bonus_degree_id', $request->bonusDegreeId);
         }
         $data = $data->paginate($limit);
+        // return $data;
         if (empty($data) || $data == null) {
-            return $this->FailedResponse(__('general.loadFailed'));
+            return $this->error(__('general.loadFailed'));
         } else {
-            return $this->ok(new BonusJobTitleResourceCollection( $data));
+            //return $this->ok(new BonusJobTitleResourceCollection( $data));
             return $this->ok(new PaginatedResourceCollection($data, BonusJobTitleResource::class));
         }
     }
@@ -46,6 +54,7 @@ class BonusJobTitleController extends Controller
     {
         $validatedData = $request->validate([
             'name' => 'required|string|max:255',
+            'bonusDegreeId' => 'required|integer|exists:bonus_degrees,id',
             'description' => 'nullable|string',
         ]);
 
@@ -70,6 +79,7 @@ class BonusJobTitleController extends Controller
 
         $validatedData = $request->validate([
             'name' => 'required|string|max:255',
+            'bonusDegreeId' => 'required|integer|exists:bonus_degrees,id',
             'description' => 'nullable|string',
         ]);
 

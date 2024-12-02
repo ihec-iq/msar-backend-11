@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers\api\v1;
+namespace App\Http\Controllers\Api\v1;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Voucher\RetrievalVoucherRequest;
@@ -44,7 +44,7 @@ class RetrievalVoucherController extends Controller
         $data = $data->paginate($limit);
 
         if (empty ($data) || $data == null) {
-            return $this->FailedResponse(__('general.loadFailed'));
+            return $this->error(__('general.loadFailed'));
         } else {
             return $this->ok(new RetrievalVoucherResourceCollection($data));
         }
@@ -69,7 +69,6 @@ class RetrievalVoucherController extends Controller
 
         //$arrayItems = json_decode($request->items, true);
         $arrayItems = json_decode($request->Items, true);
-        //Log::alert($arrayItems);
         $arrayItemInsert = [];
         foreach ($arrayItems as $key => $item) {
             $newItem = new RetrievalVoucherItem();

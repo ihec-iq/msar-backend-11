@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers\api\v1;
+namespace App\Http\Controllers\Api\v1;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Item\ItemGetFilterRequest;
@@ -52,7 +52,7 @@ class ItemController extends Controller
 
         $data = Item::orderBy('id', 'desc')->where($filter_bill)->paginate($limit);
         if (empty($data) || $data == null) {
-            return $this->FailedResponse(__('general.loadFailed'));
+            return $this->error(__('general.loadFailed'));
         } else {
             //return $this->ok($data);
             return $this->ok(new ItemResourceCollection($data));
@@ -91,7 +91,6 @@ class ItemController extends Controller
 
     public function update(ItemStoreRequest $request, string $id)
     {
-        Log::alert($request);
         $data = Item::find($id);
         $data->name = $request->name;
         $data->code = $request->code;

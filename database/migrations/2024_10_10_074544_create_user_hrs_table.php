@@ -14,15 +14,17 @@ return new class extends Migration
         Schema::create('user_hrs', function (Blueprint $table) {
             $table->id();
             $table->string('title')->nullable();
-            $table->foreignId('employee_id')->constrained()->onUpdate('cascade')->onDelete('cascade');
-            $table->foreignId('bonus_degree_stage_id')->constrained()->onUpdate('cascade')->onDelete('cascade');
-            $table->foreignId('bonus_study_id')->constrained()->onUpdate('cascade')->onDelete('cascade');
-            $table->foreignId('bonus_job_title_id')->constrained()->onUpdate('cascade')->onDelete('cascade');
-            $table->string('number_last_bounues')->nullable();
             $table->date('issue_date')->nullable();
-            $table->date('date_last_bounues')->nullable();
-            $table->date('date_last_worth')->nullable();
-            $table->date('date_next_worth')->nullable();
+            $table->foreignId('employee_id')->constrained()->onUpdate('cascade')->onDelete('cascade');
+            $table->foreignId('degree_stage_id')->constrained('bonus_degree_stages')->onUpdate('cascade')->onDelete('cascade');
+            $table->foreignId('study_id')->constrained('bonus_studies')->onUpdate('cascade')->onDelete('cascade');
+            $table->foreignId('job_title_id')->constrained('bonus_job_titles')->onUpdate('cascade')->onDelete('cascade');
+            $table->string('number_last_bonus')->nullable();
+            $table->date('date_last_bonus')->nullable();
+            $table->date('date_next_bonus')->nullable();
+            $table->string('number_last_promotion')->nullable();
+            $table->date('date_last_promotion')->nullable();
+            $table->date('date_next_promotion')->nullable();
             $table->softDeletes();
             $table->timestamps();
         });

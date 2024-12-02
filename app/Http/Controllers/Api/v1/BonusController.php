@@ -8,7 +8,9 @@ use App\Http\Resources\Bonus\BonusResource;
 use App\Http\Resources\Bonus\BonusResourceCollection;
 use App\Http\Resources\GeneralIdNameResource;
 use App\Http\Resources\Bonus\BonusDegreeStageResource;
-use App\Models\Bonus;
+use App\Http\Resources\PaginatedResourceCollection;
+use App\Models\Bonus; 
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 
@@ -30,21 +32,22 @@ class BonusController extends Controller
     }
     public function Bonus_degree_stage()
     {
-        $data = \App\Models\BonusDegreeStage::all();
+        $data = \App\Models\BonusDegreeStage::all(); 
+
         return $this->ok(BonusDegreeStageResource::collection($data));
     }
-
-
 
     public function filter(Request $request)
     {
         $request->filled('limit') ? $limit = $request->limit : $limit = 10;
-
         $data = Bonus::orderBy('id', 'desc');
         $data = $data->whereRelation('Employee', 'is_person', '=', true);
 
         if (!$request->isNotFilled('employeeName') && $request->employeeName != '') {
             $data = $data->whereRelation('Employee', 'name', 'like', '%' . $request->employeeName . '%');
+        }
+        if (!$request->isNotFilled('employeeId') && $request->employeeId != '') {
+            $data = $data->whereRelation('Employee', 'id', '=',  $request->employeeId);
         }
         if (!$request->isNotFilled('record') && $request->record != '') {
             $data = $data->orWhere('record', 'like', '%' . $request->record . '%');
@@ -56,11 +59,12 @@ class BonusController extends Controller
         // }
         $data = $data->paginate($limit);
         if (empty($data) || $data == null) {
-            return $this->FailedResponse(__('general.loadFailed'));
+            return $this->error(__('general.loadFailed'));
         } else {
-            return $this->ok(new BonusResourceCollection($data));
+            return $this->ok(new PaginatedResourceCollection($data, BonusResource::class));
         }
     }
+
     /**
      * Store a newly created resource in storage.
      */
@@ -68,10 +72,20 @@ class BonusController extends Controller
     {
         //return $request->all();
         try {
-            $data = Bonus::create($request->validated());
-            return $this->ok(new BonusResource($data));
+            $bonus = Bonus::create($request->validated());
+            // must to check employee have level up degree_stage_id
+            $employee = $bonus->Employee;
+            if ($employee->degree_stage_id < $request->degree_stage_id) {
+                $employee->update([
+                    'date_last_bonus' => $request->issue_date,
+                    'date_next_bonus' => Carbon::parse($request->issue_date)->addYears(1),
+                    'degree_stage_id' => $request->degree_stage_id,
+                    'number_last_bonus' => $request->number,
+                ]);
+            }
+            return $this->ok(new BonusResource($bonus));
         } catch (\Exception $e) {
-            return $this->FailedResponse(__('general.saveFailed'), $e->getMessage());
+            return $this->error(__('general.saveFailed'), $e->getMessage());
         }
     }
 
@@ -92,9 +106,24 @@ class BonusController extends Controller
         try {
             $bonus = Bonus::findOrFail($id);
             $bonus->update($request->validated());
+            // must to check employee have level up degree_stage_id to update it
+            $employee = $bonus->Employee;
+            Log::alert($employee->degree_stage_id);
+            Log::alert($request->degree_stage_id);
+            if ($employee->degree_stage_id < $request->degree_stage_id) {
+                $employee->update([
+                    'date_last_bonus' => $request->issue_date,
+                    'date_next_bonus' => Carbon::parse($request->issue_date)->addYears(1),
+                    'degree_stage_id' => $request->degree_stage_id,
+                    'number_last_bonus' => $request->number,
+                ]);
+            }
+            // re check employee date bonus
+            $hrDocument = new HrDocumentController();
+            $hrDocument->update_employee_date_bonus($employee->id);
             return $this->ok(new BonusResource($bonus));
         } catch (\Exception $e) {
-            return $this->FailedResponse(__('general.saveFailed'), $e->getMessage());
+            return $this->error(__('general.saveFailed'), $e->getMessage());
         }
     }
 
@@ -104,11 +133,29 @@ class BonusController extends Controller
     public function destroy(string $id)
     {
         try {
-            $bonus = Bonus::findOrFail($id);
-            $bonus->delete();
+            $data = Bonus::findOrFail($id);
+            $employee = $data->Employee;
+            $countBonuses = Bonus::where('employee_id', $employee->id)->count();
+            if ($countBonuses == 1) {
+                return $this->error('لا يمكن حذف العلاوة الاولى');    
+            }
+
+            $data->delete();
+            // get last bonus
+            $lastData = Bonus::where('employee_id', $employee->id)->orderBy('issue_date', 'desc')->first();
+            if ($lastData) {
+                $employee->update([
+                    'date_last_bonus' => $lastData->issue_date,
+                    'date_next_bonus' => Carbon::parse($lastData->issue_date)->addYears(1),
+                    'degree_stage_id' => $lastData->degree_stage_id,
+                    'number_last_bonus' => $lastData->number,
+                ]);
+            }
+            $hrDocument = new HrDocumentController();
+            $hrDocument->update_employee_date_bonus($employee->id);
             return $this->ok(['message' => 'Bonus deleted successfully']);
         } catch (\Exception $e) {
-            return $this->FailedResponse(__('general.deleteFailed'), $e->getMessage());
+            return $this->error($e->getMessage());
         }
     }
 }

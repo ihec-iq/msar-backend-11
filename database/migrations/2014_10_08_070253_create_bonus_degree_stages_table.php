@@ -14,8 +14,8 @@ return new class () extends Migration {
             $table->id();
             $table->foreignId('bonus_degree_id')->constrained()->onUpdate('cascade')->onDelete('cascade');
             $table->foreignId('bonus_stage_id')->constrained()->onUpdate('cascade')->onDelete('cascade');
-            $table->double('salery')->default(0);
-            $table->integer('yearly_bounues');
+            $table->double('salary')->default(0);
+            $table->integer('yearly_bonus');
             $table->integer('yearly_service');
             $table->timestamps();
         });

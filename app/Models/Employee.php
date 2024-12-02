@@ -2,12 +2,18 @@
 
 namespace App\Models;
 
+use App\Http\Controllers\Api\v1\HrDocumentController;
+use App\Http\Resources\Bonus\BonusDegreeStageResource;
+use App\Http\Resources\Bonus\BonusResource;
+use App\Http\Resources\Bonus\BonusWithoutEmployeeResource;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasManyThrough;
 use Illuminate\Database\Eloquent\Relations\HasOne;
+use Illuminate\Database\Eloquent\Relations\HasOneThrough;
+use Illuminate\Support\Facades\Log;
 
 class Employee extends Model
 {
@@ -19,9 +25,13 @@ class Employee extends Model
     {
         return $this->hasMany(InputVoucher::class);
     }
-    public function HrDocument(): HasMany
+    public function HrDocuments(): HasMany
     {
         return $this->hasMany(HrDocument::class);
+    }
+    public function getDifNextDateAttribute()
+    {
+        return now()->diffInDays($this->date_next_bonus);
     }
 
     public function Section(): BelongsTo
@@ -30,7 +40,7 @@ class Employee extends Model
     }
     public function MoveSection(): BelongsTo
     {
-        return $this->belongsTo(Section::class,"move_section_id","id");
+        return $this->belongsTo(Section::class, "move_section_id", "id");
     }
     public function EmployeeCenter(): BelongsTo
     {
@@ -72,5 +82,56 @@ class Employee extends Model
     public function OutputVouchers(): HasMany
     {
         return $this->hasMany(OutputVoucher::class);
+    }
+    public function BonusJobTitle(): BelongsTo
+    {
+        return $this->belongsTo(BonusJobTitle::class, 'bonus_job_title_id');
+    }
+    public function BonusStudy(): BelongsTo
+    {
+        return $this->belongsTo(BonusStudy::class, 'bonus_study_id');
+    }
+    public function DegreeStage(): BelongsTo
+    {
+        return $this->belongsTo(BonusDegreeStage::class, 'degree_stage_id');
+    }
+    public function Bonus(): HasMany
+    {
+        return $this->hasMany(Bonus::class);
+    }
+    public function LastBonus(): HasOne
+    {
+        return $this->hasOne(Bonus::class)->latestOfMany();
+    }
+
+    public function getNextDegreeStageAttribute(): ? BonusDegreeStageResource
+    {
+        return new BonusDegreeStageResource(BonusDegreeStage::find($this->degree_stage_id+1));
+    }
+
+    public function getNextNoteAttribute()
+    {
+        $hrDocument = new HrDocumentController();
+        $results= $hrDocument->check_bonus_employee($this->id);
+        $result = "";
+        //$result = implode(', ', $results->Documents);
+        foreach ($results['Documents'] as $key => $value) {
+            $result.=$value['title']."(". $value['number']." في ". $value['issue_date'].") ";
+        }
+        return  $result  ;
+    }
+
+
+    public function LastPromotion(): HasOne
+    {
+        return $this->hasOne(Promotion::class)->latestOfMany();
+    }
+    public function UserUpdate(): BelongsTo
+    {
+        return $this->belongsTo(User::class, 'updated_by');
+    }
+    public function UserCreate(): BelongsTo
+    {
+        return $this->belongsTo(User::class, 'created_by');
     }
 }

@@ -13,7 +13,7 @@ class Section extends Model
 
     protected $guarded = [];
 
-    public function users(): BelongsToMany
+    public function Users(): BelongsToMany
     {
         return $this->belongsToMany(User::class, 'user_section');
     }

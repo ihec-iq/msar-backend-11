@@ -20,12 +20,19 @@ class DatabaseSeeder extends Seeder
         //     'email' => 'test@example.com',
         // ]);
         $this->call([
+            SettingSeeder::class,
             DepartmentSeeder::class,
             DocumentTypeSeeder::class,
             SectionSeeder::class,
             EmployeePositionSeeder::class,
             EmployeeCenterSeeder::class,
             EmployeeTypeSeeder::class,
+            BonusDegreeSeeder::class,
+            BonusStageSeeder::class,
+            BonusDegreeStageSeeder::class,
+            BonusJobTitleSeeder::class,
+            BonusStudySeeder::class,
+            PermissionSeeder::class,
             UserSeeder::class,
             EmployeeSeeder::class,
             ArchiveTypeSeeder::class,
@@ -42,11 +49,7 @@ class DatabaseSeeder extends Seeder
             VacationReasonSeeder::class,
             RetrievalVoucherItemTypeSeeder::class,
             HrDocumentTypeSeeder::class,
-            BonusDegreeSeeder::class,
-            BonusStageSeeder::class,
-            BonusDegreeStageSeeder::class,
-            BonusJobTitleSeeder::class,
-            BonusStudySeeder::class,
+            
             UserHrSeeder::class
         ]);
     }

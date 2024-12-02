@@ -4,17 +4,49 @@ namespace App\Http\Controllers;
 
 abstract class Controller
 {
+    /**
+     * Return successful response with data
+     *
+     * @param mixed $data
+     * @return \Illuminate\Http\JsonResponse
+     */
     public function ok($data)
     {
         return response()->json([
+            'status' => 'success',
             'message' => 'Successful',
-            'data' => $data,
-        ], status: 200);
+            'length' => is_array($data) ? count($data) : ($data instanceof \Countable ? count($data) : 0),
+            'data' => $data
+        ], 200);
     }
-    public function ok_paginate($data)
+
+    /**
+     * Return error response
+     * 
+     * @param string $message
+     * @param mixed $data
+     * @param int $status
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function error($message = '', $data = null, $status = 500) 
     {
-        // return $data;
         return response()->json([
+            'status' => 'error',
+            'message' => $message,
+            'data' => $data,
+        ], $status);
+    }
+
+    /**
+     * Return paginated response
+     *
+     * @param mixed $data
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function okPaginate($data)
+    {
+        return response()->json([
+            'status' => 'success',
             'message' => 'Successful',
             'data' => $data,
             'links' => [
@@ -32,15 +64,6 @@ abstract class Controller
                 'total' => $data->resource->total(),
                 'last_page' => $data->resource->lastPage(),
             ],
-        ], status: 200);
-    }
-
-
-    public function FailedResponse($message = '', $data = null, $status = 500)
-    {
-        return response()->json([
-            'message' => $message,
-            'data' => $data,
-        ], status: $status);
+        ], 200);
     }
 }

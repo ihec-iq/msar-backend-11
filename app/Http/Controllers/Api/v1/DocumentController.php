@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers\API\v1;
+namespace App\Http\Controllers\Api\v1;
 
 use App\Http\Controllers\Controller;
 use App\Http\Resources\Document\DocumentResource;
@@ -168,7 +168,6 @@ class DocumentController extends Controller
         //$url = Storage::put('documents', $Document->path);
         //$result = Storage::delete($Document->path);
         $Document->delete();
-        Log::alert($Document);
         return true;
         //return $this->deleteFile($Document->path);
     }

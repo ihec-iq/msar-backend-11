@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers\api\v1;
+namespace App\Http\Controllers\Api\v1;
 
 use App\Http\Controllers\Controller;
 use App\Http\Resources\Voucher\DirectVoucherItemResource;
@@ -45,7 +45,7 @@ class DirectVoucherItemController extends Controller
 
         $data = DirectVoucherItem::orderBy('id', 'desc')->where($filter_bill)->paginate($limit);
         if (empty($data) || $data == null) {
-            return $this->FailedResponse(__('general.loadFailed'));
+            return $this->error(__('general.loadFailed'));
         } else {
             //return $this->ok($data);
             return $this->ok(new DirectVoucherItemResourceCollection($data));
