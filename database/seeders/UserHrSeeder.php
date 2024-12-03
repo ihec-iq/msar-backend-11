@@ -23,6 +23,7 @@ class UserHrSeeder extends Seeder
                     'issue_date' => now(),
                     'degree_stage_id' => 67,
                     'study_id' => 1,
+                    'certificate_id' => 1,
                     'job_title_id' => 1,
                     'number_last_bonus' => 1,
                     'date_last_bonus' => now(),

@@ -25,6 +25,7 @@ return new class extends Migration {
             $table->foreignId('user_create_id')->constrained(table: 'users')->onUpdate('cascade')->onDelete('cascade');
             $table->foreignId('user_update_id')->constrained(table: 'users')->onUpdate('cascade')->onDelete('cascade');
             $table->boolean('is_active')->default(true);
+            $table->text('notes')->nullable();
             $table->softDeletes();
             $table->timestamps();
         });

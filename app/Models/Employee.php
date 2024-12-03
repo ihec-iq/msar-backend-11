@@ -87,9 +87,13 @@ class Employee extends Model
     {
         return $this->belongsTo(BonusJobTitle::class, 'bonus_job_title_id');
     }
-    public function BonusStudy(): BelongsTo
+    public function Study(): BelongsTo
     {
-        return $this->belongsTo(BonusStudy::class, 'bonus_study_id');
+        return $this->belongsTo(Study::class, 'study_id');
+    }
+    public function Certificate(): BelongsTo
+    {
+        return $this->belongsTo(Certificate::class, 'certificate_id');
     }
     public function DegreeStage(): BelongsTo
     {

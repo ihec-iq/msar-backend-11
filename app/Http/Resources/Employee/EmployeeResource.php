@@ -53,7 +53,8 @@ class EmployeeResource extends JsonResource
             'dateNextPromotion' => $this->date_next_promotion,
             'difNextPromotionDate' => $this->getDifNextPromotionDateAttribute(),
             'BonusJobTitle' => new GeneralIdNameResource($this->BonusJobTitle),
-            'BonusStudy' => new GeneralIdNameResource($this->BonusStudy),
+            'Study' => new GeneralIdNameResource($this->Study),
+            'Certificate' => new GeneralIdNameResource($this->Certificate),
             'DegreeStage' => new BonusDegreeStageResource($this->DegreeStage),
         ];
     }

@@ -59,6 +59,7 @@ class HrDocumentController extends Controller
             'add_months' => $request->addMonths,
             'user_create_id' => Auth::user()->id,
             'user_update_id' => Auth::user()->id,
+            'notes' => $request->notes,
         ]);
         if ($request->hasFile('files')) {
             $document = new DocumentController();

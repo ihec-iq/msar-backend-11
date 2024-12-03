@@ -65,8 +65,11 @@ Route::prefix('/bonus_job_title')->middleware(['auth:sanctum'])->group(function 
     Route::delete('/delete/{id}', [BonusJobTitleController::class, 'destroy']);
     Route::get('/{id}', [BonusJobTitleController::class, 'show']);
 });
-Route::prefix('/bonus_study')->middleware(['auth:sanctum'])->group(function () {
-    Route::get('', [BonusController::class, 'Bonus_study']);
+Route::prefix('/study')->middleware(['auth:sanctum'])->group(function () {
+    Route::get('', [BonusController::class, 'Study']);
+});
+Route::prefix('/certificate')->middleware(['auth:sanctum'])->group(function () {
+    Route::get('', [BonusController::class, 'Certificate']);
 });
 Route::prefix('/bonus_degree_stage')->middleware(['auth:sanctum'])->group(function () {
     Route::get('', [BonusController::class, 'Bonus_degree_stage']);

@@ -21,6 +21,7 @@ class DatabaseSeeder extends Seeder
         // ]);
         $this->call([
             SettingSeeder::class,
+            CertificateSeeder::class,
             DepartmentSeeder::class,
             DocumentTypeSeeder::class,
             SectionSeeder::class,
@@ -31,7 +32,7 @@ class DatabaseSeeder extends Seeder
             BonusStageSeeder::class,
             BonusDegreeStageSeeder::class,
             BonusJobTitleSeeder::class,
-            BonusStudySeeder::class,
+            StudySeeder::class,
             PermissionSeeder::class,
             UserSeeder::class,
             EmployeeSeeder::class,

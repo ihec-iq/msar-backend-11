@@ -17,7 +17,8 @@ return new class extends Migration
             $table->date('issue_date')->nullable();
             $table->foreignId('employee_id')->constrained()->onUpdate('cascade')->onDelete('cascade');
             $table->foreignId('degree_stage_id')->constrained('bonus_degree_stages')->onUpdate('cascade')->onDelete('cascade');
-            $table->foreignId('study_id')->constrained('bonus_studies')->onUpdate('cascade')->onDelete('cascade');
+            $table->foreignId('study_id')->constrained('studies')->onUpdate('cascade')->onDelete('cascade');
+            $table->foreignId('certificate_id')->constrained('certificates')->onUpdate('cascade')->onDelete('cascade');
             $table->foreignId('job_title_id')->constrained('bonus_job_titles')->onUpdate('cascade')->onDelete('cascade');
             $table->string('number_last_bonus')->nullable();
             $table->date('date_last_bonus')->nullable();
