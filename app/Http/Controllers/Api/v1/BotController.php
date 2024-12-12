@@ -321,7 +321,7 @@ class BotController extends Controller
         }
         //Log::alert("inside getEmployeeVacationReport : " . $chat_id );
         $replay = '';
-        $employee = Employee::where(['telegram' => $chat_id])->first();
+        $employee = Employee::where(['telegram_id' => $chat_id])->first();
         //return $vacation;
         if ($employee) {
             $vacation = Vacation::withSum('VacationDaily as sumDaily', 'record')
@@ -406,7 +406,7 @@ class BotController extends Controller
     public function getEmployeeVacationDailyReport($chat_id)
     {
         $replay = '';
-        $employee = Employee::where(['telegram' => $chat_id])->first();
+        $employee = Employee::where(['telegram_id' => $chat_id])->first();
         if ($employee) {
             $vactionController = new VacationDailyController();
             $replay = ' --- تقرير الاجازات الاعيادية   ' . "\n";
@@ -425,7 +425,7 @@ class BotController extends Controller
     public function getEmployeeVacationTimeReport($chat_id)
     {
         $replay = '';
-        $employee = Employee::where(['telegram' => $chat_id])->first();
+        $employee = Employee::where(['telegram_id' => $chat_id])->first();
         if ($employee) {
             $vactionController = new VacationTimeController();
             $replay = ' --- تقرير الاجازات الزمنية  ' . "\n";
@@ -443,7 +443,7 @@ class BotController extends Controller
     public function getEmployeeVacationSickReport($chat_id)
     {
         $replay = '';
-        $employee = Employee::where(['telegram' => $chat_id])->first();
+        $employee = Employee::where(['telegram_id' => $chat_id])->first();
         if ($employee) {
             $vactionController = new VacationSickController();
             $replay = ' ================ تقرير الاجازات المرضية =============== ' . "\n";
@@ -458,7 +458,7 @@ class BotController extends Controller
     public function getEmployeeHrDocument($chat_id)
     {
         $replay = '';
-        $employee = Employee::where(['telegram' => $chat_id])->first();
+        $employee = Employee::where(['telegram_id' => $chat_id])->first();
         if ($employee) {
             $inlineKeyboard = [];
             $data = HrDocument::orderBy('issue_date', 'desc')
@@ -566,7 +566,7 @@ class BotController extends Controller
     public function executeCommandChangTelegramForEmployee($chat_id)
     {
         $replay = '';
-        $employee = Employee::where(['telegram' => $chat_id])->first();
+        $employee = Employee::where(['telegram_id' => $chat_id])->first();
         if ($employee) {
             $vactionController = new VacationSickController();
             $replay = ' ================  =============== ';

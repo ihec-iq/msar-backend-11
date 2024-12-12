@@ -25,7 +25,7 @@ class UpdateEmployeeRequest extends FormRequest
             'employee_type_id' => 'exists:employee_types,id',
             'id_card' => 'nullable|string|max:255',
             'number' => 'nullable|string|max:255',
-            'telegram' => 'nullable|string|max:255',
+            'telegram_id' => 'nullable|string|max:255',
             'date_work' => 'nullable|date',
             'init_vacation' => 'nullable|numeric',
             'take_vacation' => 'nullable|numeric',

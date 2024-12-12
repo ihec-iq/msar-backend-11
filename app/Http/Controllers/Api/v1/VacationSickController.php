@@ -190,8 +190,8 @@ class VacationSickController extends Controller
         $vacationSick->delete();
         $vacation = $vacationSick->Vacation;
         $vacationResult = $this->update_vacations($vacation_id);
-        if ($vacation->Employee->telegram) {
-            if (isset($vacation->Employee->telegram) && $vacation->Employee->telegram != '') {
+        if ($vacation->Employee->telegramId) {
+            if (isset($vacation->Employee->telegramId) && $vacation->Employee->telegramId != '') {
                 $botController = new BotController(new Api());
                 $message =
                     "نوع العملية : حذف اجازة مرضية" . PHP_EOL .

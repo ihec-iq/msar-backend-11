@@ -40,7 +40,7 @@ return new class extends Migration {
                 ->default(1);
             $table->string('id_card')->nullable();
             $table->string('number')->nullable();
-            $table->string('telegram')->nullable();
+            $table->string('telegram_id')->nullable();
             $table->date('date_work')->nullable();
             $table->double('init_vacation')->nullable()->default(0);
             $table->double('take_vacation')->nullable()->default(0);

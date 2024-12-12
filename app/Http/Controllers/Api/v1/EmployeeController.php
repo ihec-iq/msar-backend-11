@@ -160,7 +160,7 @@ class EmployeeController extends Controller
             $employee->date_work = $request->dateWork;
         }
         if (isset($request->telegramId)) {
-            $employee->telegram = $request->telegramId;
+            $employee->telegramId = $request->telegramId;
         }
         $employee->init_vacation = (isset($request->initVacation) && $request->initVacation != '') ?
             $request->initVacation : 0;
@@ -210,7 +210,7 @@ class EmployeeController extends Controller
             $employee->date_work = $request->dateWork;
         }
         if (isset($request->telegramId)) {
-            $employee->telegram = $request->telegramId;
+            $employee->telegramId = $request->telegramId;
         }
         $employee->init_vacation = (isset($request->initVacation) && $request->initVacation != '') ?
             $request->initVacation : 0;

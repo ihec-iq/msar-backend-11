@@ -226,8 +226,8 @@ class VacationDailyController extends Controller
         $vacationDaily->delete();
         $vacation = $vacationDaily->Vacation;
         $vacationResult = $this->update_vacations($vacation_id);
-        if ($vacation->Employee->telegram) {
-            if (isset($vacation->Employee->telegram) && $vacation->Employee->telegram != '') {
+        if ($vacation->Employee->telegramId) {
+            if (isset($vacation->Employee->telegramId) && $vacation->Employee->telegramId != '') {
                 $botController = new BotController(new Api);
                 $message =
                     'نوع العملية : حذف اجازة اعتيادية' . PHP_EOL .
