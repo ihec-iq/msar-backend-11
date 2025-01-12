@@ -5,7 +5,7 @@ namespace App\Http\Middleware;
 use Closure;
 use Illuminate\Http\Request;
 use Symfony\Component\HttpFoundation\Response;
-
+use Illuminate\Support\Facades\Log;
 class LocalizationMiddleware
 {
     /**
@@ -21,7 +21,6 @@ class LocalizationMiddleware
             // return abort(404);
             // return redirect()->route('404',['locale'=> $request->locale]);
         }
-
         return $next($request);
     }
 }

@@ -92,6 +92,8 @@ class ArchiveController extends Controller
             'description' => $request->description,
             'is_in' => $request->isIn,
             'user_id' => Auth::user()->id,
+            'user_create_id' => Auth::user()->id,
+            'user_update_id' => Auth::user()->id,
             'archive_type_id' => $request->archiveTypeId,
         ]);
         if ($request->hasFile('files')) {

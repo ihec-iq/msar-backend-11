@@ -19,6 +19,9 @@ return Application::configure(basePath: dirname(__DIR__))
                             'locale' => LocalizationMiddleware::class,
                             'maintenance' => MaintenanceCheckerMiddleware::class,
                             'auth' => Authenticate::class,
+                            'role' => \Spatie\Permission\Middleware\RoleMiddleware::class,
+                            'permission' => \Spatie\Permission\Middleware\PermissionMiddleware::class,
+                            'role_or_permission' => \Spatie\Permission\Middleware\RoleOrPermissionMiddleware::class,
                         ]);
 
         // $middleware->append(CorsMiddleware::class); // Register Cors middleware

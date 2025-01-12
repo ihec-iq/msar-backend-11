@@ -8,5 +8,5 @@ use Illuminate\Database\Eloquent\Model;
 class UserHrDocumentBonus extends Model
 {
     use HasFactory;
-    private $guarded = [];
+    protected $guarded = [];
 }
