@@ -34,6 +34,7 @@ class HrDocumentResource extends JsonResource
             'Files' => DocumentResource::collection($this->Documents),
             //'FilesBot' => DocumentHrBotResource::collection($this->Documents),
             'FilesLocal' => DocumentHrBotResource::collection($this->Documents),
+            'notes' => $this->notes,
         ];
     }
 }

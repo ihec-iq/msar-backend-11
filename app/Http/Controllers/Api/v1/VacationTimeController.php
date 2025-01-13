@@ -205,8 +205,8 @@ class VacationTimeController extends Controller
 
         $vacationTime->delete();
         $vacationResult = $this->update_vacations($vacation_id);
-        if ($vacation->Employee->telegram) {
-            if (isset($vacation->Employee->telegram) && $vacation->Employee->telegram != '') {
+        if ($vacation->Employee->telegramId) {
+            if (isset($vacation->Employee->telegramId) && $vacation->Employee->telegramId != '') {
                 $botController = new BotController(new Api());
                 $message =
                     'نوع العملية : حذف اجازة زمنية' . PHP_EOL .

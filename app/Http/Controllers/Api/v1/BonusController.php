@@ -25,9 +25,15 @@ class BonusController extends Controller
         return $this->ok(BonusResource::collection($data));
     }
 
-    public function Bonus_study()
+    public function Study()
     {
-        $data = \App\Models\BonusStudy::all();
+        $data = \App\Models\Study::all();
+        return $this->ok(GeneralIdNameResource::collection($data));
+    }
+
+    public function Certificate()
+    {
+        $data = \App\Models\Certificate::all();
         return $this->ok(GeneralIdNameResource::collection($data));
     }
     public function Bonus_degree_stage()

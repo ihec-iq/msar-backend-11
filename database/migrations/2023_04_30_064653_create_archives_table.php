@@ -23,8 +23,8 @@ return new class extends Migration
             $table->foreignId('archive_type_id')->constrained()->onUpdate('cascade')->onDelete('cascade');
             //$table->foreignId('section_id')->constrained()->onUpdate('cascade')->onDelete('cascade');  // added in separate migration
             //$table->foreignId('archive_type_id')->constrained()->onUpdate('cascade')->onDelete('cascade'); // added in separate migration
-            $table->foreignId('user_create_id')->constrained(table: 'users', indexName: 'idCreate')->onUpdate('cascade')->onDelete('cascade');
-            $table->foreignId('user_update_id')->constrained(table: 'users', indexName: 'idUpdate')->onUpdate('cascade')->onDelete('cascade');
+            $table->foreignId('user_create_id')->default(1)->constrained(table: 'users', indexName: 'idCreate')->onUpdate('cascade')->onDelete('cascade');
+            $table->foreignId('user_update_id')->default(1)-> constrained(table: 'users', indexName: 'idUpdate')->onUpdate('cascade')->onDelete('cascade');
             $table->softDeletes();
             $table->timestamps();
         });
