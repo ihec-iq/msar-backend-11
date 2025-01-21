@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Api\v1;
 use App\Http\Controllers\Api\v1\HrDocumentController;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Employee\StoreEmployeeRequest;
+use App\Http\Requests\Employee\UpdateEmployeeBonusRequest;
 use App\Http\Requests\Employee\UpdateEmployeeRequest;
 use App\Http\Resources\Employee\EmployeeBigLiteResource;
 use App\Http\Resources\Employee\EmployeeBonusResource;
@@ -87,7 +88,7 @@ class EmployeeController extends Controller
         ) {
             $filter_bill[] = ['is_person', $request->isPerson];
         } else {
-            $filter_bill[] = ['is_person', True];
+            $filter_bill[] = ['is_person', true];
         }
         $data = Employee::orderBy('name')->where($filter_bill);
         #region "Check Premission [vacation office ,vacation center ]"
@@ -130,6 +131,19 @@ class EmployeeController extends Controller
     public function update(UpdateEmployeeRequest $request, Employee $employee)
     {
         $employee->update($request->validated());
+
+        $hrController = new HrDocumentController();
+        $hrController->update_employee_date_bonus($employee->id);
+
+        return $this->ok(new EmployeeResource($employee));
+    }
+    public function updateBonusInfo(UpdateEmployeeBonusRequest $request, Employee $employee)
+    {
+        $employee->update($request->validated());
+
+        $hrController = new HrDocumentController();
+        $hrController->update_employee_date_bonus($employee->id);
+
         return $this->ok(new EmployeeResource($employee));
     }
     public function storeOld(StoreEmployeeRequest $request)
@@ -255,10 +269,14 @@ class EmployeeController extends Controller
                 $local =   $request->bound;
             } else {
                 $local = Setting::where("key", "SettingNumberDayesAlertBonus")->first()->val_int;
-                if ($local) $SettingNumberDayesAlertBonus = $local;
+                if ($local) {
+                    $SettingNumberDayesAlertBonus = $local;
+                }
             }
 
-            if ($local != '' && $local != null) $SettingNumberDayesAlertBonus = $local;
+            if ($local != '' && $local != null) {
+                $SettingNumberDayesAlertBonus = $local;
+            }
 
             $data = $data->where(function ($query) use ($SettingNumberDayesAlertBonus) {
                 $query->whereRaw('DATEDIFF(date_next_bonus,NOW()) <= ?', $SettingNumberDayesAlertBonus);

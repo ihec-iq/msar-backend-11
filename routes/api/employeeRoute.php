@@ -20,6 +20,7 @@ Route::prefix('/employee')->middleware(['auth:sanctum'])->group(function () {
     Route::get('/show/bonus/lite/{employee}', [EmployeeController::class, 'showLiteBonus']);
     Route::post('/store', [EmployeeController::class, 'store']);
     Route::post('/update/{employee}', [EmployeeController::class, 'update']);
+    Route::post('/update/bonus/{employee}', [EmployeeController::class, 'updateBonusInfo']);
     Route::delete('/delete/{employee}', [EmployeeController::class, 'destroy']);
     Route::get('/bonus/check', [EmployeeController::class, 'bonusCheck']);
     Route::get('/bonus/calculate', [EmployeeController::class, 'bonusCalculate']);

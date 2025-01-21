@@ -18,7 +18,7 @@ class ArchiveTypeResource extends JsonResource
             'id' => $this->id,
             'name' => $this->name,
             'description' => $this->description,
-            //'archives' =>  $this->Archives->count()
+            'archives' =>  $this->Archives->count()
         ];
     }
 }
