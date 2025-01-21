@@ -16,8 +16,9 @@ require __DIR__.'/api/botRoute.php';
 require __DIR__.'/api/settingRoute.php';
 require __DIR__.'/api/promotionRoute.php';
 
-Route::get('/', function () {
-    return 'IHEC ERP API running...';
+Route::get(uri:'/check', action:function (): \Illuminate\Http\JsonResponse {
+    return response()->json(data:    ['state' => 'IHEC ERP API running...']);
+    ;
 });
 //region upload file to drive
 Route::get('/info', function () {
@@ -33,4 +34,3 @@ Route::get('/setBotWebhook/{site}', function ($site) {
     $reposnse = Http::get($url);
     return response()->json($reposnse->json());
 });
-

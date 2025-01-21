@@ -104,7 +104,7 @@ class HrDocumentController extends Controller
                     ->orderBy('add_days', 'DESC')
                     ->get()
                     ->take(4);
-                $repeted6Month = 0;
+                $repeted6Month = 0;//Log::info($HrDocuments);
                 foreach ($HrDocuments as $row) {
                     if ($row->add_months == 6) {
                         if ($repeted6Month < 1) {
