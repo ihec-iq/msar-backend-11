@@ -10,22 +10,22 @@
     "require": {
         "php": "^8.2",
         "irazasyed/telegram-bot-sdk": "^3.14",
-        "laravel/framework": "^11.37",
-        "laravel/pulse": "^1.3.2",
+        "laravel/framework": "^11.39",
+        "laravel/pulse": "^1.3.3",
         "laravel/sanctum": "^4.0.7",
         "laravel/tinker": "^2.10",
         "opcodesio/log-viewer": "^3.14",
         "spatie/laravel-permission": "^6.10.1"
     },
     "require-dev": {
-        "barryvdh/laravel-ide-helper": "^3.5.3",
+        "barryvdh/laravel-ide-helper": "^3.5.4",
         "fakerphp/faker": "^1.24",
         "laravel/breeze": "^2.3",
-        "laravel/pint": "^1.19",
-        "laravel/sail": "^1.39",
+        "laravel/pint": "^1.20",
+        "laravel/sail": "^1.40",
         "mockery/mockery": "^1.6.12",
         "nunomaduro/collision": "^8.5",
-        "phpunit/phpunit": "^11.5.2"
+        "phpunit/phpunit": "^11.5.3"
     },
     "autoload": {
         "psr-4": {
