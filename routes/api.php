@@ -17,7 +17,7 @@ require __DIR__.'/api/settingRoute.php';
 require __DIR__.'/api/promotionRoute.php';
 
 Route::get(uri:'/check', action:function (): \Illuminate\Http\JsonResponse {
-    return response()->json(data:    ['state' => 'IHEC ERP API running...']);
+    return response()->json(data:    ['state' => 'ERP MSAR API running...']);
     ;
 });
 //region upload file to drive
