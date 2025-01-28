@@ -15,29 +15,24 @@ return new class extends Migration {
             $table->id();
             $table->string('name');
             $table->boolean('is_person')->default(true);
-            $table->foreignId('section_id')->constrained()
+            $table->foreignId('section_id')->default(1)->constrained()
                 ->onUpdate('cascade')
-                ->onDelete('cascade')
-                ->default(1);
+                ->onDelete('cascade');
             $table->boolean('is_move_section')->default(false);
-            $table->foreignId('move_section_id')->constrained('sections')
+            $table->foreignId('move_section_id')->default(1)->constrained('sections')
                 ->onUpdate('cascade')
-                ->onDelete('cascade')
-                ->default(1);
-            $table->foreignId('employee_center_id')->constrained()
+                ->onDelete('cascade');
+            $table->foreignId('employee_center_id')->default(1)->constrained()
                 ->onUpdate('cascade')
-                ->onDelete('cascade')
-                ->default(1);
+                ->onDelete('cascade');
             $table->foreignId('user_id')->constrained()
                 ->onUpdate('cascade')->onDelete('cascade')->default(1);
-            $table->foreignId('employee_position_id')->constrained()
+            $table->foreignId('employee_position_id')->default(1)->constrained()
                 ->onUpdate('cascade')
-                ->onDelete('cascade')
-                ->default(1);
-            $table->foreignId('employee_type_id')->constrained()
+                ->onDelete('cascade');
+            $table->foreignId('employee_type_id')->default(1)->constrained()
                 ->onUpdate('cascade')
-                ->onDelete('cascade')
-                ->default(1);
+                ->onDelete('cascade');
             $table->string('id_card')->nullable();
             $table->string('number')->nullable();
             $table->string('telegram_id')->nullable();

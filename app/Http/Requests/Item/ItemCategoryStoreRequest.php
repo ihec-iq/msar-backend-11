@@ -23,7 +23,7 @@ class ItemCategoryStoreRequest extends FormRequest
     {
         return [
             'name' => 'string | required',
-            'description' => 'string',
+            'description' => 'string | nullable',
         ];
     }
 }

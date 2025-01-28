@@ -114,8 +114,6 @@ class BonusController extends Controller
             $bonus->update($request->validated());
             // must to check employee have level up degree_stage_id to update it
             $employee = $bonus->Employee;
-            Log::alert($employee->degree_stage_id);
-            Log::alert($request->degree_stage_id);
             if ($employee->degree_stage_id < $request->degree_stage_id) {
                 $employee->update([
                     'date_last_bonus' => $request->issue_date,

@@ -8,6 +8,7 @@ use App\Http\Resources\Item\ItemCategoryResource;
 use App\Http\Resources\Item\ItemCategoryResourceCollection;
 use App\Models\ItemCategory;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
 
 class ItemCategoryController extends Controller
@@ -44,6 +45,8 @@ class ItemCategoryController extends Controller
         $data = ItemCategory::create([
             'name' => $request->name,
             'description' => $request->description,
+            'user_create_id' => Auth::user()->id,
+            'user_update_id' => Auth::user()->id,
         ]);
 
         return $this->ok(new ItemCategoryResource($data));
