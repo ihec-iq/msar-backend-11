@@ -10,6 +10,7 @@ use App\Http\Resources\Archive\ArchiveResource;
 use App\Http\Resources\Archive\ArchiveResourceCollection;
 use App\Http\Resources\Document\DocumentResource;
 use App\Models\Archive;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
 
@@ -70,12 +71,11 @@ class ArchiveController extends Controller
             if (!$request->isNotFilled('sectionId') && $request->sectionId != '-1') {
                 $data = $data->whereRelation('ArchiveType.Section', 'id', '=', Auth::user()->sections()->first()->id);
             }
-
         } else {
             $data = $data->whereRelation('ArchiveType.Section', 'id', '=', Auth::user()->sections()->first()->id);
         }
         $data = $data->where($filter_bill)->paginate($limit);
-        if (empty ($data) || $data == null) {
+        if (empty($data) || $data == null) {
             return $this->error(__('general.loadFailed'));
         } else {
             return $this->ok(new ArchiveResourceCollection($data));
@@ -86,24 +86,26 @@ class ArchiveController extends Controller
     {
         $data = Archive::create([
             'title' => $request->title,
-            'issue_date' => $request->issueDate,
+            'issue_date' => $request->issue_date,
             'number' => $request->number,
             'way' => $request->way,
             'description' => $request->description,
-            'is_in' => $request->isIn,
+            'is_in' => $request->is_in,
             'user_id' => Auth::user()->id,
             'user_create_id' => Auth::user()->id,
             'user_update_id' => Auth::user()->id,
-            'archive_type_id' => $request->archiveTypeId,
+            'archive_type_id' => $request->archive_type_id,
         ]);
-        if ($request->hasFile('files')) {
+        if ($request->hasfile('FilesDocument')) {
             $document = new DocumentController();
-            $document->store_multi(request:$request,
-                                   documentable_id: $data->id,
-                                   documentable_type:Archive::class,
-                                   pathFolder:"archives");
+            $document->store_multi(
+                request: $request,
+                documentable_id: $data->id,
+                documentable_type: Archive::class,
+                pathFolder: "archives"
+            );
         }
-        // foreach ($request->file('files') as $file) {
+        // foreach ($request->file('Files') as $file) {
         //     $document = new DocumentController();
         //     $document->store(new Request(["files" => $file, "archive_id" => $data->id]));
         // }
@@ -125,20 +127,20 @@ class ArchiveController extends Controller
         return $this->ok(DocumentResource::collection($data->documents));
     }
 
-    public function update(ArchiveStoreRequest $request, string $id)
-    {
+    public function update(Request $request, string $id)
+    { 
         $data = Archive::find($id);
         if ($data) {
             $data->title = $request->title;
-            $data->issue_date = $request->issueDate;
+            $data->issue_date = $request->issue_date;
             $data->number = $request->number;
             $data->way = $request->way;
             $data->description = $request->description;
-            $data->is_in = $request->isIn;
+            $data->is_in = $request->is_in;
             $data->user_id = Auth::user()->id;
-            $data->archive_type_id = $request->archiveTypeId;
+            $data->archive_type_id = $request->archive_type_id;
             $data->save();
-            if ($request->hasFile('files')) {
+             if ($request->hasfile('FilesDocument')) {
                 $document = new DocumentController();
                 $document->store_multi(
                     request: $request,
@@ -147,10 +149,8 @@ class ArchiveController extends Controller
                     pathFolder: "archives"
                 );
             }
-
             return $this->ok(new ArchiveResource($data));
         }
-
         return $this->ok(new ArchiveResource([]));
     }
 

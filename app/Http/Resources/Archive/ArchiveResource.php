@@ -22,14 +22,12 @@ class ArchiveResource extends JsonResource
             'way' => $this->way ? $this->way : "",
             'issueDate' => $this->issue_date,
             'sectionId' => $this->section_id,
-            'archiveTypeId' => $this->archive_type_id,
-            'archiveTypeName' => $this->ArchiveType->name,
-            'archiveType' => new ArchiveTypeResource($this->ArchiveType),
+            'ArchiveType' => new ArchiveTypeResource($this->ArchiveType),
             'number' => $this->number,
             'description' => $this->description,
             'isIn' => $this->is_in,
             'isInWord' => $this->is_in ? 'داخل' : 'خارج',
-            'Files' => DocumentResource::collection($this->Documents),
+            'FilesDocument' => DocumentResource::collection($this->Documents),
         ];
     }
 }
