@@ -52,16 +52,17 @@ class HrDocumentController extends Controller
         $data = HrDocument::create([
             'title' => $request->title,
             'number' => $request->number,
-            'issue_date' => $request->issueDate,
+            'issue_date' => $request->issue_date,
             'employee_id' => $employeeId,
-            'hr_document_type_id' => $request->hrDocumentTypeId,
-            'add_days' => $request->addDays,
-            'add_months' => $request->addMonths,
+            'hr_document_type_id' => $request->hr_document_type_id,
+            'add_days' => $request->add_days,
+            'add_months' => $request->add_months,
             'user_create_id' => Auth::user()->id,
             'user_update_id' => Auth::user()->id,
             'notes' => $request->notes,
         ]);
-        if ($request->hasFile('files')) {
+
+        if ($request->hasfile('FilesDocument')) {
             $document = new DocumentController();
             $document->store_multi_hr(
                 request: $request,
@@ -286,23 +287,23 @@ class HrDocumentController extends Controller
      */
     public function update(Request $request, string $id)
     {
+        Log::info($request);
         $data = HrDocument::find($id);
-        $employeeId = $request->employeeId;
+        $employeeId = $request->employee_id;
 
         $data->title = $request->title;
-        $data->issue_date = $request->issueDate;
-        $data->employee_id = $request->employeeId;
-        $data->hr_document_type_id = $request->hrDocumentTypeId;
-        $data->add_days = $request->addDays;
-        $data->add_months = $request->addMonths;
-        $data->is_active = $request->isActive;
+        $data->issue_date = $request->issue_date;
+        $data->employee_id = $request->employee_id;
+        $data->hr_document_type_id = $request->hr_document_type_id;
+        $data->add_days = $request->add_days;
+        $data->add_months = $request->add_months;
+        $data->is_active = $request->is_active;
         $data->user_update_id = Auth::user()->id;
-
+        Log::info($data);
         $data->save();
         //$data = HrDocument::find($data->id);
         $this->update_employee_date_bonus($employeeId);
-
-        if ($request->hasFile('files')) {
+        if ($request->hasfile('FilesDocument')) {
             $document = new DocumentController();
             $document->store_multi_hr(
                 request: $request,

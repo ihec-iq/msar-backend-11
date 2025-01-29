@@ -62,23 +62,28 @@ class DocumentController extends Controller
      */
     public function store_multi(Request $request, $documentable_id, $documentable_type, $pathFolder)
     {
-        //region "Delete log files"
-        // $logFilePath = storage_path('logs/laravel.log');
-        // file_put_contents($logFilePath, '');
-        //endregion
-        if ($request->file('files') == false) {
+        $files = $request->file('FilesDocument'); // Convert to array of files
+        if (!$files || !is_array($files)) {
             return null;
         }
+
         $result = [];
-        foreach ($request->file('files') as $file) {
+        foreach ($files as $file) {
+            // Add validation for file existence
+            if (!$file->isValid()) {
+                continue;
+            }
+
             $path = "public/" . $pathFolder . "/$documentable_id";
-            $url = Storage::putFileAs($path, $file, date('YmdHis') . $file->getClientOriginalName());
-            $extension = $file->getClientOriginalExtension();
+            $filename = date('YmdHis') . $file->getClientOriginalName();
+
+            $url = Storage::putFileAs($path, $file, $filename);
+
             $result[] = Document::create([
                 'path' => $url,
                 'title' => pathinfo($file->getClientOriginalName(), PATHINFO_FILENAME),
-                'extension' => $extension,
-                'size' => Storage::size($url),
+                'extension' => $file->getClientOriginalExtension(),
+                'size' => $file->getSize(), // More reliable than Storage::size()
                 'documentable_id' => $documentable_id,
                 'documentable_type' => $documentable_type,
                 'document_type_id' => 1,
@@ -94,11 +99,11 @@ class DocumentController extends Controller
         // $logFilePath = storage_path('logs/laravel.log');
         // file_put_contents($logFilePath, '');
         //endregion
-        if ($request->file('files') == false) {
+        if ($request->file('FilesDocument') == false) {
             return null;
         }
         $result = [];
-        foreach ($request->file('files') as $file) {
+        foreach ($request->file('FilesDocument') as $file) {
             $path = "public/hr/" . $pathFolder . "";
             $url = Storage::putFileAs($path, $file, $documentable_id.date('YmdHis') . $file->getClientOriginalName());
             $extension = $file->getClientOriginalExtension();

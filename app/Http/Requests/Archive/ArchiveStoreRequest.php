@@ -24,10 +24,10 @@ class ArchiveStoreRequest extends FormRequest
         return [
             'title' => 'string',
             'description' => 'string|nullable',
-            'isIn' => 'boolean',
+            'is_in' => 'boolean',
             'number' => 'string|nullable',
-            'issueDate' => 'date',
-            'archiveTypeId' => ['integer', 'exists:archive_types,id'],
+            'issue_date' => 'date',
+            'archive_type_id' => ['integer', 'exists:archive_types,id'],
             // 'sectionId' => ['integer', 'exists:sections,id'],
         ];
     }
@@ -36,7 +36,13 @@ class ArchiveStoreRequest extends FormRequest
     {
         return [
             'issueDate.required' => 'يجب عليك ادخال التاريخ',
-            'issueDate.date' => '',
+            'issueDate.date' => 'يجب عليك ادخال التاريخ بشكل صحيح',
+            'archive_type_id.required' => 'يجب عليك ادخال نوع الأرشيف',
+            'archive_type_id.exists' => 'يجب عليك ادخال نوع أرشيف صالح',
+            'title.string' => 'يجب عليك ادخال عنوان صالح',
+            'description.string' => 'يجب عليك ادخال وصف صالح',
+            'is_in.boolean' => 'يجب عليك ادخال صحيح أو خطأ',
+            'number.string' => 'يجب عليك ادخال رقم صالح',
         ];
     }
 }
