@@ -99,7 +99,7 @@ class VacationTimeController extends Controller
                 ' الى وقت' . $value->time_to . PHP_EOL .
                 '-----------------------------------------'. PHP_EOL;
         }
-        Log::alert('dailyReportByEmployee : ' . $result);
+        //Log::alert('dailyReportByEmployee : ' . $result);
         return $result;
     }
 

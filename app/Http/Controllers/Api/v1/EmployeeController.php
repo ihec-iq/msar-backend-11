@@ -19,6 +19,7 @@ use App\Models\User;
 use Illuminate\Container\Attributes\DB;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Log;
 
@@ -51,6 +52,7 @@ class EmployeeController extends Controller
 
     public function getLite()
     {
+       
         $data = Employee::orderBy('name');
         #region "Check Premission [vacation office ,vacation center ]"
         $data = $data->whereHas('EmployeeType', function ($query) {
@@ -65,7 +67,10 @@ class EmployeeController extends Controller
             $query->whereIn('id', $employeeType);
         });
         #endregion
-        $data = $data->get();
+         $data =  $data->get();
+        // $data = Cache::remember('getLite_employees', 60*60*24, function () use ($data) {
+        //     return $data->get();
+        // });
 
         return $this->ok(EmployeeBigLiteResource::collection($data));
     }
@@ -112,7 +117,48 @@ class EmployeeController extends Controller
             return $this->ok(new EmployeeResourceCollection($data));
         }
     }
+public function filterLite(Request $request)
+    {
+        $filter_bill = [];
+        $request->filled('limit') ? $limit = $request->limit : $limit = 10;
+        if (!$request->isNotFilled('name') && $request->name != '') {
+            $filter_bill[] = ['name', 'like', '%' . $request->name . '%'];
+        }
+        if (
+            !$request->isNotFilled('sectionId') &&
+            $request->sectionId != '' && $request->sectionId != '0' && $request->sectionId != '1'
+        ) {
+            $filter_bill[] = ['section_id', $request->sectionId];
+        }
+        if (
+            !$request->isNotFilled('isPerson') && $request->sectionId != ''
+        ) {
+            $filter_bill[] = ['is_person', $request->isPerson];
+        } else {
+            $filter_bill[] = ['is_person', true];
+        }
+        $data = Employee::orderBy('name')->where($filter_bill);
+        #region "Check Premission [vacation office ,vacation center ]"
+        $data = $data->whereHas('EmployeeType', function ($query) {
+            $employeeType = ["1"];
+            if (Auth::user()->hasAnyPermission(['vacation office'])) {
+                array_push($employeeType, "2");
+            }
+            if (Auth::user()->hasAnyPermission(['vacation center'])) {
+                array_push($employeeType, "3");
+            }
+            array_push($employeeType, "4");
+            $query->whereIn('id', $employeeType);
+        });
 
+        #endregion
+        $data = $data->paginate($limit);
+        if (empty($data) || $data == null) {
+            return $this->error(__('general.loadFailed'));
+        } else {
+            return $this->ok(new PaginatedResourceCollection ($data,EmployeeBigLiteResource::class));
+        }
+    }
     /**
      * Store a newly created resource in storage.
      */
@@ -308,8 +354,7 @@ class EmployeeController extends Controller
         foreach ($dataResult as $employee) {
             $hrController->update_employee_date_bonus($employee->id);
         }
-        $dataResult = $data->get();
-        Log::alert($dataResult);
+        $dataResult = $data->get(); 
 
         if (empty($dataResult) || $dataResult == null) {
             return $this->error(__('general.loadFailed'));

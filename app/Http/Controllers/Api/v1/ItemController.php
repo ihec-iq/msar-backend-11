@@ -61,12 +61,11 @@ class ItemController extends Controller
 
     public function store(ItemStoreRequest $request)
     {
-        $category = json_decode($request->Category, true);
         $data = Item::create([
             'name' => $request->name,
             'code' => $request->code,
             'description' => $request->description,
-            'item_category_id' => $category['id'],
+            'item_category_id' => $request->category_id,
             'measuring_unit' => $request->measuringUnit,
             'user_create_id' => auth()->user()->id,
             'user_update_id' => auth()->user()->id,
@@ -95,8 +94,7 @@ class ItemController extends Controller
         $data->name = $request->name;
         $data->code = $request->code;
         $data->description = $request->description;
-        $Category = json_decode($request->Category, true);
-        $data->item_category_id = $Category['id'];
+        $data->item_category_id = $request->category_id;
         $data->measuring_unit = $request->measuringUnit;
         $data->user_update_id = auth()->user()->id;
 
