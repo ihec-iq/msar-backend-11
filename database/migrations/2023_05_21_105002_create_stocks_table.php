@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::create('stocks', function (Blueprint $table) {
             $table->id();
             $table->string('name');
-            $table->string('number')->unique();
+            $table->text('description')->nullable();
             $table->softDeletes();
             $table->timestamps();
         });
