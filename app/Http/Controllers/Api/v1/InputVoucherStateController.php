@@ -23,6 +23,10 @@ class InputVoucherStateController extends Controller
     public function store(Request $request)
     {
         //
+        $data = InputVoucherState::create([
+            'name' => $request->name,
+        ]);
+        return $this->ok(new GeneralIdNameResource($data));
     }
 
     /**
@@ -39,7 +43,11 @@ class InputVoucherStateController extends Controller
      */
     public function update(Request $request, string $id)
     {
-        //
+        
+        $data = InputVoucherState::find($id);
+        $data->name = $request->name;
+        $data->save();
+        return $this->ok(new GeneralIdNameResource($data));
     }
 
     /**
@@ -47,6 +55,8 @@ class InputVoucherStateController extends Controller
      */
     public function destroy(string $id)
     {
-        //
+        $data = InputVoucherState::find($id);
+        $data->delete();
+        return $this->ok(new GeneralIdNameResource($data));
     }
 }

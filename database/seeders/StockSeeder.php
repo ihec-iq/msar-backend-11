@@ -13,17 +13,14 @@ class StockSeeder extends Seeder
     public function run(): void
     {
         Stock::create([
-            'name' => 'غير محدد',
-            'number' => '1',
+            'name' => 'غير محدد', 
         ]);
         Stock::create([
-            'name' => 'مخزن الاجهزة البايومترية',
-            'number' => '2',
+            'name' => 'مخزن الاجهزة البايومترية', 
         ]);
 
         Stock::create([
-            'name' => 'مخزن الموجودات الثابتة',
-            'number' => '3',
+            'name' => 'مخزن الموجودات الثابتة', 
         ]);
     }
 }
