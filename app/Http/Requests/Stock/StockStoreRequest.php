@@ -23,7 +23,8 @@ class StockStoreRequest extends FormRequest
     {
         return [
             'name' => 'required | string',
-            'number' => 'required | string | unique:stocks,number',
+            'description' => 'nullable | string',
         ];
     }
 }
+

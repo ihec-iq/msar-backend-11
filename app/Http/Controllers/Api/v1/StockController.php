@@ -18,7 +18,7 @@ class StockController extends Controller
     {
         $data = Stock::create([
             'name' => $request->name,
-            'number' => $request->number,
+            'description' => $request->description,
         ]);
 
         return $this->ok(new StockResource($data));
@@ -33,10 +33,8 @@ class StockController extends Controller
     {
         $data = Stock::find($id);
         $data->name = $request->name;
-        $data->number = $request->number;
-
+        $data->description = $request->description;
         $data->save();
-
         return $this->ok(new StockResource($data));
     }
 
@@ -44,7 +42,6 @@ class StockController extends Controller
     {
         $data = Stock::find($id);
         $data->delete();
-
         return $this->ok(null);
     }
 }
