@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Api\v1;
 
 use App\Http\Controllers\Controller;
 use App\Http\Resources\Employee\EmployeeCenterResource;
+use App\Http\Resources\GeneralIdNameResource;
 use App\Models\EmployeeCenter;
 use Illuminate\Http\Request;
 
@@ -24,6 +25,11 @@ class EmployeeCenterController extends Controller
     public function store(Request $request)
     {
         //
+        $data = EmployeeCenter::create([
+            'name' => $request->name,
+            'code' => $request->code ?? '',
+        ]);
+        return $this->ok(new GeneralIdNameResource($data));
     }
 
     /**
@@ -31,7 +37,7 @@ class EmployeeCenterController extends Controller
      */
     public function show(string $id)
     {
-        //
+        return $this->ok(new GeneralIdNameResource(EmployeeCenter::find($id)));
     }
 
     /**
@@ -39,7 +45,11 @@ class EmployeeCenterController extends Controller
      */
     public function update(Request $request, string $id)
     {
-        //
+
+        $data = EmployeeCenter::find($id);
+        $data->name = $request->name;
+        $data->save();
+        return $this->ok(new GeneralIdNameResource($data));
     }
 
     /**
@@ -47,6 +57,8 @@ class EmployeeCenterController extends Controller
      */
     public function destroy(string $id)
     {
-        //
+        $data = EmployeeCenter::find($id);
+        $data->delete();
+        return $this->ok(new GeneralIdNameResource($data));
     }
 }

@@ -109,12 +109,19 @@ class PermissionSeeder extends Seeder
         Permission::create(['name' => 'show user hrs']);
         // Special permission
         Permission::create(['name' => 'has section only']);
-        
+
+
+
+        //endregion
         Permission::create(['name' => 'add warehouse setting']);
         Permission::create(['name' => 'edit warehouse setting']);
         Permission::create(['name' => 'delete warehouse setting']);
         Permission::create(['name' => 'show warehouse settings']);
 
-        //endregion
+        Permission::create(['name' => 'add employee setting']);
+        Permission::create(['name' => 'edit employee setting']);
+        Permission::create(['name' => 'delete employee setting']);
+        Permission::create(['name' => 'show employee setting']);
+
     }
-} 
+}

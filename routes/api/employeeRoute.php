@@ -29,12 +29,24 @@ Route::prefix('/employee')->middleware(['auth:sanctum'])->group(function () {
 });
 Route::prefix('/employee_type')->middleware(['auth:sanctum'])->group(function () {
     Route::get('/', [EmployeeTypeController::class, 'index']);
+    Route::get('/{id}', [EmployeeTypeController::class, 'show']);
+    Route::post('/store', [EmployeeTypeController::class, 'store']);
+    Route::post('/update/{id}', [EmployeeTypeController::class, 'update']);
+    Route::delete('/delete/{id}', [EmployeeTypeController::class, 'destroy']);
 });
 Route::prefix('/employee_position')->middleware(['auth:sanctum'])->group(function () {
     Route::get('/', [EmployeePositionController::class, 'index']);
+    Route::get('/{id}', [EmployeePositionController::class, 'show']);
+    Route::post('/store', [EmployeePositionController::class, 'store']);
+    Route::post('/update/{id}', [EmployeePositionController::class, 'update']);
+    Route::delete('/delete/{id}', [EmployeePositionController::class, 'destroy']);
 });
 Route::prefix('/employee_center')->middleware(['auth:sanctum'])->group(function () {
     Route::get('/', [EmployeeCenterController::class, 'index']);
+    Route::get('/{id}', [EmployeeCenterController::class, 'show']);
+    Route::post('/store', [EmployeeCenterController::class, 'store']);
+    Route::post('/update/{id}', [EmployeeCenterController::class, 'update']);
+    Route::delete('/delete/{id}', [EmployeeCenterController::class, 'destroy']);
 });
 Route::prefix('/hr_document')->middleware(['auth:sanctum'])->group(function () {
     Route::get('/', [HrDocumentController::class, 'index']);
