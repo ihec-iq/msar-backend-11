@@ -12,6 +12,7 @@ use App\Http\Resources\PaginatedResourceCollection;
 use App\Models\Bonus; 
 use Carbon\Carbon;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Log;
 
 class BonusController extends Controller
@@ -21,26 +22,37 @@ class BonusController extends Controller
      */
     public function index()
     {
-        $data = Bonus::all();
-        return $this->ok(BonusResource::collection($data));
+        return $this->ok(
+            BonusResource::collection(Cache::rememberForever('bonuses', function () {
+                return Bonus::get();
+            }))
+        );
     }
 
     public function Study()
     {
-        $data = \App\Models\Study::all();
-        return $this->ok(GeneralIdNameResource::collection($data));
+         return $this->ok(
+            GeneralIdNameResource::collection(Cache::rememberForever('studies', function () {
+                return \App\Models\Study::get();
+            }))
+        );
     }
 
     public function Certificate()
     {
-        $data = \App\Models\Certificate::all();
-        return $this->ok(GeneralIdNameResource::collection($data));
+        return $this->ok(
+            GeneralIdNameResource::collection(Cache::rememberForever('certificates', function () {
+                return \App\Models\Certificate::get();
+            }))
+        );
     }
     public function Bonus_degree_stage()
     {
-        $data = \App\Models\BonusDegreeStage::all(); 
-
-        return $this->ok(BonusDegreeStageResource::collection($data));
+        return $this->ok(
+            BonusDegreeStageResource::collection(Cache::rememberForever('bonus_degree_stages', function () {
+                return \App\Models\BonusDegreeStage::get();
+            }))
+        );
     }
 
     public function filter(Request $request)

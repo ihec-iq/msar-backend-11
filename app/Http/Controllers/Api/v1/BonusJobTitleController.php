@@ -3,13 +3,11 @@
 namespace App\Http\Controllers\Api\v1;
 
 use App\Http\Controllers\Controller;
-use App\Http\Resources\Bonus\BonusJobTitleResource;
-use App\Http\Resources\Bonus\BonusJobTitleResourceCollection;
-use App\Http\Resources\PagesResourceCollection;
+use App\Http\Resources\Bonus\BonusJobTitleResource; 
 use App\Http\Resources\PaginatedResourceCollection;
 use App\Models\BonusJobTitle;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Cache;
 
 class BonusJobTitleController extends Controller
 {

@@ -43,7 +43,7 @@ class StoreController extends Controller
             ->select(
                 'items.id as itemId',
                 'items.name as itemName',
-                'description as description',
+                'items.description as description',
                 'stocks.name as stockName',
                 'price',
                 DB::raw('sum(count) as count'),
