@@ -2,12 +2,18 @@
 
 namespace App\Providers;
 
+use App\Models\ArchiveType;
 use App\Models\RetrievalVoucherItem;
 use App\Models\InputVoucherItem;
+use App\Models\ItemCategory;
 use App\Models\OutputVoucherItem;
+use App\Models\Stock;
+use App\Observers\ArchiveTypeObserver;
 use App\Observers\RetrievalVoucherItemObserver;
 use App\Observers\InputVoucherItemObserver;
+use App\Observers\ItemCategoryObserver;
 use App\Observers\OutputVoucherItemObserver;
+use App\Observers\StockObserver;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Auth\Listeners\SendEmailVerificationNotification;
 use Illuminate\Foundation\Support\Providers\EventServiceProvider as ServiceProvider;
@@ -30,6 +36,9 @@ class EventServiceProvider extends ServiceProvider
         InputVoucherItem::class => [InputVoucherItemObserver::class],
         OutputVoucherItem::class => [OutputVoucherItemObserver::class],
         RetrievalVoucherItem::class => [RetrievalVoucherItemObserver::class],
+        ItemCategory::class => [ItemCategoryObserver::class],
+        Stock::class => [StockObserver::class],
+        ArchiveType::class => [ArchiveTypeObserver::class],
     ];
 
     /**

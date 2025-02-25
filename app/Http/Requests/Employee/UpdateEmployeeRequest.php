@@ -18,7 +18,7 @@ class UpdateEmployeeRequest extends FormRequest
             'is_person' => 'boolean',
             'section_id' => 'exists:sections,id',
             'is_move_section' => 'boolean',
-            'move_section_id' => 'exists:sections,id',
+            // 'move_section_id' => 'exists:sections,id',
             'employee_center_id' => 'exists:employee_centers,id',
             'user_id' => 'exists:users,id',
             'employee_position_id' => 'exists:employee_positions,id',

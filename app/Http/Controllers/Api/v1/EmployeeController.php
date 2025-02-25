@@ -46,8 +46,9 @@ class EmployeeController extends Controller
             $query->whereIn('id', $employeeType);
         });
         #endregion
-        $data = $data->get();
-        return $this->ok(EmployeeResource::collection($data));
+        return EmployeeResource::collection(Cache::rememberForever('employees', function () use ($data) {
+            return $data->get();
+        })); 
     }
 
     public function getLite()
@@ -72,7 +73,9 @@ class EmployeeController extends Controller
         //     return $data->get();
         // });
 
-        return $this->ok(EmployeeBigLiteResource::collection($data));
+        return EmployeeBigLiteResource::collection(Cache::rememberForever('employees_lite', function () use ($data) {
+            return $data->get();
+        })); 
     }
 
     public function filter(Request $request)
@@ -111,6 +114,7 @@ class EmployeeController extends Controller
 
         #endregion
         $data = $data->paginate($limit);
+        
         if (empty($data) || $data == null) {
             return $this->error(__('general.loadFailed'));
         } else {

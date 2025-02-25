@@ -8,15 +8,16 @@ use App\Http\Resources\ArchiveType\ArchiveTypeResource;
 use App\Models\ArchiveType;
 use App\Models\Archive;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Cache;
 use Log;
 
 class ArchiveTypeController extends Controller
 {
     public function index()
     {
-        $data = ArchiveTypeResource::collection(ArchiveType::all());
-
-        return $this->ok($data);
+        return $this->ok(ArchiveTypeResource::collection(Cache::rememberForever('archive_types', function () {
+            return ArchiveType::get();
+        })));
     }
     public function getBySectionId($id)
     {

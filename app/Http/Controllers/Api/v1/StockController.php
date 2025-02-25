@@ -6,12 +6,15 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\Stock\StockStoreRequest;
 use App\Http\Resources\Stock\StockResource;
 use App\Models\Stock;
+use Illuminate\Support\Facades\Cache;
 
 class StockController extends Controller
 {
     public function index()
     {
-        return $this->ok(StockResource::collection(Stock::all()));
+        return $this->ok(StockResource::collection(Cache::rememberForever('stocks', function () {
+            return Stock::get();
+        })));
     }
 
     public function store(StockStoreRequest $request)

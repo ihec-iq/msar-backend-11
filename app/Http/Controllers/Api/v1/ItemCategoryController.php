@@ -9,16 +9,18 @@ use App\Http\Resources\Item\ItemCategoryResourceCollection;
 use App\Models\ItemCategory;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Log;
 
 class ItemCategoryController extends Controller
 {
     public function index()
     {
-        $data = ItemCategoryResource::collection(ItemCategory::all());
-
-        return $this->ok($data);
+        return $this->ok(ItemCategoryResource::collection(Cache::rememberForever('item_categories', function () {
+            return ItemCategory::get();
+        })));
     }
+
 
     public function filter(Request $request)
     {

@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Api\v1;
 
 use App\Http\Controllers\Controller;
 use App\Http\Resources\Employee\EmployeePositionResource;
+use App\Http\Resources\GeneralIdNameResource;
 use App\Models\EmployeePosition;
 use Illuminate\Http\Request;
 
@@ -23,6 +24,12 @@ class EmployeePositionController extends Controller
     public function store(Request $request)
     {
         //
+        $data = EmployeePosition::create([
+            'name' => $request->name,
+            'code' => $request->code ?? '',
+            'level' => $request->level ?? '',
+        ]);
+        return $this->ok(new GeneralIdNameResource($data));
     }
 
     /**
@@ -30,7 +37,7 @@ class EmployeePositionController extends Controller
      */
     public function show(string $id)
     {
-        //
+        return $this->ok(new GeneralIdNameResource(EmployeePosition::find($id)));
     }
 
     /**
@@ -38,7 +45,14 @@ class EmployeePositionController extends Controller
      */
     public function update(Request $request, string $id)
     {
-        //
+
+        $data = EmployeePosition::find($id);
+        $data->name = $request->name;
+        $data->code = $request->code ?? ''; 
+        $data->level = $request->level ?? ''; 
+
+        $data->save();
+        return $this->ok(new GeneralIdNameResource($data));
     }
 
     /**
@@ -46,6 +60,8 @@ class EmployeePositionController extends Controller
      */
     public function destroy(string $id)
     {
-        //
+        $data = EmployeePosition::find($id);
+        $data->delete();
+        return $this->ok(new GeneralIdNameResource($data));
     }
 }
