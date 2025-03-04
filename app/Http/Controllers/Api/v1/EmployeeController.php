@@ -68,7 +68,7 @@ class EmployeeController extends Controller
             $query->whereIn('id', $employeeType);
         });
         #endregion
-         $data =  $data->get();
+         //$data =  $data->get();
         // $data = Cache::remember('getLite_employees', 60*60*24, function () use ($data) {
         //     return $data->get();
         // });
@@ -114,7 +114,7 @@ class EmployeeController extends Controller
 
         #endregion
         $data = $data->paginate($limit);
-        
+
         if (empty($data) || $data == null) {
             return $this->error(__('general.loadFailed'));
         } else {

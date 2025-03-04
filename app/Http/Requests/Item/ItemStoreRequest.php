@@ -23,7 +23,7 @@ class ItemStoreRequest extends FormRequest
     {
         return [
             'name' => 'string',
-            'code' => 'string | unique:items,code | nullable',
+            'code' => 'string |unique:items,code| nullable',
             'description' => 'string | nullable',
             'Category.id' => 'integer | exists:item_categories,id',
             'measuringUnit' => 'string | nullable',
