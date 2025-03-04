@@ -21,6 +21,7 @@ class EmployeeBonusResource extends JsonResource
         $noteNext= $this->getNextNoteAttribute();
         return [
             'id' => $this->id,
+            'checked' => 0,
             'name' => $this->name,
             'numberLastBonus' => $this->number_last_bonus,
             'dateLastBonus' => $this->date_last_bonus,
@@ -49,8 +50,8 @@ class EmployeeBonusResource extends JsonResource
             'degreeNext' =>   $this->nextDegreeStage['Degree']['name'],
             'salaryNext' => $this->nextDegreeStage['salary'],
             //'notesNext' => $this->getNextNoteAttribute($this->id) ?? "",
+            'notes'=> '',
             'notesNext' => $noteNext!="" ? $noteNext: "لايوجد",
-
             // 'nextDegreeStage' => $this->nextDegreeStage,
             // 'lastDegreeStage' => $this->nextDegreeStage,
 
