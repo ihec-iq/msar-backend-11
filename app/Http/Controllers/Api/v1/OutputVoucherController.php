@@ -60,6 +60,8 @@ class OutputVoucherController extends Controller
             'date' => $request->date,
             'employee_id' => $request->employeeRequestId,
             'signature_person' => $request->signaturePerson,
+            'date_bill' => $request->dateBill,
+            'number_bill' => $request->numberBill,
             'notes' => $request->notes,
             'stock_id' => $Stock['id'],
             'user_create_id' => auth()->user()->id,
@@ -103,11 +105,15 @@ class OutputVoucherController extends Controller
         $outputVoucher->employee_id = $request->employeeRequestId;
         $outputVoucher->signature_person = $request->signaturePerson;
         $outputVoucher->notes = $request->notes;
+
+        $outputVoucher->date_bill = $request->dateBill;
+        $outputVoucher->number_bill = $request->numberBill;
+
         $Stock = json_decode($request->Stock, true);
         $outputVoucher->stock_id = $Stock['id'];
         $outputVoucher->user_update_id = auth()->user()->id;
 
-        $arrayItems = json_decode($request->Items, true);
+        $arrayItems = json_decode(json: $request->Items, associative: true);
         $arrayNewItemInsert = [];
         foreach ($arrayItems as $key => $item) {
             // item schema {"id":0,"input_voucher_id":0,"item":{"name":"","id":0,"code":"","description":"","itemCategory":{"id":0,"name":""},"measuringUnit":""},"stock":{"name":"","id":1},"description":"66666666","count":0,"price":0,"value":0,"notes":""}

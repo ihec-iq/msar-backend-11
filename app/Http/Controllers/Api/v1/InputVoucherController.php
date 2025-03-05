@@ -62,9 +62,9 @@ class InputVoucherController extends Controller
         $Stock = json_decode($request->Stock, true);
         $data = InputVoucher::create([
             'number' => $request->number,
-            'number_bill' => $request->numberBill,
             'date' => $request->date,
             'date_bill' => $request->dateBill,
+            'number_bill' => $request->numberBill,
             'date_receive' => $request->dateReceive,
             'input_voucher_state_id' => $State['id'],
             'requested_by' => $request->requestedBy,
@@ -100,10 +100,10 @@ class InputVoucherController extends Controller
     public function update(InputVoucherStoreRequest $request, InputVoucher $inputVoucher)
     {
         $inputVoucher->number = $request->number;
-        $inputVoucher->number_bill = $request->numberBill;
         $inputVoucher->date = $request->date;
         $inputVoucher->date_receive = $request->dateReceive;
         $inputVoucher->date_bill = $request->dateBill;
+        $inputVoucher->number_bill = $request->numberBill;
         $State = json_decode($request->State, true);
         $inputVoucher->input_voucher_state_id = $State['id'];
         $Stock = json_decode($request->Stock, true);
