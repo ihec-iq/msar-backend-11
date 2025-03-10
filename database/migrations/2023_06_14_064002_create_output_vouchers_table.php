@@ -16,6 +16,8 @@ return new class extends Migration {
             $table->foreignId('stock_id')->constrained()->onUpdate('cascade')->onDelete('cascade');
             $table->string('number')->nullable();
             $table->date('date');
+            $table->string('number_bill')->nullable();
+            $table->date('date_bill')->default(now());
             $table->text('notes')->nullable();
             $table->string('signature_person')->nullable();
             $table->foreignId('user_create_id')->constrained(table: 'users')->onUpdate('cascade')->onDelete('cascade');

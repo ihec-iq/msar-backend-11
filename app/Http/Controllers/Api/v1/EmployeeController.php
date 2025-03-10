@@ -48,12 +48,12 @@ class EmployeeController extends Controller
         #endregion
         return EmployeeResource::collection(Cache::rememberForever('employees', function () use ($data) {
             return $data->get();
-        })); 
+        }));
     }
 
     public function getLite()
     {
-       
+
         $data = Employee::orderBy('name');
         #region "Check Premission [vacation office ,vacation center ]"
         $data = $data->whereHas('EmployeeType', function ($query) {
@@ -68,14 +68,15 @@ class EmployeeController extends Controller
             $query->whereIn('id', $employeeType);
         });
         #endregion
-         //$data =  $data->get();
+         $data =  $data->get();
+         return EmployeeBigLiteResource::collection($data);
         // $data = Cache::remember('getLite_employees', 60*60*24, function () use ($data) {
         //     return $data->get();
         // });
 
-        return EmployeeBigLiteResource::collection(Cache::rememberForever('employees_lite', function () use ($data) {
-            return $data->get();
-        })); 
+        // return EmployeeBigLiteResource::collection(Cache::rememberForever('employees_lite', function () use ($data) {
+        //     return $data->get();
+        // }));
     }
 
     public function filter(Request $request)
@@ -358,7 +359,7 @@ public function filterLite(Request $request)
         foreach ($dataResult as $employee) {
             $hrController->update_employee_date_bonus($employee->id);
         }
-        $dataResult = $data->get(); 
+        $dataResult = $data->get();
 
         if (empty($dataResult) || $dataResult == null) {
             return $this->error(__('general.loadFailed'));

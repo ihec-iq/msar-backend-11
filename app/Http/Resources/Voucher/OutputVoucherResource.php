@@ -21,6 +21,8 @@ class OutputVoucherResource extends JsonResource
             'number' => $this->number,
             'date' => $this->date,
             'notes' => $this->notes,
+            'numberBill'=> $this->number_bill,
+            'dateBill'=> $this->date_bill,
             'Items' => OutputVoucherItemResource::collection($this->Items),
             'signaturePerson' => $this->signature_person,
             'Employee' => new EmployeeBigLiteResource($this->Employee),
