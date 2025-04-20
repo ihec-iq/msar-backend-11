@@ -9,5 +9,6 @@ Route::prefix('/setting')->middleware(['auth:sanctum'])->group(function () {
     Route::get('/show/key', [SettingController::class, 'showByKey']);
     Route::post('/store', [SettingController::class, 'store']);
     Route::post('/update/{setting}', [SettingController::class, 'update']);
+    Route::post('/updatebykey', [SettingController::class, 'updateByKey']);
     Route::delete('/delete/{setting}', [SettingController::class, 'destroy']);
 });

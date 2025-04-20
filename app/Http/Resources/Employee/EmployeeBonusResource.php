@@ -18,44 +18,47 @@ class EmployeeBonusResource extends JsonResource
     {
         $lastBonus = $this->Bonus->last();
         $nextDegreeStage = $this->getNextDegreeStageAttribute();
-        $noteNext= $this->getNextNoteAttribute();
+        $noteNext = $this->getNextNoteAttribute();
         return [
             'id' => $this->id,
             'checked' => 0,
             'name' => $this->name,
-            'numberLastBonus' => $this->number_last_bonus,
-            'dateLastBonus' => $this->date_last_bonus,
-            'dateNextBonus' => $this->date_next_bonus,
-            'difNextBonusDate' => $this->getDifNextBonusDateAttribute(),
-            'numberLastPromotion' => $this->number_last_promotion,
-            'dateLastPromotion' => $this->date_last_promotion,
-            'dateNextPromotion' => $this->date_next_promotion,
-            'difNextPromotionDate' => $this->getDifNextPromotionDateAttribute(),
-            'employeePosition' => $this->EmployeePosition->name,
-            'employeeCenter' => $this->EmployeeCenter->name,
-            'employeeSection' => $this->Section->name,
-            'employeeDepartment' => $this->Section->Department->name,
-            'employeeType' => $this->EmployeeType->name,
-            'bonusJobTitle' => $this->BonusJobTitle->name,
+            'current' => [
+                'number' => $this->number_last_bonus,
+                'dateBonus' => $this->date_last_bonus,
+                'numberPromotion' => $this->number_last_promotion,
+                'datePromotion' => $this->date_last_promotion,
+                'degreeStage' => 'الدرجة ' . $this->DegreeStage->Degree->name . ' المرحلة ' . $this->DegreeStage->Stage->name,
+                'stage' =>   $this->DegreeStage->Stage->name,
+                'degree' =>   $this->DegreeStage->Degree->name,
+                'salary' => $this->DegreeStage->salary,
+                'notes' => $lastBonus->notes ?? "",
+            ],
+            'next' => [
+                'number' => $this->number_next_bonus,
+                'dateBonus' => $this->date_next_bonus,
+                'numberPromotion' => $this->number_next_promotion,
+                'datePromotion' => $this->date_next_promotion,
+                'difBonusDate' => $this->getDifNextBonusDateAttribute(),
+                'difPromotionDate' => $this->getDifNextPromotionDateAttribute(),
+                'degreeStage' => 'الدرجة ' . $this->nextDegreeStage['Degree']['name'] . ' المرحلة ' . $this->nextDegreeStage['Stage']['name'],
+                'stage' =>   $this->nextDegreeStage['Stage']['name'],
+                'degree' =>   $this->nextDegreeStage['Degree']['name'],
+                'salary' => $this->nextDegreeStage['salary'],
+                'notes' => $noteNext != "" ? $noteNext : "لايوجد",
+            ],
+
+
+            'position' => $this->EmployeePosition->name,
+            'center' => $this->EmployeeCenter->name,
+            'section' => $this->Section->name,
+            'department' => $this->Section->Department->name,
+            'type' => $this->EmployeeType->name,
+            'jobTitle' => $this->BonusJobTitle->name,
             'study' => $this->Study->name,
             'certificate' => $this->Certificate->name,
-            'degreeStage' => 'الدرجة ' . $this->DegreeStage->Degree->name . ' المرحلة ' . $this->DegreeStage->Stage->name,
-            'stage' =>   $this->DegreeStage->Stage->name,
-            'degree' =>   $this->DegreeStage->Degree->name,
-            'salary' => $this->DegreeStage->salary,
-            'notesBonus' => $lastBonus->notes ?? "",
-
-            'degreeStageNext' => 'الدرجة ' . $this->nextDegreeStage['Degree']['name']. ' المرحلة ' . $this->nextDegreeStage['Stage']['name'],
-            'stageNext' =>   $this->nextDegreeStage['Stage']['name'],
-            'degreeNext' =>   $this->nextDegreeStage['Degree']['name'],
-            'salaryNext' => $this->nextDegreeStage['salary'],
-            //'notesNext' => $this->getNextNoteAttribute($this->id) ?? "",
-            'notes'=> '',
-            'notesNext' => $noteNext!="" ? $noteNext: "لايوجد",
-            // 'nextDegreeStage' => $this->nextDegreeStage,
-            // 'lastDegreeStage' => $this->nextDegreeStage,
-
-            'lastBonus' => new BonusWithoutEmployeeResource($lastBonus) ?? "",
+            'notes' => '',
+            'LastBonus' => new BonusWithoutEmployeeResource($lastBonus) ?? "",
         ];
     }
 

@@ -143,10 +143,12 @@ class HrDocumentController extends Controller
                 'id' => $employee->id,
                 'name' => $employee->name,
                 'currentDateBonus' => Carbon::parse($date_last_bonus)->format('Y-m-d'),
-                'numberIncreseDayes' => $increseDay + ($increseMonths * 30),
+                'numberIncreseDayes' => $increseDay  ,
+                'numberIncreseMonths' => $increseMonths ,
                 'nextDateBonus' => Carbon::parse($date_last_bonus)->addYear(1)->addDay($increseDay * -1)->addMonths($increseMonths * -1)->format('Y-m-d'),
                 'Documents' => HrDocumentResource::collection($filteredArray)
             ];
+            //Log::alert($result);
             return $result;
 
             //date_next_bonus
@@ -226,8 +228,9 @@ class HrDocumentController extends Controller
     }
     public function store(Request $request)
     {
+        Log::info($request);
         if ($request->chosePushBy == EnumTypeChoseShareDocument::None->value || $request->chosePushBy == EnumTypeChoseShareDocument::ToEmployee->value) {
-            $data = $this->addHrDocument(request: $request, employeeId: $request->employeeId);
+            $data = $this->addHrDocument(request: $request, employeeId: $request->employee_id);
         } elseif ($request->chosePushBy == EnumTypeChoseShareDocument::ToSection->value) {
             $filter_bill[] = ['section_id', '=', $request->selectedSectionId];
             $EmployeesBySection = Employee::where($filter_bill)->get();
