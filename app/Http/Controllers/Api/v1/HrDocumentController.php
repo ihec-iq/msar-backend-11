@@ -228,7 +228,7 @@ class HrDocumentController extends Controller
     }
     public function store(Request $request)
     {
-        Log::info($request);
+        //Log::info($request);
         if ($request->chosePushBy == EnumTypeChoseShareDocument::None->value || $request->chosePushBy == EnumTypeChoseShareDocument::ToEmployee->value) {
             $data = $this->addHrDocument(request: $request, employeeId: $request->employee_id);
         } elseif ($request->chosePushBy == EnumTypeChoseShareDocument::ToSection->value) {
@@ -290,7 +290,7 @@ class HrDocumentController extends Controller
      */
     public function update(Request $request, string $id)
     {
-        Log::info($request);
+        //Log::info($request);
         $data = HrDocument::find($id);
         $employeeId = $request->employee_id;
 
@@ -302,7 +302,7 @@ class HrDocumentController extends Controller
         $data->add_months = $request->add_months;
         $data->is_active = $request->is_active;
         $data->user_update_id = Auth::user()->id;
-        Log::info($data);
+        //Log::info($data);
         $data->save();
         //$data = HrDocument::find($data->id);
         $this->update_employee_date_bonus($employeeId);

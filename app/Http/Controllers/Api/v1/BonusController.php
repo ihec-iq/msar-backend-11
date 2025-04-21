@@ -5,11 +5,10 @@ namespace App\Http\Controllers\Api\v1;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Bonus\BonusStoreRequest;
 use App\Http\Resources\Bonus\BonusResource;
-use App\Http\Resources\Bonus\BonusResourceCollection;
 use App\Http\Resources\GeneralIdNameResource;
 use App\Http\Resources\Bonus\BonusDegreeStageResource;
 use App\Http\Resources\PaginatedResourceCollection;
-use App\Models\Bonus; 
+use App\Models\Bonus;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Cache;
@@ -31,7 +30,7 @@ class BonusController extends Controller
 
     public function Study()
     {
-         return $this->ok(
+        return $this->ok(
             GeneralIdNameResource::collection(Cache::rememberForever('studies', function () {
                 return \App\Models\Study::get();
             }))
@@ -153,7 +152,7 @@ class BonusController extends Controller
             $employee = $data->Employee;
             $countBonuses = Bonus::where('employee_id', $employee->id)->count();
             if ($countBonuses == 1) {
-                return $this->error('لا يمكن حذف العلاوة الاولى');    
+                return $this->error('لا يمكن حذف العلاوة الاولى');
             }
 
             $data->delete();

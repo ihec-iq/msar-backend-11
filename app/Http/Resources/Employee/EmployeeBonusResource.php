@@ -2,8 +2,8 @@
 
 namespace App\Http\Resources\Employee;
 
-use App\Http\Resources\Bonus\BonusResource;
 use App\Http\Resources\Bonus\BonusWithoutEmployeeResource;
+use App\Http\Resources\Hr\HrDocumentResource;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 
@@ -59,6 +59,7 @@ class EmployeeBonusResource extends JsonResource
             'certificate' => $this->Certificate->name,
             'notes' => '',
             'LastBonus' => new BonusWithoutEmployeeResource($lastBonus) ?? "",
+            'HrDocuments' => HrDocumentResource::collection($this->HrDocuments),
         ];
     }
 
