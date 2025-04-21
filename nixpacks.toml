@@ -145,14 +145,16 @@ http {
 
         charset utf-8;
 
-        # One location block to handle root URL
-        location / {
-            $if(NIXPACKS_PHP_FALLBACK_PATH) (
+
+        $if(NIXPACKS_PHP_FALLBACK_PATH) (
+            location / {
                 try_files $uri $uri/ ${NIXPACKS_PHP_FALLBACK_PATH}?$query_string;
-            ) else (
+            }
+        ) else (
+          location / {
                 try_files $uri $uri/ /index.php?$query_string;
-            )
-        }
+           }
+        )
 
         location = /favicon.ico { access_log off; log_not_found off; }
         location = /robots.txt  { access_log off; log_not_found off; }
@@ -173,5 +175,4 @@ http {
         }
     }
 }
-
 '''
