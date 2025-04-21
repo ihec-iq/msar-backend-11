@@ -140,7 +140,7 @@ http {
     server {
         listen ${PORT};
         listen [::]:${PORT};
-        server_name domain.com _;
+        server_name https://masr-api.yaser-optical.com ;
 
         root /app/public;
 
