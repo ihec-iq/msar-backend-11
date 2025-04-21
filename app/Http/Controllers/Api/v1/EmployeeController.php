@@ -355,11 +355,14 @@ public function filterLite(Request $request)
         }
 
         $dataResult = $data->get();
+        //Log::alert('dataResult', ['dataResult' => $dataResult]);
         $hrController = new HrDocumentController();
         foreach ($dataResult as $employee) {
             $hrController->update_employee_date_bonus($employee->id);
         }
         $dataResult = $data->get();
+
+        //Log::alert('dataResult', ['dataResult' => $dataResult]);
 
         if (empty($dataResult) || $dataResult == null) {
             return $this->error(__('general.loadFailed'));

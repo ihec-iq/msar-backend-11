@@ -4,8 +4,8 @@ namespace App\Http\Controllers\Api\v1;
 
 use App\Http\Controllers\Controller;
 use App\Models\Setting;
-use App\Http\Requests\StoreSettingRequest; 
-use App\Http\Resources\SettingResource; 
+use App\Http\Requests\StoreSettingRequest;
+use App\Http\Resources\SettingResource;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Http\Request;
 
@@ -50,6 +50,16 @@ class SettingController extends Controller
      */
     public function update(StoreSettingRequest $request, Setting $setting)
     {
+        $setting->update($request->validated()); // Update the specified setting
+        return $this->ok(new SettingResource($setting)); // Return the updated setting
+    }
+    /**
+     * Update the specified resource in storage.
+     */
+    public function updateByKey(StoreSettingRequest $request)
+    {
+        $setting = Setting::where('key', $request->key)->first();
+        if (!$setting) return $this->error('Setting not found', 404); // Return error if setting not found
         $setting->update($request->validated()); // Update the specified setting
         return $this->ok(new SettingResource($setting)); // Return the updated setting
     }

@@ -34,7 +34,7 @@ class DatabaseSeeder extends Seeder
             BonusJobTitleSeeder::class,
             StudySeeder::class,
             PermissionSeeder::class,
-            UserSeeder::class,
+            UserSeeder1::class,
             EmployeeSeeder::class,
             ArchiveTypeSeeder::class,
                 //ArchiveSeeder::class,
@@ -50,7 +50,7 @@ class DatabaseSeeder extends Seeder
             VacationReasonSeeder::class,
             RetrievalVoucherItemTypeSeeder::class,
             HrDocumentTypeSeeder::class,
-            
+
             UserHrSeeder::class
         ]);
     }
