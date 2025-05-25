@@ -9,7 +9,7 @@ use App\Http\Resources\Store\StoreSummationResourceCollection;
 use App\Models\ItemStoreView;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
-use Log;
+use Illuminate\Support\Facades\Log;
 
 class StoreController extends Controller
 {
